@@ -23,7 +23,6 @@ import com.atguigu.atcrowdfunding.manager.dao.UserRoleMapper;
 import com.atguigu.atcrowdfunding.manager.service.UserService;
 import com.atguigu.atcrowdfunding.util.MD5Util;
 import com.atguigu.atcrowdfunding.util.Page;
-import com.mysql.fabric.xmlrpc.base.Data;
 import com.atguigu.atcrowdfunding.bean.Permission;
 import com.atguigu.atcrowdfunding.bean.Role;
 
