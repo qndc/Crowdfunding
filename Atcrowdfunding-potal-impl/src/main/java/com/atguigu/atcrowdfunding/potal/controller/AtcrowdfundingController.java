@@ -132,6 +132,13 @@ public class AtcrowdfundingController {
 		return result;
 	}
 
+	/**
+	 * 	发起项目流程总控制器
+	 * @param session
+	 * @param projectId
+	 * @param map
+	 * @return
+	 */
 	@RequestMapping({ "/atcrowdfunding/apply" })
 	public String ActivityControlle(HttpSession session, Integer projectId, Map map) {
 		Member member = (Member) session.getAttribute("member");
@@ -154,6 +161,7 @@ public class AtcrowdfundingController {
 			if (step.equals("agreement"))
 				return "/atcrowdfunding/projectInfo";
 			if (step.equals("projectInfo")) {
+				//查询回报列表
 				List<TReturn> returns = this.ptService.getReturns(ticket.getProid());
 				map.put("returns", returns);
 				return "/atcrowdfunding/return";
@@ -185,6 +193,12 @@ public class AtcrowdfundingController {
 		return result;
 	}
 
+	/**
+	 * 文件上传
+	 * @param session
+	 * @param file
+	 * @return
+	 */
 	@RequestMapping({ "/atcrowdfunding/upload" })
 	@ResponseBody
 	public Object upload(HttpSession session, @RequestParam List<MultipartFile> file) {
@@ -213,6 +227,11 @@ public class AtcrowdfundingController {
 		return result;
 	}
 
+	/**
+	 * 文件下载
+	 * @param response
+	 * @param fileName
+	 */
 	@RequestMapping(value = { "/atcrowdfunding/{fileName}/download" }, method = {
 			org.springframework.web.bind.annotation.RequestMethod.GET })
 	public void downLoad(HttpServletResponse response, @PathVariable String fileName) {
@@ -227,6 +246,12 @@ public class AtcrowdfundingController {
 		}
 	}
 
+	/**
+	 * 添加项目
+	 * @param session
+	 * @param project
+	 * @return
+	 */
 	@RequestMapping({ "/atcrowdfunding/proInfo" })
 	@ResponseBody
 	public Object proInfo(HttpSession session, Project project) {
@@ -272,15 +297,18 @@ public class AtcrowdfundingController {
 		return result;
 	}
 
+	/**
+	 * 添加回报
+	 * @param session
+	 * @param ret
+	 * @return
+	 */
 	@RequestMapping({ "/atcrowdfunding/addReturn" })
 	@ResponseBody
 	public Object addReturn(HttpSession session, TReturn ret) {
 		AjaxResult result = new AjaxResult();
 		try {
-			Member member = (Member) session.getAttribute("member");
-
 			this.ptService.insertReturn(ret);
-
 			result.setStatus(Integer.valueOf(200));
 			result.setMessage("回报添加成功");
 		} catch (Exception e) {
@@ -291,6 +319,11 @@ public class AtcrowdfundingController {
 		return result;
 	}
 
+	/**
+	 * 根据回报id查询回报
+	 * @param returnId
+	 * @return
+	 */
 	@RequestMapping({ "/atcrowdfunding/getReturnById" })
 	@ResponseBody
 	public Object getRetById(Integer returnId) {
@@ -307,6 +340,11 @@ public class AtcrowdfundingController {
 		return result;
 	}
 
+	/**
+	 * 更新回报
+	 * @param ret
+	 * @return
+	 */
 	@RequestMapping({ "/atcrowdfunding/updateReturn" })
 	@ResponseBody
 	public Object updateReturn(TReturn ret) {
@@ -324,6 +362,11 @@ public class AtcrowdfundingController {
 		return result;
 	}
 
+	/**
+	 * 删除回报
+	 * @param returnId
+	 * @return
+	 */
 	@RequestMapping({ "/atcrowdfunding/delReturn" })
 	@ResponseBody
 	public Object delReturn(Integer returnId) {
@@ -341,6 +384,11 @@ public class AtcrowdfundingController {
 		return result;
 	}
 
+	/**
+	 * 更新项目审批单到回报填写
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping({ "/atcrowdfunding/proReturn.do" })
 	public String proReturn(HttpSession session) {
 		Member member = (Member) session.getAttribute("member");
@@ -355,6 +403,12 @@ public class AtcrowdfundingController {
 		return "redirect:/atcrowdfunding/apply.do";
 	}
 
+	/**
+	 * 添加公司信息
+	 * @param comp
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping({ "/atcrowdfunding/addComp" })
 	@ResponseBody
 	public Object addComp(TProjectComp comp, HttpSession session) {

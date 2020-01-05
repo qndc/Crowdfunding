@@ -143,21 +143,21 @@ px
 			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="container">
 					<div class="navbar-header">
-						<a class="navbar-brand" href="index.html" style="font-size: 32px;">尚筹网-创意产品众筹平台</a>
+						<a class="navbar-brand" href="/" style="font-size: 32px;">尚筹网-创意产品众筹平台</a>
 					</div>
 					<div id="navbar" class="navbar-collapse collapse"
 						style="float: right;">
 						<ul class="nav navbar-nav">
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>
-									张三<span class="caret"></span></a>
+									${sessionScope.member.username }<span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="member.html"><i
 											class="glyphicon glyphicon-scale"></i> 会员中心</a></li>
 									<li><a href="#"><i class="glyphicon glyphicon-comment"></i>
 											消息</a></li>
 									<li class="divider"></li>
-									<li><a href="index.html"><i
+									<li><a href="${APP_PATH }/logout.do"><i
 											class="glyphicon glyphicon-off"></i> 退出系统</a></li>
 								</ul></li>
 						</ul>
@@ -275,30 +275,54 @@ px
 													<td>回报内容</td>
 													<td>回报时间</td>
 													<td>运费</td>
+													<td>发票</td>
 													<td>操作</td>
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<td scope="row">1</td>
-													<td>￥1.00</td>
-													<td>无限制</td>
-													<td>1</td>
-													<td>1</td>
-													<td>项目结束后的30天</td>
-													<td>包邮</td>
-													<td>
-														<button type="button" class="btn btn-primary btn-xs">
-															<i class=" glyphicon glyphicon-pencil"></i>
-														</button>
-														<button type="button" class="btn btn-danger btn-xs">
-															<i class=" glyphicon glyphicon-remove"></i>
-														</button>
-													</td>
-												</tr>
+												<c:forEach items="${requestScope.returns }" var="ret" varStatus="hx">
+													<tr>
+														<td scope="row">${hx.count }</td>
+														<td>￥${ret.supportmoney }.00</td>
+														<c:if test="${ret.count == 0 }">
+															<td>不限回报数量</td>
+														</c:if>
+														<c:if test="${ret.count != 0 }">
+															<td>${ret.count }</td>
+														</c:if>
+														<c:if test="${ret.signalpurchase == 0 }">
+															<td>单笔不限购</td>
+														</c:if>
+														<c:if test="${ret.signalpurchase != 0 }">
+															<td>${ret.purchase }</td>
+														</c:if>
+														<td><a href="javascript:;" style="text-decoration: none;color:#1e9fff" onclick="show('${ret.img}')">${ret.content }</a></td>
+														<td>项目结束后的${ret.rtndate }天</td>
+														<c:if test="${ret.freight == 0 }">
+															<td>免运费</td>
+														</c:if>
+														<c:if test="${ret.freight != 0 }">
+															<td>${ret.freight }</td>
+														</c:if>
+														<c:if test="${ret.invoice == 0 }">
+															<td>可开发票</td>
+														</c:if>
+														<c:if test="${ret.invoice != 0 }">
+															<td>不可开发票</td>
+														</c:if>
+														<td>
+															<button type="button" class="btn btn-primary btn-xs" onclick="getRetById(${ret.id})">
+																<i class=" glyphicon glyphicon-pencil"></i>
+															</button>
+															<button type="button" class="btn btn-danger btn-xs" onclick="delReturn(${ret.id})">
+																<i class=" glyphicon glyphicon-remove"></i>
+															</button>
+														</td>
+													</tr>
+												</c:forEach>
 											</tbody>
 										</table>
-										<button type="button" class="btn btn-primary btn-lg">
+										<button type="button" class="btn btn-primary btn-lg" id="Jumpflag">
 											<i class="glyphicon glyphicon-plus"></i> 添加回报
 										</button>
 										<div
@@ -308,45 +332,54 @@ px
 											<div class="panel-body">
 
 												<div class="col-md-12 column">
-													<form class="form-horizontal">
+													<form class="form-horizontal" id="retForm">
 														<div class="form-group">
 															<label for="inputEmail3" class="col-sm-2 control-label">回报类型</label>
 															<div class="col-sm-10">
-																<label class="radio-inline"> <input type="radio"
-																	name="inlineRadioOptions" id="inlineRadio1"
-																	value="option1"> 实物回报
-																</label> <label class="radio-inline"> <input
-																	type="radio" name="inlineRadioOptions"
-																	id="inlineRadio2" value="option2"> 虚拟物品回报
+																<label class="radio-inline"> 
+																	<input type="radio" name="type" value="0" checked="checked"> 实物回报
+																</label> 
+																<label class="radio-inline"> 
+																	<input type="radio" name="type" value="1"> 虚拟物品回报
 																</label>
 															</div>
 														</div>
 														<div class="form-group">
 															<label class="col-sm-2 control-label">支持金额（元）</label>
 															<div class="col-sm-10">
-																<input type="text" class="form-control"
-																	style="width: 100px;">
+																<input type="text" class="form-control" style="width: 100px;" name="supportmoney">
+																<input type="hidden" value="${requestScope.projectId }" name="projectid">
 															</div>
 														</div>
 														<div class="form-group">
 															<label class="col-sm-2 control-label">回报内容</label>
 															<div class="col-sm-10">
-																<textarea class="form-control" rows="5"
-																	placeholder="简单描述回报内容，不超过200字"></textarea>
-															</div>
+																<input class="form-control" name="content" placeholder="不超过14字"/>
+															 </div>
 														</div>
 														<div class="form-group">
-															<label class="col-sm-2 control-label">说明图片</label>
+															<label class="col-sm-2 control-label">回报描述</label>
 															<div class="col-sm-10">
-																<button type="button"
-																	class="btn btn-primary btn-lg active">上传图片</button>
+																<textarea class="form-control" name="returndesc" rows="5" placeholder="简单描述回报内容，不超过200字"></textarea>
+															 </div>
+														</div>
+														<div class="form-group">
+															<label class="col-sm-2 control-label">回报图片</label>
+															<div class="col-sm-10">
+																<button type="button" id="returnImg" class="layui-btn" style="background-color: #337ab7">
+																	<i class="layui-icon">&#xe67c;</i>上传图片
+																</button>	
+																<input type="hidden" id="retImg" name="img">
 																<label class="control-label">支持jpg、jpeg、png、gif格式，大小不超过2M，建议尺寸：760*510px选择文件</label>
+																<br>
+																<img alt="" id="showImg" style="width: 100px;height: 75px;float: left;margin: 10px 0 0 0;display: none;">
 															</div>
 														</div>
+														
 														<div class="form-group">
 															<label class="col-sm-2 control-label">回报数量（名）</label>
 															<div class="col-sm-10">
-																<input type="text" class="form-control"
+																<input type="text" class="form-control" name="count"
 																	style="width: 100px; display: inline"> <label
 																	class="control-label">“0”为不限回报数量</label>
 															</div>
@@ -354,21 +387,20 @@ px
 														<div class="form-group">
 															<label for="inputEmail3" class="col-sm-2 control-label">单笔限购</label>
 															<div class="col-sm-10">
-																<label class="radio-inline"> <input type="radio"
-																	name="inlineRadioOptions2" id="inlineRadio1"
-																	value="option1"> 不限购
-																</label> <label class="radio-inline"> <input
-																	type="radio" name="inlineRadioOptions2"
-																	id="inlineRadio2" value="option2"> 限购
-																</label> <input type="text" class="form-control"
-																	style="width: 100px; display: inline"> <label
-																	class="radio-inline">默认数量为1，且不超过上方已设置的回报数量</label>
+																<label class="radio-inline"> 
+																	<input type="radio" name="signalpurchase" onclick="clearNum()" value="0" checked="checked"> 不限购
+																</label> 
+																<label class="radio-inline"> 
+																	<input type="radio" name="signalpurchase" value="1"> 限购
+																</label> 
+																<input type="text" class="form-control" name="purchase" style="width: 100px; display: inline"> 
+																<label class="radio-inline">默认数量为1，且不超过上方已设置的回报数量</label>
 															</div>
 														</div>
 														<div class="form-group">
 															<label class="col-sm-2 control-label">运费(元)</label>
 															<div class="col-sm-10">
-																<input type="text" class="form-control"
+																<input type="text" class="form-control" name="freight"
 																	style="width: 100px; display: inline" value="0">
 																<label class="control-label">“0”为包邮</label>
 															</div>
@@ -376,13 +408,11 @@ px
 														<div class="form-group">
 															<label for="inputEmail3" class="col-sm-2 control-label">发票</label>
 															<div class="col-sm-10">
-																<label class="radio-inline"> <input type="radio"
-																	name="inlineRadioOptions1" id="inlineRadio1"
-																	value="option1"> 不可开发票
-																</label> <label class="radio-inline"> <input
-																	type="radio" name="inlineRadioOptions1"
-																	id="inlineRadio2" value="option2">
-																	可开发票（包括个人发票和自定义抬头发票）
+																<label class="radio-inline"> 
+																	<input type="radio" name="invoice"  value="0" checked="checked"> 不可开发票
+																</label> 
+																<label class="radio-inline"> 
+																	<input type="radio" name="invoice" value="1">可开发票（包括个人发票和自定义抬头发票）
 																</label>
 															</div>
 														</div>
@@ -390,7 +420,7 @@ px
 															<label for="inputEmail3" class="col-sm-2 control-label">回报时间</label>
 															<div class="col-sm-10">
 																<label class="radio-inline"> 项目结束后 </label> <input
-																	type="text" class="form-control"
+																	type="text" class="form-control" name="rtndate"
 																	style="width: 100px; display: inline"> <label
 																	class="radio-inline">天，向支持者发送回报</label>
 															</div>
@@ -398,7 +428,7 @@ px
 														<div class="form-group">
 															<label for="inputEmail3" class="col-sm-2 control-label"></label>
 															<div class="col-sm-10">
-																<button type="button" class="btn btn-primary">确定</button>
+																<button type="button" class="btn btn-primary" onclick="sub()">确定</button>
 																<button type="button" class="btn btn-default">取消</button>
 															</div>
 														</div>
@@ -435,7 +465,6 @@ px
 								onclick="window.location.href='start-step-1.html'">上一步</button>
 							<button type="button" class="btn  btn-warning btn-lg"
 								onclick="window.location.href='start-step-3.html'">下一步</button>
-							<a class="btn"> 预览 </a>
 						</div>
 					</div>
 				</div>
@@ -475,6 +504,118 @@ px
 			e.preventDefault()
 			$(this).tab('show')
 		})
+		
+		//更新回报
+		function updateReturn(retId) {
+			console.log(retId);
+		}
+		
+		//删除回报
+		function delReturn(retId) {
+			console.log(retId);
+		}
+		
+		//根据id获取回报信息
+		function getRetById(id) {
+			
+			$.ajax({
+				url:"${APP_PATH}/atcrowdfunding/getReturnById.do",
+				type:"post",
+				data:{
+					"returnId":id
+				},
+				success:function(result){
+					//锚点跳转
+					$('body,html').animate({scrollTop: $('#Jumpflag').offset().top}, 500);
+					console.log(result);
+				},
+				error:function(result){
+					layer.msg(result.message,{time:1000,icon:5,shift:6})
+				}
+			})
+		}
+		
+		
+		
+		//回报图片上传
+		layui.use('upload', function(){
+		  var upload = layui.upload;
+		  var layer = layui.layer;
+		   
+		  var uploadHead = upload.render({
+		    elem: '#returnImg' //绑定元素
+		    ,url: '${APP_PATH}/atcrowdfunding/upload.do' //上传接口
+		    ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+		    	 layer.load(); //上传loading
+		    }
+		    ,done: function(res){
+		      //上传完毕回调
+		      if (res.code == 200) {
+			      $("#retImg").val(res.data[0].src);
+			      $("#showImg").prop("src",res.data[0].src).show();
+			      layer.msg("上传成功",{time:1000,icon:6}); 
+			  }else{
+				  layer.msg(res.msg,{time:1000,icon:5,shift:6}); 
+			  }
+		      layer.closeAll('loading'); //关闭loading
+		    }
+		    ,error: function(){
+		      //请求异常回调
+		      layer.msg("图片上传失败！",{time:1000,icon:5,shift:6})
+		    }
+		 
+		  });
+		});
+		
+		//提交回报
+		function sub() {
+			
+			if ($("input[name='supportmoney']").val().trim() != "" && $("input[name='content']").val().trim() != "" && $("textarea[name='returndesc']").val().trim() != "" && $("input[name='img']").val().trim() != "" && $("input[name='count']").val().trim() != "" && $("input[name='freight']").val().trim() != ""  && $("input[name='rtndate']").val().trim() != "") {
+				if ($("input[name='signalpurchase']:checked").val() == 1 && $("input[name='purchase']").val().trim() == "") {
+					
+					layer.msg("请将信息填写完善！",{time:1000,icon:5,shift:6});
+				
+				}else{
+					
+					$.ajax({
+						url:"${APP_PATH}/atcrowdfunding/addReturn.do",
+						type:"post",
+						data:$("#retForm").serialize(),
+						success:function(result){
+							if (result.status == 200) {
+								window.location.href="/atcrowdfunding/apply.do";
+							}else {
+								layer.msg(result.message,{time:1000,icon:5,shift:6});
+							}
+						},
+						error:function(result){
+							layer.msg(result.message,{time:1000,icon:5,shift:6})
+						}
+					})
+				}
+			}else{
+				layer.msg("请将信息填写完善！",{time:1000,icon:5,shift:6});
+			}
+		}
+		
+		//清空单人限购数量
+		function clearNum() {
+			$("input[name='purchase']").val("");
+		}
+		
+		//图片预览
+		function show(url) {
+			layer.open({
+				  type: 1,
+				  title: false,
+				  closeBtn: 0,
+				  area: ['500px', '350px'],
+				  skin: 'layui-layer-nobg', //没有背景色
+				  shadeClose: true,
+				  content: "<img src = '"+url+"' style='width:100%;height:100%;'>"
+				});
+		}
+	
 	</script>
 </body>
 </html>
