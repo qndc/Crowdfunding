@@ -1,0 +1,17 @@
+/**
+@Document action 
+css 
+ */
+body{
+	padding:0;
+	margin:0;
+	font-size: 14px;
+	color:#444;
+}
+*{
+	border:0;
+	padding:0;
+	margin:0;
+	list-style: none;
+	text-decoration:none;
+}
