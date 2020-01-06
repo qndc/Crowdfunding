@@ -305,16 +305,16 @@ px
 															<td>${ret.freight }</td>
 														</c:if>
 														<c:if test="${ret.invoice == 0 }">
-															<td>可开发票</td>
+															<td>不可开发票</td>
 														</c:if>
 														<c:if test="${ret.invoice != 0 }">
-															<td>不可开发票</td>
+															<td>可开发票</td>
 														</c:if>
 														<td>
 															<button type="button" class="btn btn-primary btn-xs" onclick="getRetById(${ret.id})">
 																<i class=" glyphicon glyphicon-pencil"></i>
 															</button>
-															<button type="button" class="btn btn-danger btn-xs" onclick="delReturn(${ret.id})">
+															<button type="button" class="btn btn-danger btn-xs delBtn" del-id="${ret.id }">
 																<i class=" glyphicon glyphicon-remove"></i>
 															</button>
 														</td>
@@ -349,6 +349,7 @@ px
 															<div class="col-sm-10">
 																<input type="text" class="form-control" style="width: 100px;" name="supportmoney">
 																<input type="hidden" value="${requestScope.projectId }" name="projectid">
+																<input type="hidden" value="" name="id">
 															</div>
 														</div>
 														<div class="form-group">
@@ -428,7 +429,7 @@ px
 														<div class="form-group">
 															<label for="inputEmail3" class="col-sm-2 control-label"></label>
 															<div class="col-sm-10">
-																<button type="button" class="btn btn-primary" onclick="sub()">确定</button>
+																<button type="button" id="subBtn" class="btn btn-primary" onclick="sub()">确定</button>
 																<button type="button" class="btn btn-default">取消</button>
 															</div>
 														</div>
@@ -505,15 +506,43 @@ px
 			$(this).tab('show')
 		})
 		
-		//更新回报
-		function updateReturn(retId) {
-			console.log(retId);
-		}
-		
 		//删除回报
-		function delReturn(retId) {
-			console.log(retId);
-		}
+		var loadingIndex = -1;
+		$(".delBtn").click(function () {
+			var obj = $(this);
+			
+			layer.confirm("确定删除该回报吗？",{icon:3,title:'提示'},function(cindex){
+				
+				$.ajax({
+					url:"${APP_PATH}/atcrowdfunding/delReturn.do",
+					type:"post",
+					data:{
+						"returnId":obj.attr("del-id")
+					},
+					success:function(result){
+						
+						if (result.status == 200) {
+							
+							obj.parent().parent().remove();
+							layer.msg(result.message,{time:1000,icon:6});
+							
+						}else {
+							layer.msg(result.message,{time:1000,icon:5,shift:6});
+						}
+					},
+					error:function(result){
+						layer.msg(result.message,{time:1000,icon:5,shift:6})
+					}
+				})
+				
+				layer.close(cindex);
+			},function(cindex){
+				layer.close(cindex); 
+			})
+			
+		})
+		
+		
 		
 		//根据id获取回报信息
 		function getRetById(id) {
@@ -527,15 +556,48 @@ px
 				success:function(result){
 					//锚点跳转
 					$('body,html').animate({scrollTop: $('#Jumpflag').offset().top}, 500);
-					console.log(result);
-				},
+					//控件赋值
+					//$("input[name='type']").removeAttr('checked');
+					$("input[name='type']").eq(result.message.type).prop("checked",'checked');
+					$("input[name='supportmoney']").val(result.message.supportmoney);
+					$("input[name='content']").val(result.message.content);
+					$("textarea[name='returndesc']").val(result.message.returndesc);
+					$("#retImg").val(result.message.img);
+					$("#showImg").prop("src",result.message.img).show();
+					$("input[name='count']").val(result.message.count);
+					$("input[name='signalpurchase']").eq(result.message.signalpurchase).prop("checked",'checked');
+					$("input[name='purchase']").val(result.message.purchase);
+					$("input[name='invoice']").eq(result.message.invoice).prop("checked",'checked');
+					$("input[name='freight']").val(result.message.freight);
+					$("input[name='rtndate']").val(result.message.rtndate);
+					$("input[name='id']").val(result.message.id);
+					//修改表单提交方法
+					$("#subBtn").attr("onclick","updateReturn()")
+					},
 				error:function(result){
 					layer.msg(result.message,{time:1000,icon:5,shift:6})
 				}
 			})
 		}
 		
-		
+		//更新回报
+		function updateReturn(retId) {
+			$.ajax({
+				url:"${APP_PATH}/atcrowdfunding/updateReturn.do",
+				type:"post",
+				data:$("#retForm").serialize(),
+				success:function(result){
+					if (result.status == 200) {
+						window.location.href="/atcrowdfunding/apply.do";
+					}else {
+						layer.msg(result.message,{time:1000,icon:5,shift:6});
+					}
+				},
+				error:function(result){
+					layer.msg(result.message,{time:1000,icon:5,shift:6})
+				}
+			})
+		}
 		
 		//回报图片上传
 		layui.use('upload', function(){

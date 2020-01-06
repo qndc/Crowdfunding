@@ -373,7 +373,6 @@ public class AtcrowdfundingController {
 		AjaxResult result = new AjaxResult();
 		try {
 			this.actService.delReturn(returnId);
-
 			result.setStatus(Integer.valueOf(200));
 			result.setMessage("回报删除成功");
 		} catch (Exception e) {
