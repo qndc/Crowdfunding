@@ -465,7 +465,7 @@ px
 							<button type="button" class="btn  btn-default btn-lg"
 								onclick="window.location.href='start-step-1.html'">上一步</button>
 							<button type="button" class="btn  btn-warning btn-lg"
-								onclick="window.location.href='start-step-3.html'">下一步</button>
+								onclick="window.location.href='/atcrowdfunding/proReturn.do'">下一步</button>
 						</div>
 					</div>
 				</div>

@@ -24,9 +24,12 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.atguigu.atcrowdfunding.bean.Project;
 import com.atguigu.atcrowdfunding.potal.quartz.ProjectSettlement;
+import com.atguigu.atcrowdfunding.potal.service.HomePageService;
 import com.atguigu.atcrowdfunding.potal.service.QuartzService;
 import com.atguigu.atcrowdfunding.quertztask.FinishWorkTask;
+import com.atguigu.atcrowdfunding.util.AlipayConfig;
 import com.atguigu.atcrowdfunding.util.QuartzUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,11 +38,17 @@ public class TestQuartz {
 
 	@Autowired
 	private QuartzService quartzService;
+	@Autowired
+	private HomePageService homePageService;
 	
 	@Test
 	public void demo() {
-		//quartzService.startSchedule();
-		//quartzService.addJob("2_jname", "3_jgname", "4_tname", "5_tgname", ProjectSettlement.class, "0/3 * * * * ?");
+		Project project = homePageService.getProsById(11);
+		String jobName = project.getId() + "_jname";
+		String triggerName = project.getId() + "_tname";
+		String jobGroupName = project.getMemberid() + "_jgname";
+		String triggerGroupName = project.getMemberid() + "_tgname";
+		quartzService.addJob(jobName, jobGroupName, triggerName, triggerGroupName, ProjectSettlement.class, "10 32 21 6 1 ?",project.getId().toString());
 	}
 	
 	@Test

@@ -29,6 +29,7 @@ public class YesListener implements ExecutionListener {
 		Integer proId = (Integer) arg0.getVariable("proId");
 		System.err.println(proId);
 
+		//更新项目审批单：项目状态->1 ,发布时间
 		ProjectTicketService ticketService = (ProjectTicketService) applicationContext
 				.getBean(ProjectTicketService.class);
 		Project project = ticketService.getProjectByProId(proId);
@@ -37,6 +38,7 @@ public class YesListener implements ExecutionListener {
 		project.setDeploydate(rightNow.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		ticketService.updateProject(project);
 
+		//开启定时任务，定时时间审批时间：项目开始时间+众筹天数
 		QuartzService quartzService = (QuartzService) applicationContext.getBean(QuartzService.class);
 		Integer day = project.getDay();
 		String deploydate = project.getDeploydate();
@@ -46,7 +48,7 @@ public class YesListener implements ExecutionListener {
 		String triggerName = project.getId() + "_tname";
 		String jobGroupName = project.getMemberid() + "_jgname";
 		String triggerGroupName = project.getMemberid() + "_tgname";
-		quartzService.addJob(jobName, jobGroupName, triggerName, triggerGroupName, ProjectSettlement.class, cron);
+		quartzService.addJob(jobName, jobGroupName, triggerName, triggerGroupName, ProjectSettlement.class, cron,project.getId().toString());
 
 		TProjectTicketMapper mapper = (TProjectTicketMapper) applicationContext.getBean(TProjectTicketMapper.class);
 		MemberMapper memberMapper = (MemberMapper) applicationContext.getBean(MemberMapper.class);
@@ -65,6 +67,7 @@ public class YesListener implements ExecutionListener {
 		}
 	}
 
+	//组合项目审批时间
 	private static String getTimeStr(Integer temp, String deploydate) {
 		LocalDateTime oldDate = LocalDateTime.parse(deploydate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		LocalDateTime newDate = oldDate.plusDays(temp.longValue());

@@ -1,7 +1,10 @@
 package com.atguigu.atcrowdfunding.util;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @Auther: dc
@@ -35,8 +38,8 @@ public class AlipayConfig {
     // 支付宝网关
     public static String gatewayUrl = "https://openapi.alipaydev.com/gateway.do";
 
-    // 支付宝网关
-    public static String log_path = "C:\\";
+    // 日志文件地址
+    public static String log_path = "F:\\众筹日志文件\\";
 
 
 //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
@@ -48,8 +51,12 @@ public class AlipayConfig {
     public static void logResult(String sWord) {
         FileWriter writer = null;
         try {
-            writer = new FileWriter(log_path + "alipay_log_" + System.currentTimeMillis()+".txt");
+        	LocalDateTime now = LocalDateTime.now();
+    		String dateString = now.format(DateTimeFormatter.ofPattern("yyyy_MM_dd"));
+        	writer = new FileWriter(log_path + "atcrowdfunding_log_" + dateString+".txt",true);
             writer.write(sWord);
+            //换行
+            writer.write("\r\n");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
