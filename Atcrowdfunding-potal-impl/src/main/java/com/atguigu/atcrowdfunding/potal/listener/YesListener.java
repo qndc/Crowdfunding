@@ -11,6 +11,9 @@ import com.atguigu.atcrowdfunding.potal.quartz.ProjectSettlement;
 import com.atguigu.atcrowdfunding.potal.service.ProjectTicketService;
 import com.atguigu.atcrowdfunding.potal.service.QuartzService;
 import com.atguigu.atcrowdfunding.util.ApplicationContextUtils;
+import com.atguigu.atcrowdfunding.util.SmsUtil;
+import com.google.gson.Gson;
+
 import java.io.PrintStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +30,6 @@ public class YesListener implements ExecutionListener {
 		ApplicationContext applicationContext = ApplicationContextUtils.applicationContext;
 
 		Integer proId = (Integer) arg0.getVariable("proId");
-		System.err.println(proId);
 
 		//更新项目审批单：项目状态->1 ,发布时间
 		ProjectTicketService ticketService = (ProjectTicketService) applicationContext
@@ -61,9 +63,10 @@ public class YesListener implements ExecutionListener {
 			mapper.updateByPrimaryKey(tProjectTicket);
 
 			Member member = memberMapper.selectByPrimaryKey(tProjectTicket.getMemberid());
-
-			Map map = new HashMap();
+			Map<String, String> map = new HashMap();
 			map.put("name", member.getRealname());
+			//发送短信验证码
+			SmsUtil.sendSms("SMS_181195868", new Gson().toJson(map), member.getTel(), "我的学习分享");
 		}
 	}
 

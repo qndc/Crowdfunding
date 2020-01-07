@@ -3,7 +3,10 @@ package com.atguigu.atcrowdfunding.potal.quartz;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -15,10 +18,12 @@ import org.springframework.context.ApplicationContext;
 
 import com.atguigu.atcrowdfunding.bean.Member;
 import com.atguigu.atcrowdfunding.bean.Project;
+import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.potal.service.HomePageService;
 import com.atguigu.atcrowdfunding.potal.service.MemberService;
 import com.atguigu.atcrowdfunding.util.AlipayConfig;
 import com.atguigu.atcrowdfunding.util.ApplicationContextUtils;
+import com.atguigu.atcrowdfunding.util.SmsUtil;
 import com.google.gson.Gson;
 
 /**
@@ -41,18 +46,53 @@ public class ProjectSettlement implements Job
     JobDataMap dataMap = context.getJobDetail().getJobDataMap();   
     Project project = homePageService.getProsById(Integer.valueOf(dataMap.getString("proId")));
     Member member = memberService.queryMemberByMid(project.getMemberid());
+    Map<String, String> memberMap = new HashMap<>();
+    memberMap.put("name", member.getRealname());
+    List<TOrder> list = homePageService.getOrderByProId(project.getId());
+	Set<Integer> memberIds = new HashSet<>();
+	for (TOrder tOrder : list) {
+		memberIds.add(tOrder.getMemberid());
+	}
     AlipayConfig.logResult("众筹时间到，审核开始..."+now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    
     AlipayConfig.logResult("项目信息："+new Gson().toJson(project));
     AlipayConfig.logResult("发起人信息："+new Gson().toJson(member));
-    //如果众筹金额>=总金额的90%，可视为项目众筹成功,否则失败
-    if (project.getCompletion() >= 90) {
-		//成功后通知众筹成功-众筹发起人，众筹支持者
-    	AlipayConfig.logResult("Completion >= 90% SUCCESS !");
-	}else {
-		//失败后通知众筹失败-众筹发起人，众筹支持者，并退款
-		AlipayConfig.logResult("Completion < 90% ,FAILURE !");
+    try {
+		//如果众筹金额>=总金额的90%，可视为项目众筹成功,否则失败
+		if (project.getCompletion() >= 90) {
+			//成功后通知众筹成功-众筹发起人，众筹支持者,扣除手续费后打款50%
+			AlipayConfig.logResult("Completion >= 90% SUCCESS !");
+			//发送短信验证码-项目发起者
+			SmsUtil.sendSms("SMS_181853713", new Gson().toJson(memberMap), member.getTel(), "我的学习分享");
+			//发送短信验证码-项目支持者，查询该项目的所有支持者
+			for (Integer memberId : memberIds) {
+				Member mm = memberService.queryMemberByMid(memberId);
+				Map<String, String> supporterMap = new HashMap<>();
+				supporterMap.put("name", mm.getRealname());
+				SmsUtil.sendSms("SMS_181853714", new Gson().toJson(supporterMap), mm.getTel(), "我的学习分享");
+			}
+			
+		} else {
+			//失败后通知众筹失败-众筹发起人，众筹支持者，并退款
+			AlipayConfig.logResult("Completion < 90% ,FAILURE !");
+			//发送短信验证码-项目发起者
+			SmsUtil.sendSms("SMS_181853713", new Gson().toJson(memberMap), member.getTel(), "我的学习分享");
+			//发送短信验证码-项目支持者
+			for (Integer memberId : memberIds) {
+				Member mm = memberService.queryMemberByMid(memberId);
+				Map<String, String> supporterMap = new HashMap<>();
+				supporterMap.put("name", mm.getRealname());
+				SmsUtil.sendSms("SMS_181853714", new Gson().toJson(supporterMap), mm.getTel(), "我的学习分享");
+			}
+			//发起退款
+			for (TOrder tOrder : list) {
+				
+			}
+		} 
+	} catch (Exception e) {
+		AlipayConfig.logResult(e.getMessage());
 	}
-    AlipayConfig.logResult("-------------------------------------------------------");
+	AlipayConfig.logResult("-------------------------------------------------------");
   }
 }
 

@@ -28,7 +28,7 @@ public class AliPayUtil {
     }
 
     /**
-     * 支付
+     * 	支付
      * @param bean
      * @return
      * @throws IOException
@@ -46,7 +46,7 @@ public class AliPayUtil {
     }
 
     /**
-     * 退款
+     *	 退款
      * @param bean
      * @return
      * @throws IOException
@@ -62,7 +62,7 @@ public class AliPayUtil {
     }
 
     /**
-     * 交易查询
+     * 	交易查询
      * @param
      * @return
      * @throws IOException
@@ -78,7 +78,7 @@ public class AliPayUtil {
     }
 
     /**
-     * 退款查询
+     * 	退款查询
      * @param bean
      * @return
      * @throws AlipayApiException
@@ -93,7 +93,7 @@ public class AliPayUtil {
     }
 
     /**
-     * 关闭交易
+     * 	关闭交易
      * @param request
      * @return
      * @throws IOException

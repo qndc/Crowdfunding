@@ -1,7 +1,12 @@
 package com.dc.test;
 
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,9 +29,13 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.atguigu.atcrowdfunding.bean.AliPayBean;
+import com.atguigu.atcrowdfunding.bean.Member;
 import com.atguigu.atcrowdfunding.bean.Project;
+import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.potal.quartz.ProjectSettlement;
 import com.atguigu.atcrowdfunding.potal.service.HomePageService;
+import com.atguigu.atcrowdfunding.potal.service.MemberService;
 import com.atguigu.atcrowdfunding.potal.service.QuartzService;
 import com.atguigu.atcrowdfunding.quertztask.FinishWorkTask;
 import com.atguigu.atcrowdfunding.util.AlipayConfig;
@@ -40,6 +49,9 @@ public class TestQuartz {
 	private QuartzService quartzService;
 	@Autowired
 	private HomePageService homePageService;
+	@Autowired
+	private MemberService memberService;
+	
 	
 	@Test
 	public void demo() {
@@ -48,7 +60,7 @@ public class TestQuartz {
 		String triggerName = project.getId() + "_tname";
 		String jobGroupName = project.getMemberid() + "_jgname";
 		String triggerGroupName = project.getMemberid() + "_tgname";
-		quartzService.addJob(jobName, jobGroupName, triggerName, triggerGroupName, ProjectSettlement.class, "10 32 21 6 1 ?",project.getId().toString());
+		//quartzService.addJob(jobName, jobGroupName, triggerName, triggerGroupName, ProjectSettlement.class, "10 32 21 6 1 ?",project.getId().toString());
 	}
 	
 	@Test
@@ -66,6 +78,24 @@ public class TestQuartz {
 		int second = newDate.getSecond();
 		
 		String str = second+" "+minute+" "+hour+" "+day+" "+month+" ? "+year;
-		System.out.println(str);
+	}
+	
+	@Test
+	public void getAllSupporter() {
+		List<TOrder> list = homePageService.getOrderByProId(11);
+		Set<Integer> memberIds = new HashSet<>();
+		for (TOrder tOrder : list) {
+			memberIds.add(tOrder.getMemberid());
+		}
+		for (Integer mid : memberIds) {
+			Member member = memberService.queryMemberByMid(mid);
+			System.err.println(member.getTel());
+		}
+	}
+	
+	@Test
+	public void TestRefund() {
+		List<AliPayBean> beans = new ArrayList<AliPayBean>();
+		
 	}
 }

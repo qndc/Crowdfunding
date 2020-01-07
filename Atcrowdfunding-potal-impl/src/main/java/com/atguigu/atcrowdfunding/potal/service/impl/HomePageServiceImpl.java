@@ -128,4 +128,12 @@ public class HomePageServiceImpl implements HomePageService {
 	public void updateOrder(TOrder tOrder) {
 		this.orderMapper.updateByPrimaryKey(tOrder);
 	}
+
+	@Override
+	public List<TOrder> getOrderByProId(Integer proId) {
+		TOrderExample example = new TOrderExample();
+		TOrderExample.Criteria criteria = example.createCriteria();
+		criteria.andProjectidEqualTo(proId);
+		return orderMapper.selectByExample(example);
+	}
 }

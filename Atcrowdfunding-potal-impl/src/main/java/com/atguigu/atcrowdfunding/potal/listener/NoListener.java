@@ -1,6 +1,7 @@
 package com.atguigu.atcrowdfunding.potal.listener;
 
- import com.atguigu.atcrowdfunding.bean.Member;
+ import com.alibaba.fastjson.JSON;
+import com.atguigu.atcrowdfunding.bean.Member;
  import com.atguigu.atcrowdfunding.bean.Project;
  import com.atguigu.atcrowdfunding.bean.TProjectTicket;
  import com.atguigu.atcrowdfunding.bean.TProjectTicketExample;
@@ -8,7 +9,10 @@ package com.atguigu.atcrowdfunding.potal.listener;
  import com.atguigu.atcrowdfunding.potal.dao.TProjectTicketMapper;
  import com.atguigu.atcrowdfunding.potal.service.ProjectTicketService;
  import com.atguigu.atcrowdfunding.util.ApplicationContextUtils;
- import java.util.HashMap;
+import com.atguigu.atcrowdfunding.util.SmsUtil;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
  import java.util.List;
  import java.util.Map;
  import org.activiti.engine.delegate.DelegateExecution;
@@ -38,12 +42,12 @@ public class NoListener implements ExecutionListener {
 			tProjectTicket.setStatus("0");
 			tProjectTicket.setPstep("init");
 			mapper.updateByPrimaryKey(tProjectTicket);
-
 			Member member = memberMapper.selectByPrimaryKey(tProjectTicket.getMemberid());
-
-			Map map = new HashMap();
+			Map<String, String> map = new HashMap();
 			map.put("name", member.getRealname());
 			map.put("result", result);
+			//发送短信验证码
+			SmsUtil.sendSms("SMS_181200841",new Gson().toJson(map), member.getTel(), "我的学习分享");
 		}
 	}
  }

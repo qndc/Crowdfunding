@@ -42,10 +42,11 @@ public abstract interface HomePageService
   public abstract void updatePro(Project paramProject);
   
   public abstract void updateOrder(TOrder paramTOrder);
+  
+  /**
+   * 	根据项目查询订单
+   * @param proId
+   * @return
+   */
+  List<TOrder> getOrderByProId(Integer proId);
 }
-
-
-/* Location:              C:\Users\dc\Desktop\jar包\Atcrowdfunding-potal-api-0.0.1-SNAPSHOT.jar!\com\atguigu\atcrowdfunding\potal\service\HomePageService.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       0.7.1
- */
