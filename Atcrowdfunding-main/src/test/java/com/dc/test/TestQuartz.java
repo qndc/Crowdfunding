@@ -60,7 +60,7 @@ public class TestQuartz {
 		String triggerName = project.getId() + "_tname";
 		String jobGroupName = project.getMemberid() + "_jgname";
 		String triggerGroupName = project.getMemberid() + "_tgname";
-		quartzService.addJob(jobName, jobGroupName, triggerName, triggerGroupName, ProjectSettlement.class, "10 10 22 8 1 ?",project.getId().toString());
+		quartzService.addJob(jobName, jobGroupName, triggerName, triggerGroupName, ProjectSettlement.class, "0 0 10 9 1 ?",project.getId().toString());
 	}
 	
 	

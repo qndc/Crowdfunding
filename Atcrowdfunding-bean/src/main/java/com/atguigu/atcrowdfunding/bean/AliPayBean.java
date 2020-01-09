@@ -2,16 +2,16 @@ package com.atguigu.atcrowdfunding.bean;
 
 public class AliPayBean
 {
-  private String out_trade_no;
-  private String total_amount;
-  private String subject;
-  private String body;
-  private String timeout_express = "10m";
-  private String product_code = "FAST_INSTANT_TRADE_PAY";
-  private String trade_no;
-  private String refund_amount;
-  private String refund_reason;
-  private String out_request_no;
+  private String out_trade_no;	//商户订单号
+  private String total_amount;	//订单总金额
+  private String subject;		//订单标题
+  private String body;			//订单描述
+  private String timeout_express = "10m";	//该笔订单允许的最晚付款时间
+  private String product_code = "FAST_INSTANT_TRADE_PAY";	//销售产品码
+  private String trade_no;	//支付宝交易号
+  private String refund_amount;	//退款金额，该金额不能大于订单金额,单位为元
+  private String refund_reason;	//退款的原因说明
+  private String out_request_no;	//标识一次退款请求，同一笔交易多次退款需要保证唯一，如需部分退款，则此参数必传
   
   public String getOut_trade_no()
   {
