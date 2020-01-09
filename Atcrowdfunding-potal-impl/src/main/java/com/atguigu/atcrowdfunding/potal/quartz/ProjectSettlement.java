@@ -105,8 +105,9 @@ public class ProjectSettlement implements Job
 					Map<String, String> sm = new HashMap<>();
 					sm.put("name", mmm.getRealname());
 					SmsUtil.sendSms("SMS_182375151", new Gson().toJson(sm), mmm.getTel(), "我的学习分享");
-					
 					//更新订单状态为3-交易关闭
+					tOrder.setStatus("3");
+					homePageService.updateOrder(tOrder);
 					
 				}else {
 					AlipayConfig.logResult("退款失败，失败原因："+response.getSubMsg());

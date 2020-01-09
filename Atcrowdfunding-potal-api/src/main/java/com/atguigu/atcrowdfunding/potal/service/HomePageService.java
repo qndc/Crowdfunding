@@ -5,6 +5,7 @@ import com.atguigu.atcrowdfunding.bean.ProjectType;
 import com.atguigu.atcrowdfunding.bean.TImgs;
 import com.atguigu.atcrowdfunding.bean.TMemberAddress;
 import com.atguigu.atcrowdfunding.bean.TMemberInvoice;
+import com.atguigu.atcrowdfunding.bean.TMemberProjectFollow;
 import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.bean.TProjectComp;
 import com.atguigu.atcrowdfunding.bean.TReturn;
@@ -49,4 +50,10 @@ public abstract interface HomePageService
    * @return
    */
   List<TOrder> getOrderByProId(Integer proId);
+
+  /**
+   * 关注
+   * @param mpf
+   */
+  public abstract void addFollower(TMemberProjectFollow mpf);
 }

@@ -353,15 +353,15 @@ h3.break>a {
 											</div>
 											<div style="float: right;">
 												<i title="截至日期" class="glyphicon glyphicon-calendar"></i>
-												2017-20-20
+												${project.enddate }
 											</div>
 											</p>
 											<br>
 											<div class="progress" style="margin-bottom: 4px;">
 												<div class="progress-bar progress-bar-success"
-													role="progressbar" aria-valuenow="40" aria-valuemin="0"
-													aria-valuemax="100" style="width: 40%">
-													<span>40% </span>
+													role="progressbar" aria-valuenow="${project.completion}" aria-valuemin="0"
+													aria-valuemax="100" style="width: ${project.completion}%">
+													<span>${project.completion}% </span>
 												</div>
 											</div>
 											<div>

@@ -8,6 +8,7 @@ import com.atguigu.atcrowdfunding.bean.TImgsExample.Criteria;
 import com.atguigu.atcrowdfunding.bean.TMemberAddress;
 import com.atguigu.atcrowdfunding.bean.TMemberAddressExample;
 import com.atguigu.atcrowdfunding.bean.TMemberInvoice;
+import com.atguigu.atcrowdfunding.bean.TMemberProjectFollow;
 import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.bean.TOrderExample;
 import com.atguigu.atcrowdfunding.bean.TProjectComp;
@@ -20,6 +21,7 @@ import com.atguigu.atcrowdfunding.potal.dao.ProjectMapper;
 import com.atguigu.atcrowdfunding.potal.dao.TImgsMapper;
 import com.atguigu.atcrowdfunding.potal.dao.TMemberAddressMapper;
 import com.atguigu.atcrowdfunding.potal.dao.TMemberInvoiceMapper;
+import com.atguigu.atcrowdfunding.potal.dao.TMemberProjectFollowMapper;
 import com.atguigu.atcrowdfunding.potal.dao.TOrderMapper;
 import com.atguigu.atcrowdfunding.potal.dao.TProjectCompMapper;
 import com.atguigu.atcrowdfunding.potal.dao.TReturnMapper;
@@ -48,6 +50,8 @@ public class HomePageServiceImpl implements HomePageService {
 	private TMemberInvoiceMapper invoiceMapper;
 	@Autowired
 	private TOrderMapper orderMapper;
+	@Autowired
+	private TMemberProjectFollowMapper mpfMapper;
 
 	public List<com.atguigu.atcrowdfunding.bean.Type> typeList() {
 		return this.typeMapper.selectAll();
@@ -135,5 +139,11 @@ public class HomePageServiceImpl implements HomePageService {
 		TOrderExample.Criteria criteria = example.createCriteria();
 		criteria.andProjectidEqualTo(proId);
 		return orderMapper.selectByExample(example);
+	}
+
+	@Override
+	public void addFollower(TMemberProjectFollow mpf) {
+		mpfMapper.insert(mpf);
+		
 	}
 }

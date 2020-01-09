@@ -1,12 +1,12 @@
 package com.atguigu.atcrowdfunding.potal.controller;
 
-import com.alipay.api.internal.util.AlipaySignature;
 import com.atguigu.atcrowdfunding.bean.AliPayBean;
 import com.atguigu.atcrowdfunding.bean.Member;
 import com.atguigu.atcrowdfunding.bean.Project;
 import com.atguigu.atcrowdfunding.bean.TImgs;
 import com.atguigu.atcrowdfunding.bean.TMemberAddress;
 import com.atguigu.atcrowdfunding.bean.TMemberInvoice;
+import com.atguigu.atcrowdfunding.bean.TMemberProjectFollow;
 import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.bean.TProjectComp;
 import com.atguigu.atcrowdfunding.bean.TReturn;
@@ -14,9 +14,8 @@ import com.atguigu.atcrowdfunding.potal.service.HomePageService;
 import com.atguigu.atcrowdfunding.potal.service.QuartzService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.AliPayUtil;
-import com.atguigu.atcrowdfunding.util.AlipayConfig;
 
-import java.io.IOException;
+
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,10 +23,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.function.Function;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -43,8 +42,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomePageController {
 	@Autowired
 	private HomePageService homePageService;
-	@Autowired
-	private QuartzService quartzService;
 
 	@RequestMapping({ "/{proId}/detailInfo" })
 	public String detailInfo(@PathVariable Integer proId, Model model) {
@@ -55,10 +52,10 @@ public class HomePageController {
 		List<TReturn> returntList = this.homePageService.getReturnByProId(proId);
 
 		TProjectComp comp = this.homePageService.getCompByProId(proId);
-
-		LocalDateTime start = LocalDateTime.parse("2019-12-26 11:29:40",
-				DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-		LocalDateTime end = start.plusDays(30L);
+		
+		//时间显示
+		LocalDateTime start = LocalDateTime.parse(project.getDeploydate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		LocalDateTime end = start.plusDays(project.getDay());
 		LocalDateTime now = LocalDateTime.now();
 		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date beginTime = null;
@@ -265,4 +262,56 @@ public class HomePageController {
 		}
 		
 	}
+	
+	/**
+	 * 关注
+	 * @return
+	 */
+	@RequestMapping("/follower")
+	@ResponseBody
+	public Object follower(Integer proId,HttpSession session) {
+		AjaxResult result = new AjaxResult();
+		try {
+//			Member loginMember = (Member) session.getAttribute("member");
+//			TMemberProjectFollow mpf = new TMemberProjectFollow();
+//			mpf.setMemberid(loginMember.getId());
+//			mpf.setProjectid(proId);
+//			//添加关注
+//			homePageService.addFollower(mpf);
+//			//修改项目关注数量
+//			Project project = homePageService.getProsById(proId);
+//			project.setFollower(project.getFollower()+1);
+//			homePageService.updatePro(project);
+//			Map<String, Object> map = new HashMap<>();
+//			map.put("mpfId", mpf.getId());
+//			map.put("followers", project.getFollower());
+			result.setStatus(200);
+//			result.setMessage(map);
+			System.err.println("关注");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(500);
+			result.setMessage("关注失败");
+		}
+		return result;
+	}
+	
+	/**
+	 * 取消关注
+	 * @return
+	 */
+	@RequestMapping("/cancel")
+	@ResponseBody
+	public Object cancelFollower(Integer proId,HttpSession session) {
+		AjaxResult result = new AjaxResult();
+		try {
+			result.setStatus(200);
+			System.err.println("取消关注");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setStatus(500);
+		}
+		return result;
+	}
+	
 }

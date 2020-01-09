@@ -141,9 +141,8 @@
 						<div style="float: left; width: 70%;">
 							${project.remark }</div>
 						<div style="float: right;">
-							<button type="button" class="btn btn-default">
-								<i style="color: #f60" class="glyphicon glyphicon-heart"></i> 关注
-								${project.supporter }
+							<button type="button" class="btn btn-default" id="follower">
+								<i style="color: #f60" class="fa fa-heart-o"></i>关注${project.follower }
 							</button>
 						</div>
 					</div>
@@ -368,13 +367,54 @@
 	<script src="${APP_PATH }/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${APP_PATH }/script/docs.min.js"></script>
 	<script src="${APP_PATH }/script/back-to-top.js"></script>
+	<script src="${APP_PATH }/jquery/layer/layer.js"></script>
 	<script>
 		$(".prjtip img").css("cursor", "pointer");
 		$(".prjtip img").click(function() {
 			window.location.href = 'project.html';
 		});
 		
-		
+		//关注
+		$("#follower").click(function () {
+			var btn = $(this);
+			if ($(this).find($("i")).attr("class") == "fa fa-heart") {
+				$.ajax({
+					url:"${APP_PATH}/homepage/cancel.do",
+					type:"post",
+					data:{
+						"proId":"${project.id }"
+					},
+					success:function(result){
+						if (result.status == 200) {
+							btn.find($("i")).attr("class","fa fa-heart-o");
+						}else{
+							layer.msg(result.message,{time:1000,icon:5,shift:6})
+						}
+					},
+					error:function(result){
+						layer.msg(result.message,{time:1000,icon:5,shift:6})
+					}
+				})
+			}else{
+				$.ajax({
+					url:"${APP_PATH}/homepage/follower.do",
+					type:"post",
+					data:{
+						"proId":"${project.id }"
+					},
+					success:function(result){
+						if (result.status == 200) {
+							btn.find($("i")).attr("class","fa fa-heart");
+						}else{
+							layer.msg(result.message,{time:1000,icon:5,shift:6})
+						}
+					},
+					error:function(result){
+						layer.msg(result.message,{time:1000,icon:5,shift:6})
+					}
+				})
+			}
+		})
 	</script>
 </body>
 </html>

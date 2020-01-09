@@ -1,5 +1,7 @@
 package com.atguigu.atcrowdfunding.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +62,9 @@ public class DispatcherController {
 					for (TImgs img : imgs) {
 						pro.setImgs(img);
 					}
+					LocalDateTime start = LocalDateTime.parse(pro.getDeploydate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+					LocalDateTime end = start.plusDays(pro.getDay());
+					pro.setEnddate(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 					pros.add(pro);
 				}
 			}
@@ -117,7 +123,7 @@ public class DispatcherController {
 			if ("admin".equals(map.get("type"))) {
 				return "redirect:/main.htm";
 			} else if ("member".equals(map.get("type"))) {
-				return "redirect:/member.htm";
+				return "redirect:/index.htm";
 			}
 		}
 		return "login";
@@ -346,5 +352,10 @@ public class DispatcherController {
 		}
 		return str.toString();
 	}
-
+	
+	
+	//日期处理
+	public String strHandler(Project project,Function<Project, String> fun) {
+		return fun.apply(project);
+	}
 }
