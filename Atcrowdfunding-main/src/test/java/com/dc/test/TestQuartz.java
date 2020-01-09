@@ -55,47 +55,13 @@ public class TestQuartz {
 	
 	@Test
 	public void demo() {
-		Project project = homePageService.getProsById(11);
+		Project project = homePageService.getProsById(13);
 		String jobName = project.getId() + "_jname";
 		String triggerName = project.getId() + "_tname";
 		String jobGroupName = project.getMemberid() + "_jgname";
 		String triggerGroupName = project.getMemberid() + "_tgname";
-		//quartzService.addJob(jobName, jobGroupName, triggerName, triggerGroupName, ProjectSettlement.class, "10 32 21 6 1 ?",project.getId().toString());
+		quartzService.addJob(jobName, jobGroupName, triggerName, triggerGroupName, ProjectSettlement.class, "10 10 22 8 1 ?",project.getId().toString());
 	}
 	
-	@Test
-	public void time() {
-		String date = "2019-12-26 11:29:40";
-		Integer temp = 30;
-		LocalDateTime oldDate = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-		LocalDateTime newDate = oldDate.plusDays(temp.longValue());
-		
-		int year = newDate.getYear();
-		int month = newDate.getMonthValue();
-		int day = newDate.getDayOfMonth();
-		int hour = newDate.getHour();
-		int minute = newDate.getMinute();
-		int second = newDate.getSecond();
-		
-		String str = second+" "+minute+" "+hour+" "+day+" "+month+" ? "+year;
-	}
 	
-	@Test
-	public void getAllSupporter() {
-		List<TOrder> list = homePageService.getOrderByProId(11);
-		Set<Integer> memberIds = new HashSet<>();
-		for (TOrder tOrder : list) {
-			memberIds.add(tOrder.getMemberid());
-		}
-		for (Integer mid : memberIds) {
-			Member member = memberService.queryMemberByMid(mid);
-			System.err.println(member.getTel());
-		}
-	}
-	
-	@Test
-	public void TestRefund() {
-		List<AliPayBean> beans = new ArrayList<AliPayBean>();
-		
-	}
 }

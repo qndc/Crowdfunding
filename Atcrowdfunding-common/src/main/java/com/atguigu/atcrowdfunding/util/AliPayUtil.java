@@ -5,6 +5,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.*;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.atguigu.atcrowdfunding.bean.AliPayBean;
 
 import org.springframework.stereotype.Component;
@@ -52,13 +53,12 @@ public class AliPayUtil {
      * @throws IOException
      * @throws AlipayApiException
      */
-    public static String Refund(AliPayBean bean) throws IOException,AlipayApiException{
+    public static AlipayTradeRefundResponse Refund(AliPayBean bean) throws IOException,AlipayApiException{
         //设置请求参数
         AlipayTradeRefundRequest alipayRequest = new AlipayTradeRefundRequest();
         alipayRequest.setBizContent(JSON.toJSONString(bean));
         //请求
-        String result = alipayClient.execute(alipayRequest).getBody();
-        return  result;
+        return alipayClient.execute(alipayRequest);
     }
 
     /**
