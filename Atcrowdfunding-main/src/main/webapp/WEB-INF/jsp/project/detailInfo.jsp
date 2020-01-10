@@ -142,7 +142,14 @@
 							${project.remark }</div>
 						<div style="float: right;">
 							<button type="button" class="btn btn-default" id="follower">
-								<i style="color: #f60" class="fa fa-heart-o"></i>关注${project.follower }
+								<c:if test="${requestScope.isFollow  == true}">
+									<i style="color: #f60" class="fa fa-heart"></i>
+									<span>取消关注&nbsp;&nbsp;${project.follower } </span>
+								</c:if>
+								<c:if test="${requestScope.isFollow  == false}">
+									<i style="color: #f60" class="fa fa-heart-o"></i>
+									<span>关注&nbsp;&nbsp;${project.follower } </span>
+								</c:if>
 							</button>
 						</div>
 					</div>
@@ -385,8 +392,11 @@
 						"proId":"${project.id }"
 					},
 					success:function(result){
+						console.log(result);
 						if (result.status == 200) {
+							//样式修改
 							btn.find($("i")).attr("class","fa fa-heart-o");
+							btn.find($("span")).text("关注 "+ result.message);
 						}else{
 							layer.msg(result.message,{time:1000,icon:5,shift:6})
 						}
@@ -403,8 +413,11 @@
 						"proId":"${project.id }"
 					},
 					success:function(result){
+						console.log(result);
 						if (result.status == 200) {
+							
 							btn.find($("i")).attr("class","fa fa-heart");
+							btn.find($("span")).text("取消关注 " + result.message.followers);
 						}else{
 							layer.msg(result.message,{time:1000,icon:5,shift:6})
 						}

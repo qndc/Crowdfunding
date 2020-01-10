@@ -9,6 +9,7 @@ import com.atguigu.atcrowdfunding.bean.TMemberAddress;
 import com.atguigu.atcrowdfunding.bean.TMemberAddressExample;
 import com.atguigu.atcrowdfunding.bean.TMemberInvoice;
 import com.atguigu.atcrowdfunding.bean.TMemberProjectFollow;
+import com.atguigu.atcrowdfunding.bean.TMemberProjectFollowExample;
 import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.bean.TOrderExample;
 import com.atguigu.atcrowdfunding.bean.TProjectComp;
@@ -27,6 +28,8 @@ import com.atguigu.atcrowdfunding.potal.dao.TProjectCompMapper;
 import com.atguigu.atcrowdfunding.potal.dao.TReturnMapper;
 import com.atguigu.atcrowdfunding.potal.service.HomePageService;
 import java.util.List;
+import java.util.function.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -145,5 +148,29 @@ public class HomePageServiceImpl implements HomePageService {
 	public void addFollower(TMemberProjectFollow mpf) {
 		mpfMapper.insert(mpf);
 		
+	}
+
+	@Override
+	public List<TMemberProjectFollow> getProjectFollowe(Integer id, Integer proId) {
+		TMemberProjectFollowExample example = new TMemberProjectFollowExample();
+		TMemberProjectFollowExample.Criteria criteria = example.createCriteria();
+		criteria.andProjectidEqualTo(proId);
+		criteria.andMemberidEqualTo(id);
+		List<TMemberProjectFollow> list = mpfMapper.selectByExample(example);
+		return list;
+	}
+
+	@Override
+	public Boolean cancelFollow(Integer id, Integer proId) {
+		TMemberProjectFollowExample example = new TMemberProjectFollowExample();
+		TMemberProjectFollowExample.Criteria criteria = example.createCriteria();
+		criteria.andProjectidEqualTo(proId);
+		criteria.andMemberidEqualTo(id);
+		int deleteByExample = mpfMapper.deleteByExample(example);
+		if (deleteByExample > 0) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 }

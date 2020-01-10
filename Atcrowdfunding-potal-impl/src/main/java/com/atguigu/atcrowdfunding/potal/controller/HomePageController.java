@@ -44,7 +44,10 @@ public class HomePageController {
 	private HomePageService homePageService;
 
 	@RequestMapping({ "/{proId}/detailInfo" })
-	public String detailInfo(@PathVariable Integer proId, Model model) {
+	public String detailInfo(@PathVariable Integer proId, Model model,HttpSession session) {
+		
+		boolean isFollow = false;
+		
 		Project project = this.homePageService.getProsById(proId);
 
 		List<TImgs> imgs = this.homePageService.getProDetailImg(proId);
@@ -78,11 +81,16 @@ public class HomePageController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		Member loginMember = (Member) session.getAttribute("member");
+		List<TMemberProjectFollow> list = homePageService.getProjectFollowe(loginMember.getId(),proId);
+		if (!list.isEmpty()) {
+			isFollow = true;
+		}
 		model.addAttribute("project", project);
 		model.addAttribute("imgs", imgs);
 		model.addAttribute("returntList", returntList);
 		model.addAttribute("comp", comp);
+		model.addAttribute("isFollow", isFollow);
 
 		return "/project/detailInfo";
 	}
@@ -272,22 +280,25 @@ public class HomePageController {
 	public Object follower(Integer proId,HttpSession session) {
 		AjaxResult result = new AjaxResult();
 		try {
-//			Member loginMember = (Member) session.getAttribute("member");
-//			TMemberProjectFollow mpf = new TMemberProjectFollow();
-//			mpf.setMemberid(loginMember.getId());
-//			mpf.setProjectid(proId);
-//			//添加关注
-//			homePageService.addFollower(mpf);
-//			//修改项目关注数量
-//			Project project = homePageService.getProsById(proId);
-//			project.setFollower(project.getFollower()+1);
-//			homePageService.updatePro(project);
-//			Map<String, Object> map = new HashMap<>();
-//			map.put("mpfId", mpf.getId());
-//			map.put("followers", project.getFollower());
+			Member loginMember = (Member) session.getAttribute("member");
+			List<TMemberProjectFollow> list = homePageService.getProjectFollowe(loginMember.getId(),proId);
+			Project project = homePageService.getProsById(proId);
+			Map<String, Object> map = new HashMap<>();
+			TMemberProjectFollow mpf = new TMemberProjectFollow();
+			if (list.isEmpty()) {
+				//添加关注
+				mpf.setMemberid(loginMember.getId());
+				mpf.setProjectid(proId);
+				homePageService.addFollower(mpf);
+				//修改项目关注数量
+				project.setFollower(project.getFollower() + 1);
+				homePageService.updatePro(project);
+				map.put("followers", project.getFollower());
+			}else {
+				map.put("followers", project.getFollower());
+			}
 			result.setStatus(200);
-//			result.setMessage(map);
-			System.err.println("关注");
+			result.setMessage(map);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setStatus(500);
@@ -305,8 +316,17 @@ public class HomePageController {
 	public Object cancelFollower(Integer proId,HttpSession session) {
 		AjaxResult result = new AjaxResult();
 		try {
+			Member loginMember = (Member) session.getAttribute("member");
+			List<TMemberProjectFollow> list = homePageService.getProjectFollowe(loginMember.getId(),proId);
+			Project project = homePageService.getProsById(proId);
+			if (!list.isEmpty()) {
+				if (homePageService.cancelFollow(loginMember.getId(),proId)) {
+					project.setFollower(project.getFollower() - 1);
+					homePageService.updatePro(project);
+				}
+			}
 			result.setStatus(200);
-			System.err.println("取消关注");
+			result.setMessage(project.getFollower());
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setStatus(500);

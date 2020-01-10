@@ -30,4 +30,11 @@ public class TMemberProjectFollow {
     public void setMemberid(Integer memberid) {
         this.memberid = memberid;
     }
+
+	@Override
+	public String toString() {
+		return "TMemberProjectFollow [id=" + id + ", projectid=" + projectid + ", memberid=" + memberid + "]";
+	}
+    
+    
 }

@@ -14,35 +14,35 @@ import java.util.List;
 
 public abstract interface HomePageService
 {
-  public abstract List<Type> typeList();
+  List<Type> typeList();
   
-  public abstract List<ProjectType> getProsIdByType(Integer paramInteger);
+  List<ProjectType> getProsIdByType(Integer paramInteger);
   
-  public abstract Project getProsById(Integer paramInteger);
+  Project getProsById(Integer paramInteger);
   
-  public abstract List<TImgs> getProImg(Integer paramInteger);
+  List<TImgs> getProImg(Integer paramInteger);
   
-  public abstract List<TImgs> getProDetailImg(Integer paramInteger);
+  List<TImgs> getProDetailImg(Integer paramInteger);
   
-  public abstract List<TReturn> getReturnByProId(Integer paramInteger);
+  List<TReturn> getReturnByProId(Integer paramInteger);
   
-  public abstract TProjectComp getCompByProId(Integer paramInteger);
+  TProjectComp getCompByProId(Integer paramInteger);
   
-  public abstract TReturn getReturnById(Integer paramInteger);
+  TReturn getReturnById(Integer paramInteger);
   
-  public abstract void addAddress(TMemberAddress paramTMemberAddress);
+  void addAddress(TMemberAddress paramTMemberAddress);
   
-  public abstract List<TMemberAddress> getAddrByMemberId(Integer paramInteger);
+  List<TMemberAddress> getAddrByMemberId(Integer paramInteger);
   
-  public abstract void addInvoice(TMemberInvoice paramTMemberInvoice);
+  void addInvoice(TMemberInvoice paramTMemberInvoice);
   
-  public abstract void addOrder(TOrder paramTOrder);
+  void addOrder(TOrder paramTOrder);
   
-  public abstract List<TOrder> selectOrder(String paramString);
+  List<TOrder> selectOrder(String paramString);
   
-  public abstract void updatePro(Project paramProject);
+  void updatePro(Project paramProject);
   
-  public abstract void updateOrder(TOrder paramTOrder);
+  void updateOrder(TOrder paramTOrder);
   
   /**
    * 	根据项目查询订单
@@ -52,8 +52,22 @@ public abstract interface HomePageService
   List<TOrder> getOrderByProId(Integer proId);
 
   /**
-   * 关注
+   * 	关注
    * @param mpf
    */
   public abstract void addFollower(TMemberProjectFollow mpf);
+
+  /**
+   * 	根据项目id、用户id查询是否已关注
+   * @param id
+   * @param proId
+   */
+  List<TMemberProjectFollow> getProjectFollowe(Integer id, Integer proId);
+  
+  /**
+   * 	取消关注
+   * @param id
+   * @param proId
+   */
+  Boolean cancelFollow(Integer id, Integer proId);
 }
