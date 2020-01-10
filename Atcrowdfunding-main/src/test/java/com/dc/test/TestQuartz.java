@@ -23,6 +23,7 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -51,6 +52,8 @@ public class TestQuartz {
 	private HomePageService homePageService;
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private RedisTemplate redisTemplate;
 	
 	
 	@Test
@@ -63,5 +66,12 @@ public class TestQuartz {
 		//quartzService.addJob(jobName, jobGroupName, triggerName, triggerGroupName, ProjectSettlement.class, "0 0 10 9 1 ?",project.getId().toString());
 	}
 	
-	
+	@Test
+	public void redisDemo() {
+		
+//		redisTemplate.opsForValue().set("desc","spring-data-redis 测试");
+//		String str = (String) redisTemplate.opsForValue().get("desc") ;
+//		System.err.println(str);
+		
+	}
 }
