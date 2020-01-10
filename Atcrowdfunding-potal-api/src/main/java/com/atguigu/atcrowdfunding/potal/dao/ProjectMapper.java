@@ -6,15 +6,17 @@ import org.apache.ibatis.annotations.Param;
 
 public abstract interface ProjectMapper
 {
-  public abstract int deleteByPrimaryKey(Integer paramInteger);
+  int deleteByPrimaryKey(Integer paramInteger);
   
-  public abstract int insert(Project paramProject);
+  int insert(Project paramProject);
   
-  public abstract Project selectByPrimaryKey(Integer paramInteger);
+  Project selectByPrimaryKey(Integer paramInteger);
   
-  public abstract Project selectActrowIng(@Param("id") Integer paramInteger, @Param("status") String paramString);
+  Project selectActrowIng(@Param("id") Integer paramInteger, @Param("status") String paramString);
   
-  public abstract List<Project> selectAll();
+  List<Project> selectAll();
   
-  public abstract int updateByPrimaryKey(Project paramProject);
+  int updateByPrimaryKey(Project paramProject);
+
+  List<Project> selectByPage(@Param("startIndex") Integer startIndex,@Param("pagesize") Integer pagesize);
 }

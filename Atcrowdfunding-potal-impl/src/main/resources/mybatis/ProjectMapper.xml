@@ -73,4 +73,9 @@
     from t_project
     where memberid = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, name, remark, money, day, status, deploydate, supportmoney, supporter, 
+    completion, memberid, createdate, follower
+    from t_project limit #{startIndex},#{pagesize}
+  </select>
 </mapper>

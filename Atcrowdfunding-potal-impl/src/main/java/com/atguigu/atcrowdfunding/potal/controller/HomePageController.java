@@ -14,7 +14,7 @@ import com.atguigu.atcrowdfunding.potal.service.HomePageService;
 import com.atguigu.atcrowdfunding.potal.service.QuartzService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.AliPayUtil;
-
+import com.atguigu.atcrowdfunding.util.PageVo;
 
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -35,6 +35,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -332,6 +333,22 @@ public class HomePageController {
 			result.setStatus(500);
 		}
 		return result;
+	}
+	
+	/**
+	 * 	查询全部
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping({"/{pageno}/projects"})
+	public String getProsByTypeId(@PathVariable Integer pageno,Model model) {
+		PageVo<Project> vo = new PageVo<>(pageno, 12);
+		vo = homePageService.getProsByPage(vo);
+//		for (Project project : vo.getData()) {
+//			System.err.println(project);
+//		}
+		model.addAttribute("page", vo);
+		return "/project/projects";
 	}
 	
 }

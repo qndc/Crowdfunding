@@ -52,7 +52,7 @@ public class Page {
 	}
 	public Page() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	@Override
 	public String toString() {

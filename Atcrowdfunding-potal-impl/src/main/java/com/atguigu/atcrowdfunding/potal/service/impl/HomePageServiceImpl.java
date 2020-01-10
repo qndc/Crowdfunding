@@ -27,6 +27,8 @@ import com.atguigu.atcrowdfunding.potal.dao.TOrderMapper;
 import com.atguigu.atcrowdfunding.potal.dao.TProjectCompMapper;
 import com.atguigu.atcrowdfunding.potal.dao.TReturnMapper;
 import com.atguigu.atcrowdfunding.potal.service.HomePageService;
+import com.atguigu.atcrowdfunding.util.PageVo;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -173,4 +175,13 @@ public class HomePageServiceImpl implements HomePageService {
 			return false;
 		}
 	}
+
+	@Override
+	public PageVo<Project> getProsByPage(PageVo<Project> vo) {
+		List<Project> pros = projectMapper.selectByPage(vo.getStartIndex(),vo.getPagesize());
+		vo.setData(pros);
+		return vo;
+	}
+
+	
 }

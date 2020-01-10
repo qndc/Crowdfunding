@@ -327,7 +327,7 @@ h3.break>a {
 					<div class="box ui-draggable" id="mainBox">
 						<div class="mHd" style="">
 							<div class="path">
-								<a href="projects.html">更多...</a>
+								<a href="/homepage/1/projects.htm">更多...</a>
 							</div>
 							<h3>
 								${type.name } <small style="color: #FFF;">${type.remark }</small>
@@ -365,9 +365,8 @@ h3.break>a {
 												</div>
 											</div>
 											<div>
-												<span style="float: right;"><i
-													class="glyphicon glyphicon-star-empty"></i></span> <span><i
-													class="glyphicon glyphicon-user" title="支持人数"></i> 12345</span>
+												<span style="float: right;"><i class="glyphicon glyphicon-star-empty"></i>${project.follower }</span> 
+												<span><i class="glyphicon glyphicon-user" title="支持人数"></i>${project.supporter }</span>
 												</div>
 											</div>
 										</div>

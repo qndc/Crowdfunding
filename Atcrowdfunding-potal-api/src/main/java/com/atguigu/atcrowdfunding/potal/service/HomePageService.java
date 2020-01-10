@@ -10,6 +10,8 @@ import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.bean.TProjectComp;
 import com.atguigu.atcrowdfunding.bean.TReturn;
 import com.atguigu.atcrowdfunding.bean.Type;
+import com.atguigu.atcrowdfunding.util.PageVo;
+
 import java.util.List;
 
 public abstract interface HomePageService
@@ -70,4 +72,13 @@ public abstract interface HomePageService
    * @param proId
    */
   Boolean cancelFollow(Integer id, Integer proId);
+
+  /**
+   * 	分页查询所有
+   * @param vo
+   * @return
+   */
+  PageVo<Project> getProsByPage(PageVo<Project> vo);
+
+ 
 }
