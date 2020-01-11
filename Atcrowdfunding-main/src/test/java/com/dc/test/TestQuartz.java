@@ -69,9 +69,22 @@ public class TestQuartz {
 	@Test
 	public void redisDemo() {
 		
-//		redisTemplate.opsForValue().set("desc","spring-data-redis 测试");
-//		String str = (String) redisTemplate.opsForValue().get("desc") ;
+//		redisTemplate.opsForValue().set("k2","k22");
+//		String str = (String) redisTemplate.opsForValue().get("k2") ;
 //		System.err.println(str);
+		
+	}
+	
+	@Test
+	public void redisList() {
+		
+//		redisTemplate.boundListOps("projects").rightPush("1");
+//		redisTemplate.boundListOps("projects").rightPush("2");
+//		redisTemplate.boundListOps("projects").rightPush("3");
+//		List<String> range = redisTemplate.boundListOps("projects").range(0, 10);
+//		for (String string : range) {
+//			System.err.println(string);
+//		}
 		
 	}
 }

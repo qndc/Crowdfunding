@@ -11,4 +11,5 @@ public class Const
   public static final String UPLOADFILE = "uploadfile";
   public static final String CHECKEMAIL = "checkemail";
   public static final String SMSCODE = "code";
+  public static final String INDEXPROS = "indexpros";
 }

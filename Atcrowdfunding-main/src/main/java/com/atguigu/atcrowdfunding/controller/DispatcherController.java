@@ -17,12 +17,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.h2.util.New;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.atguigu.atcrowdfunding.bean.Member;
 import com.atguigu.atcrowdfunding.bean.Permission;
 import com.atguigu.atcrowdfunding.bean.Project;
@@ -48,30 +52,40 @@ public class DispatcherController {
 	private MemberService memberService;
 	@Autowired
 	private HomePageService hpService;
+	@Autowired
+	private RedisTemplate redisTemplate;
 
 	@RequestMapping({ "/index" })
 	public Object index(Model model) {
-		List<Type> types = this.hpService.typeList();
-		for (Type type : types) {
-			List<ProjectType> pTypeS = this.hpService.getProsIdByType(type.getId());
-			List<Project> pros = new ArrayList();
-			for (ProjectType projectType : pTypeS) {
-				Project pro = this.hpService.getProsById(projectType.getProjectid());
-				if (pro != null) {
-					List<TImgs> imgs = this.hpService.getProImg(pro.getId());
-					for (TImgs img : imgs) {
-						pro.setImgs(img);
+		String indexPros = (String)redisTemplate.opsForValue().get(Const.INDEXPROS);
+		//redis取出来的为空，就查询数据库
+		if (StringUtils.isBlank(indexPros)) {
+			List<Type> types = hpService.typeList();
+			for (Type type : types) {
+				List<ProjectType> pTypeS = hpService.getProsIdByType(type.getId());
+				List<Project> pros = new ArrayList<>();
+				for (ProjectType projectType : pTypeS) {
+					Project pro = this.hpService.getProsById(projectType.getProjectid());
+					if (pro != null) {
+						List<TImgs> imgs = this.hpService.getProImg(pro.getId());
+						for (TImgs img : imgs) {
+							pro.setImgs(img);
+						}
+						LocalDateTime start = LocalDateTime.parse(pro.getDeploydate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+						LocalDateTime end = start.plusDays(pro.getDay());
+						pro.setEnddate(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+						pros.add(pro);
 					}
-					LocalDateTime start = LocalDateTime.parse(pro.getDeploydate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-					LocalDateTime end = start.plusDays(pro.getDay());
-					pro.setEnddate(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-					pros.add(pro);
 				}
+//				type.setPros(pros.subList(0, 3));
+				type.setPros(pros);
 			}
-			type.setPros(pros);
+			redisTemplate.opsForValue().set(Const.INDEXPROS, new Gson().toJson(types));
+			model.addAttribute("types", types);
+		}else {
+			List<Type> types = JSONObject.parseArray(indexPros,Type.class);
+			model.addAttribute("types", types);
 		}
-		model.addAttribute("types", types);
-
 		return "iindex";
 	}
 
@@ -354,8 +368,4 @@ public class DispatcherController {
 	}
 	
 	
-	//日期处理
-	public String strHandler(Project project,Function<Project, String> fun) {
-		return fun.apply(project);
-	}
 }

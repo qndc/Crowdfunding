@@ -273,7 +273,7 @@ public class HomePageController {
 	}
 	
 	/**
-	 * 关注
+	 *	 关注
 	 * @return
 	 */
 	@RequestMapping("/follower")
@@ -309,7 +309,7 @@ public class HomePageController {
 	}
 	
 	/**
-	 * 取消关注
+	 * 	取消关注
 	 * @return
 	 */
 	@RequestMapping("/cancel")
@@ -337,6 +337,7 @@ public class HomePageController {
 	
 	/**
 	 * 	查询全部
+	 * 	redis缓存
 	 * @param model
 	 * @return
 	 */
