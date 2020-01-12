@@ -73,9 +73,41 @@
     from t_project
     where memberid = #{id,jdbcType=INTEGER}
   </select>
+  
+  <!-- 此次需要动态拼接sql -->
   <select id="selectByPage" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select id, name, remark, money, day, status, deploydate, supportmoney, supporter, 
-    completion, memberid, createdate, follower
-    from t_project limit #{startIndex},#{pagesize}
+    select 
+    tp.id, 
+    tp.name, 
+    tp.remark, 
+    tp.money, 
+    tp.day, 
+    tp.status, 
+    tp.deploydate, 
+    tp.supportmoney, 
+    tp.supporter, 
+    tp.completion, 
+    tp.memberid, 
+    tp.createdate, 
+    tp.follower,
+    tt.typeid
+    from t_project tp
+    left join t_project_type tt
+    on tp.id = tt.projectid
+    <if test="typeid != 0">
+    	<where>
+    		tt.typeid = #{typeid}
+    	</where> 
+    	<if test="status != 3">
+    		and tp.status = #{status}
+    	</if>
+    </if>
+    <if test="typeid == 0">
+    	<if test="status != 3">
+    		where tp.status = #{status}
+    	</if>
+    </if>
+    limit #{startIndex},#{pagesize}
   </select>
+  
 </mapper>

@@ -3,6 +3,7 @@ package com.atguigu.atcrowdfunding.potal.controller;
 import com.atguigu.atcrowdfunding.bean.AliPayBean;
 import com.atguigu.atcrowdfunding.bean.Member;
 import com.atguigu.atcrowdfunding.bean.Project;
+import com.atguigu.atcrowdfunding.bean.ProjectType;
 import com.atguigu.atcrowdfunding.bean.TImgs;
 import com.atguigu.atcrowdfunding.bean.TMemberAddress;
 import com.atguigu.atcrowdfunding.bean.TMemberInvoice;
@@ -10,6 +11,7 @@ import com.atguigu.atcrowdfunding.bean.TMemberProjectFollow;
 import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.bean.TProjectComp;
 import com.atguigu.atcrowdfunding.bean.TReturn;
+import com.atguigu.atcrowdfunding.bean.Type;
 import com.atguigu.atcrowdfunding.potal.service.HomePageService;
 import com.atguigu.atcrowdfunding.potal.service.QuartzService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
@@ -30,6 +32,8 @@ import java.util.function.Function;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -341,14 +345,40 @@ public class HomePageController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping({"/{pageno}/projects"})
-	public String getProsByTypeId(@PathVariable Integer pageno,Model model) {
+	@RequestMapping({"/{typeid}/{status}/{pageno}/projects"})
+	public String getProsByTypeId(@PathVariable Integer typeid,@PathVariable Integer status,@PathVariable Integer pageno,Model model) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		//总记录数、页数
 		PageVo<Project> vo = new PageVo<>(pageno, 12);
-		vo = homePageService.getProsByPage(vo);
-//		for (Project project : vo.getData()) {
-//			System.err.println(project);
-//		}
-		model.addAttribute("page", vo);
+		//分页查询
+		vo = homePageService.getProsByPage(vo,typeid,status);
+		for (Project project : vo.getData()) {
+			List<TImgs> img = homePageService.getProImg(project.getId());
+			if (!img.isEmpty()) {
+				project.setImgs(img.get(0));
+			}
+			if (!StringUtils.isBlank(project.getDeploydate())) {
+				LocalDateTime start = LocalDateTime.parse(project.getDeploydate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+				LocalDateTime end = start.plusDays(project.getDay());
+				project.setEnddate(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			}else {
+				project.setEnddate("即将开始");
+			}
+		}
+		//查询对应的类型的项目总数:此处查询不能分页查询
+		if (typeid == 0) {
+			List<Project> list = homePageService.getPros();
+			vo.setTotalsize(list.size());
+		}else {
+			List<ProjectType> all = homePageService.getProsIdByType(typeid);
+			vo.setTotalsize(all.size());
+		}
+		List<Type> types = homePageService.typeList();
+		map.put("types", types);
+		map.put("page", vo);
+		map.put("typeid", typeid);
+		map.put("status", status);
+		model.addAttribute("map", map);
 		return "/project/projects";
 	}
 	

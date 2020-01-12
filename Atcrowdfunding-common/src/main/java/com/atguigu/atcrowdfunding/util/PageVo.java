@@ -67,5 +67,13 @@ public class PageVo<T> {
 	public Integer getStartIndex() {
 		return (this.pageno - 1) * pagesize;
 	}
+
+	@Override
+	public String toString() {
+		return "PageVo [pageno=" + pageno + ", pagesize=" + pagesize + ", data=" + data + ", totalsize=" + totalsize
+				+ ", totalno=" + totalno + "]";
+	}
+	
+	
 	
 }

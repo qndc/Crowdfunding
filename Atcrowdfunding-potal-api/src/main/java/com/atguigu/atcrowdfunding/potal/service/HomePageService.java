@@ -74,11 +74,19 @@ public abstract interface HomePageService
   Boolean cancelFollow(Integer id, Integer proId);
 
   /**
-   * 	分页查询所有
-   * @param vo
+   * 	查询全部项目总数
    * @return
    */
-  PageVo<Project> getProsByPage(PageVo<Project> vo);
+  List<Project> getPros();
+
+  /**
+   * 	查询分类下的所有项目
+   * 	mybatis动态拼接sql
+   * @param vo
+   * @param typeid
+   * @return
+   */
+  PageVo<Project> getProsByPage(PageVo<Project> vo, Integer typeid,Integer status);
 
  
 }

@@ -327,7 +327,7 @@ h3.break>a {
 					<div class="box ui-draggable" id="mainBox">
 						<div class="mHd" style="">
 							<div class="path">
-								<a href="/homepage/1/projects.htm">更多...</a>
+								<a href="/homepage/0/3/1/projects.htm">更多...</a>
 							</div>
 							<h3>
 								${type.name } <small style="color: #FFF;">${type.remark }</small>
