@@ -1,5 +1,5 @@
 # Crowdfunding
-基于SSM+Quartz+Activiti5+Redis的众筹网站
+基于SSM+Quartz+Activiti5的众筹网站
 
 Atcrowdfunding-bean 	实体类工程
 
