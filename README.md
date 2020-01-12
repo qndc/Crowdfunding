@@ -1,5 +1,5 @@
 # Crowdfunding
-基于SSM+Quartz+Activiti5的众筹网站
+基于SSM+Quartz+Activiti5+Redis的众筹网站
 
 Atcrowdfunding-bean 	实体类工程
 
@@ -38,9 +38,13 @@ Atcrowdfunding-potal-impl	前台controller、serviceImpl
 2. 前台
    1. 登录、注册：阿里云短信验证码
    2. 门户项目展示：
-   3. 项目详情：
-   4. 支持项目：支付宝支付、退款
-   5. 认证：
+   3. 项目总览：
+      1. 分类筛选
+      2. 状态筛选
+      3. 分类+状态联合筛选
+   4. 项目详情：
+   5. 支持项目：支付宝支付、退款
+   6. 认证：
       1. 实名认证流程：
          1. 基本信息
          2. 资质图片上传
@@ -52,7 +56,7 @@ Atcrowdfunding-potal-impl	前台controller、serviceImpl
          3. 项目所属公司
             1. 采用已认证的公司信息
             2. 委托书
-   6. 我的资产
+   7. 我的资产
       1. 我的支持
       2. 我的关注
       3. 我的发起
