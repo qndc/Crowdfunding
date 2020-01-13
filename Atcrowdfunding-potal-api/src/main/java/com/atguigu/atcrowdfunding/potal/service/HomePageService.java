@@ -86,7 +86,7 @@ public abstract interface HomePageService
    * @param typeid
    * @return
    */
-  PageVo<Project> getProsByPage(PageVo<Project> vo, Integer typeid,Integer status);
+  PageVo<Project> getProsByPage(PageVo<Project> vo, Integer typeid,Integer status,Integer sort);
 
  
 }

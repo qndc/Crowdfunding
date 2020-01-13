@@ -345,13 +345,13 @@ public class HomePageController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping({"/{typeid}/{status}/{pageno}/projects"})
-	public String getProsByTypeId(@PathVariable Integer typeid,@PathVariable Integer status,@PathVariable Integer pageno,Model model) {
+	@RequestMapping({"/{typeid}/{status}/{sort}/{pageno}/projects"})
+	public String getProsByTypeId(@PathVariable Integer typeid,@PathVariable Integer status,@PathVariable Integer sort,@PathVariable Integer pageno,Model model) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		//总记录数、页数
 		PageVo<Project> vo = new PageVo<>(pageno, 12);
 		//分页查询
-		vo = homePageService.getProsByPage(vo,typeid,status);
+		vo = homePageService.getProsByPage(vo,typeid,status,sort);
 		for (Project project : vo.getData()) {
 			List<TImgs> img = homePageService.getProImg(project.getId());
 			if (!img.isEmpty()) {
@@ -378,6 +378,7 @@ public class HomePageController {
 		map.put("page", vo);
 		map.put("typeid", typeid);
 		map.put("status", status);
+		map.put("sort", sort);
 		model.addAttribute("map", map);
 		return "/project/projects";
 	}

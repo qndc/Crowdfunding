@@ -160,23 +160,23 @@ h3.break>a {
 						<div class="panel-body">
 							<ul id="typeList" style="list-style: none;">
 								<li>分类：
-									<a href="/homepage/0/3/1/projects.htm" class="${map.typeid  == 0 ? 'active':'' }">全部</a>
+									<a href="/homepage/0/3/0/1/projects.htm" class="${map.typeid  == 0 ? 'active':'' }">全部</a>
 									<c:forEach items="${requestScope.map.types }" var="type">
-										<a href="/homepage/${type.id }/3/1/projects.htm" class="${map.typeid  == type.id ? 'active':'' }">${type.name }</a> 
+										<a href="/homepage/${type.id }/3/0/1/projects.htm" class="${map.typeid  == type.id ? 'active':'' }">${type.name }</a> 
 									</c:forEach>
 									
 								</li>
 								<li>状态：
-									<a href="/homepage/${map.typeid }/3/1/projects.htm" class="${map.status  == 3 ? 'active':'' }">全部</a>
-									<a href="/homepage/${map.typeid }/0/1/projects.htm" class="${map.status  == 0 ? 'active':'' }">即将开始</a>
-									<a href="/homepage/${map.typeid }/1/1/projects.htm" class="${map.status  == 1 ? 'active':'' }">众筹中</a>
-									<a href="/homepage/${map.typeid }/2/1/projects.htm" class="${map.status  == 2 ? 'active':'' }">众筹成功</a>
+									<a href="/homepage/${map.typeid }/3/0/1/projects.htm" class="${map.status  == 3 ? 'active':'' }">全部</a>
+									<a href="/homepage/${map.typeid }/0/0/1/projects.htm" class="${map.status  == 0 ? 'active':'' }">即将开始</a>
+									<a href="/homepage/${map.typeid }/1/0/1/projects.htm" class="${map.status  == 1 ? 'active':'' }">众筹中</a>
+									<a href="/homepage/${map.typeid }/2/0/1/projects.htm" class="${map.status  == 2 ? 'active':'' }">众筹成功</a>
 								</li>
 								<li>排序：
-									<span class="active">综合排序</span> 
-									<span class="label-text">最新上线</span> 
-									<span class="label-text">金额最多</span>
-									<span class="label-text">支持最多</span>
+									<a href="/homepage/${map.typeid }/${map.status }/0/${map.page.pageno }/projects.htm" class="${map.sort  == 0 ? 'active':'' }">综合排序</a> 
+									<a href="/homepage/${map.typeid }/${map.status }/1/${map.page.pageno }/projects.htm" class="${map.sort  == 1 ? 'active':'' } ${map.status  == 0 || map.status == 2 ? 'hide':'' }">最新上线</a> 
+									<a href="/homepage/${map.typeid }/${map.status }/2/${map.page.pageno }/projects.htm" class="${map.sort  == 2 ? 'active':'' }">金额最多</a>
+									<a href="/homepage/${map.typeid }/${map.status }/3/${map.page.pageno }/projects.htm" class="${map.sort  == 3 ? 'active':'' } ${map.status  == 0 ? 'hide':'' }">支持最多</a>
 								</li>
 							</ul>
 						</div>
@@ -251,19 +251,19 @@ h3.break>a {
 							<a 
 							class='btn ${map.page.pageno - 1  <= 0 ? "disabled":"" }'
 							rel="nofollow" 
-							href="/homepage/${map.typeid }/${map.status }/${ map.page.pageno - 1  <= 0 ? map.page.pageno:map.page.pageno-1}/projects.htm">上一页
+							href="/homepage/${map.typeid }/${map.status }/${map.sort }/${ map.page.pageno - 1  <= 0 ? map.page.pageno:map.page.pageno-1}/projects.htm">上一页
 							</a>
 						</li>
 						<c:forEach begin="1" end="${map.page.totalno }" var="pageno">
 							<li class='${pageno == map.page.pageno ? "active":"" }' >
-								<a rel="nofollow" href="/homepage/${map.typeid }/${map.status }/${pageno}/projects.htm">${pageno}</a>
+								<a rel="nofollow" href="/homepage/${map.typeid }/${map.status }/${map.sort }/${pageno}/projects.htm">${pageno}</a>
 							</li>
 						</c:forEach>
 						<li>
 							<a 
 							 class='btn ${map.page.pageno + 1  > map.page.totalno ? "disabled":"" }'
 							 rel="nofollow"
-							 href="/homepage/${map.typeid }/${map.status }/${ map.page.pageno + 1  > map.page.totalno ? map.page.pageno:map.page.pageno+1}/projects.htm">下一页
+							 href="/homepage/${map.typeid }/${map.status }/${map.sort }/${ map.page.pageno + 1  > map.page.totalno ? map.page.pageno:map.page.pageno+1}/projects.htm">下一页
 							 </a>
 						</li>
 					</ul>

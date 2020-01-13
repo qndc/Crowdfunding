@@ -107,6 +107,15 @@
     		where tp.status = #{status}
     	</if>
     </if>
+    <if test="sort == 1">
+    	order by tp.deploydate desc
+    </if>
+    <if test="sort == 2">
+    	order by tp.money desc
+    </if>
+    <if test="sort == 3">
+    	ORDER BY tp.supporter DESC
+    </if>
     limit #{startIndex},#{pagesize}
   </select>
   
