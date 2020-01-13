@@ -110,18 +110,14 @@ h3.break>a {
 					<div id="navbar" class="navbar-collapse collapse"
 						style="float: right;">
 						<ul class="nav navbar-nav">
-							<li class="dropdown"><a href="#" class="dropdown-toggle"
-								data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>
-									张三<span class="caret"></span></a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="member.html"><i
-											class="glyphicon glyphicon-scale"></i> 会员中心</a></li>
-									<li><a href="#"><i class="glyphicon glyphicon-comment"></i>
-											消息</a></li>
-									<li class="divider"></li>
-									<li><a href="index.html"><i
-											class="glyphicon glyphicon-off"></i> 退出系统</a></li>
-								</ul></li>
+							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>${sessionScope.member.username }<span class="caret"></span></a>
+			                  <ul class="dropdown-menu" role="menu">
+			                    <li><a href="member.html">会员中心</a></li>
+			                    <li><a href="message.html">消息 <span class="badge badge-success">42</span></a></li>
+			                    <li class="divider"></li>
+			                    <li><a href="${APP_PATH }/logout.do">退出系统</a></li>
+			                  </ul>
+                  			</li>
 						</ul>
 					</div>
 				</div>
@@ -138,13 +134,13 @@ h3.break>a {
 						<div class="collapse navbar-collapse"
 							id="bs-example-navbar-collapse-1">
 							<ul class="nav navbar-nav">
-								<li><a rel="nofollow" href="index.html"><i
+								<li><a rel="nofollow" href="/"><i
 										class="glyphicon glyphicon-home"></i> 众筹首页</a></li>
 								<li class="active"><a rel="nofollow" href="javascript:;"><i
 										class="glyphicon glyphicon-th-large"></i> 项目总览</a></li>
-								<li><a rel="nofollow" href="start.html"><i
+								<li><a rel="nofollow" style="cursor: pointer;" onclick="toStart()"><i
 										class="glyphicon glyphicon-edit"></i> 发起众筹</a></li>
-								<li><a rel="nofollow" href="minecrowdfunding.html"><i
+								<li><a rel="nofollow" style="cursor: pointer;" onclick="toAtcrowd()"><i
 										class="glyphicon glyphicon-user"></i> 我的众筹</a></li>
 							</ul>
 						</div>
@@ -205,10 +201,10 @@ h3.break>a {
 						<c:forEach items="${map.page.data }" var="typeAndPro">
 							<div class="col-md-3">
 							<div class="thumbnail">
-								<img alt="300x200"  style="width: 250px;height: 150px" src="${typeAndPro.imgs.img }" />
+								<img alt="300x200"  style="width: 250px;height: 150px;cursor: pointer;" src="${typeAndPro.imgs.img }" onclick="detailInfo(${typeAndPro.id},${ typeAndPro.status})"/>
 								<div class="caption">
 									<h3 class="break">
-										<a href="project.html">${typeAndPro.name }</a>
+										<a href="javascript:;" onclick="detailInfo(${typeAndPro.id},${ typeAndPro.status})">${typeAndPro.name }</a>
 									</h3>
 									<p>
 									<div style="float: left;">
@@ -296,11 +292,47 @@ h3.break>a {
 	<script src="${APP_PATH }/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${APP_PATH }/script/docs.min.js"></script>
 	<script src="${APP_PATH }/script/back-to-top.js"></script>
+	<script src="${APP_PATH }/jquery/layer/layer.js"></script>
 	<script>
 		$('#myTab a').click(function(e) {
 			e.preventDefault()
 			$(this).tab('show')
 		})
+		
+		//图片点击查看项目详情
+		function detailInfo(proId,status) {
+			if (status != 0) {
+				window.location.href="/homepage/"+proId+"/detailInfo.htm";
+			}else{
+				layer.msg("当前项目还未开始！",{time:1000,icon:5,shift:6})
+			}
+		}
+		
+		function toAtcrowd() {
+			$.ajax({
+				url:"${APP_PATH}/atcrowdfunding/toIndex.htm",
+				type:"GET",
+				success:function(result){
+					console.log(result);
+					if (result.status == 200) {
+						window.location.href='/atcrowdfunding/index.htm';
+					}else {
+						layer.msg(result.message,{time:1000,icon:5,shift:6});
+					}
+				},
+				error:function(result){
+					layer.msg(result.message,{time:1000,icon:5,shift:6})
+				}
+			})
+		}
+		
+		function toStart() {
+			if (${sessionScope.member.authstatus} != 2) {
+				layer.msg("请先实名认证！",{time:1000,icon:5,shift:6});
+			}else{
+				window.location.href="/atcrowdfunding/start.htm";
+			}
+		}
 	</script>
 </body>
 </html>
