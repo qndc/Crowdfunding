@@ -75,7 +75,7 @@
   </select>
   
   <!-- 此次需要动态拼接sql -->
-  <select id="selectByPage" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPage" resultMap="BaseResultMap" >
     select 
     tp.id, 
     tp.name, 
@@ -101,10 +101,21 @@
     	<if test="status != 3">
     		and tp.status = #{status}
     	</if>
+    	<if test="keyWords != null">
+    		and tp.name like '%${keyWords}%'
+    	</if>
     </if>
     <if test="typeid == 0">
     	<if test="status != 3">
     		where tp.status = #{status}
+    		<if test="keyWords != null">
+    		and tp.name like '%${keyWords}%'
+    		</if>
+    	</if>
+    	<if test="status == 3">
+    		<if test="keyWords != null">
+    		where tp.name like '%${keyWords}%'
+    		</if>
     	</if>
     </if>
     <if test="sort == 1">
@@ -117,6 +128,39 @@
     	ORDER BY tp.supporter DESC
     </if>
     limit #{startIndex},#{pagesize}
+  </select>
+  
+  <!-- 此次需要动态拼接sql-不分页查询 -->
+  <select id="selectNotByPage" resultType="java.lang.Integer" >
+    select 
+    count(*)
+    from t_project tp
+    left join t_project_type tt
+    on tp.id = tt.projectid
+    <if test="typeid != 0">
+    	<where>
+    		tt.typeid = #{typeid}
+    	</where> 
+    	<if test="status != 3">
+    		and tp.status = #{status}
+    	</if>
+    	<if test="keyWords != null">
+    		and tp.name like '%${keyWords}%'
+    	</if>
+    </if>
+    <if test="typeid == 0">
+    	<if test="status != 3">
+    		where tp.status = #{status}
+    		<if test="keyWords != null">
+    		and tp.name like '%${keyWords}%'
+    		</if>
+    	</if>
+    	<if test="status == 3">
+    		<if test="keyWords != null">
+    		where tp.name like '%${keyWords}%'
+    		</if>
+    	</if>
+    </if>
   </select>
   
 </mapper>

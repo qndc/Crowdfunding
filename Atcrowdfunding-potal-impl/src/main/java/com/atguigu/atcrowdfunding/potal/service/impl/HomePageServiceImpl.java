@@ -182,10 +182,16 @@ public class HomePageServiceImpl implements HomePageService {
 	}
 	
 	@Override
-	public PageVo<Project> getProsByPage(PageVo<Project> vo,Integer typeid,Integer status,Integer sort) {
-		List<Project> pros = projectMapper.selectByPage(typeid,status,sort,vo.getStartIndex(),vo.getPagesize());
+	public PageVo<Project> getProsByPage(PageVo<Project> vo,Integer typeid,Integer status,Integer sort,String keyWords) {
+		List<Project> pros = projectMapper.selectByPage(typeid,status,sort,keyWords,vo.getStartIndex(),vo.getPagesize());
 		vo.setData(pros);
 		return vo;
+	}
+
+	@Override
+	public Integer getProsNotByPage(Integer typeid, Integer status, String keyWords) {
+		
+		return projectMapper.selectNotByPage(typeid,status,keyWords);
 	}
 
 	

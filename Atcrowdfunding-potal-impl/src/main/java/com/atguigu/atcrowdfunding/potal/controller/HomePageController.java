@@ -19,6 +19,7 @@ import com.atguigu.atcrowdfunding.util.AliPayUtil;
 import com.atguigu.atcrowdfunding.util.PageVo;
 
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -344,14 +345,15 @@ public class HomePageController {
 	 * 	redis缓存
 	 * @param model
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping({"/{typeid}/{status}/{sort}/{pageno}/projects"})
-	public String getProsByTypeId(@PathVariable Integer typeid,@PathVariable Integer status,@PathVariable Integer sort,@PathVariable Integer pageno,Model model) {
+	public String getProsByTypeId(@PathVariable Integer typeid,@PathVariable Integer status,@PathVariable Integer sort,@PathVariable Integer pageno,Model model,String keyWords) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		//总记录数、页数
 		PageVo<Project> vo = new PageVo<>(pageno, 12);
 		//分页查询
-		vo = homePageService.getProsByPage(vo,typeid,status,sort);
+		vo = homePageService.getProsByPage(vo,typeid,status,sort,keyWords);
 		for (Project project : vo.getData()) {
 			List<TImgs> img = homePageService.getProImg(project.getId());
 			if (!img.isEmpty()) {
@@ -365,14 +367,8 @@ public class HomePageController {
 				project.setEnddate("即将开始");
 			}
 		}
-		//查询对应的类型的项目总数:此处查询不能分页查询
-		if (typeid == 0) {
-			List<Project> list = homePageService.getPros();
-			vo.setTotalsize(list.size());
-		}else {
-			List<ProjectType> all = homePageService.getProsIdByType(typeid);
-			vo.setTotalsize(all.size());
-		}
+		//查询对应的类型的项目总数:此处查询不能分页查询,但是分页一开始就写好了
+		vo.setTotalsize(homePageService.getProsNotByPage(typeid,status,keyWords));
 		List<Type> types = homePageService.typeList();
 		map.put("types", types);
 		map.put("page", vo);

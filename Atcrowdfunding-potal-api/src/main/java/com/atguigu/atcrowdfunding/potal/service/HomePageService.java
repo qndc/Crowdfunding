@@ -86,7 +86,17 @@ public abstract interface HomePageService
    * @param typeid
    * @return
    */
-  PageVo<Project> getProsByPage(PageVo<Project> vo, Integer typeid,Integer status,Integer sort);
+  PageVo<Project> getProsByPage(PageVo<Project> vo, Integer typeid,Integer status,Integer sort,String keyWords);
+
+  /**
+   * 	不根据分页查记录数
+   * @param typeid
+   * @param status
+   * @param sort
+   * @param keyWords
+   * @return
+   */
+  Integer getProsNotByPage(Integer typeid, Integer status, String keyWords);
 
  
 }

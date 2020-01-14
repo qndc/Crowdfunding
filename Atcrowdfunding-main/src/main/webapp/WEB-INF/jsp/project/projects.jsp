@@ -179,9 +179,9 @@ h3.break>a {
 						<div class="panel-footer" style="height: 50px; padding: 0;">
 							<div style="float: left; padding: 15px;">共${map.page.totalsize}个众筹项目</div>
 							<div style="float: right;">
-								<form class="navbar-form navbar-left" role="search">
+								<form class="navbar-form navbar-left" role="search" action="/homepage/0/3/0/1/projects.htm">
 									<div class="form-group">
-										<input type="text" class="form-control" placeholder="请输入搜索内容">
+										<input type="text" class="form-control" name="keyWords" placeholder="请输入搜索内容">
 									</div>
 									<button type="submit" class="btn btn-default">
 										<i class="glyphicon glyphicon-search"></i> 搜索

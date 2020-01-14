@@ -73,14 +73,14 @@
 			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			  <div class="container">
 				<div class="navbar-header">
-				  <a class="navbar-brand" href="index.html" style="font-size:32px;">尚筹网-创意产品众筹平台</a>
+				  <a class="navbar-brand" href="/" style="font-size:32px;">尚筹网-创意产品众筹平台</a>
 				</div>
             <div id="navbar" class="navbar-collapse collapse" style="float:right;">
               <ul class="nav navbar-nav">
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>${sessionScope.member.username }<span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="member.html">会员中心</a></li>
+                    <li><a href="member.htm">会员中心</a></li>
                     <li><a href="message.html">消息 <span class="badge badge-success">42</span></a></li>
                     <li class="divider"></li>
                     <li><a href="${APP_PATH }/logout.do">退出系统</a></li>

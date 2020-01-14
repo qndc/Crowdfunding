@@ -18,5 +18,7 @@ public abstract interface ProjectMapper
   
   int updateByPrimaryKey(Project paramProject);
 
-  List<Project> selectByPage(@Param("typeid")Integer typeid,@Param("status") Integer status,@Param("sort") Integer sort,@Param("startIndex") Integer startIndex,@Param("pagesize") Integer pagesize);
+  List<Project> selectByPage(@Param("typeid")Integer typeid,@Param("status") Integer status,@Param("sort") Integer sort,@Param("keyWords")String keyWords,@Param("startIndex") Integer startIndex,@Param("pagesize") Integer pagesize);
+
+  Integer selectNotByPage(@Param("typeid")Integer typeid, @Param("status")Integer status,@Param("keyWords") String keyWords);
 }
