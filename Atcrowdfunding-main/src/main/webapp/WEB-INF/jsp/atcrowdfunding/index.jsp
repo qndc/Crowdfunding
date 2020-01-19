@@ -53,6 +53,12 @@ pageEncoding="UTF-8"%>
 	-o-transition: all 0.3s ease-in-out;
 	transition: all 0.3s ease-in-out;
 }
+.thumbnail{
+	margin-bottom: 0px;
+}
+.thumbnail .caption h4,p{
+	margin: 0 0 8px 0;
+}
 </style>
 </head>
 <body>
@@ -70,7 +76,7 @@ pageEncoding="UTF-8"%>
 								data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>
 									${sessionScope.member.username }<span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="member.html"><i
+									<li><a href="${APP_PATH }/member.htm"><i
 											class="glyphicon glyphicon-scale"></i> 会员中心</a></li>
 									<li><a href="#"><i class="glyphicon glyphicon-comment"></i>
 											消息</a></li>
@@ -86,7 +92,7 @@ pageEncoding="UTF-8"%>
 
 		</div>
 	</div>
-	<div class="container">
+	<div class="container"  style="height: 650px">
 		<div class="row clearfix">
 			<div class="col-sm-3 col-md-3 column">
 				<div class="row">
@@ -137,7 +143,7 @@ pageEncoding="UTF-8"%>
 
 						<ul id="myTab1" class="nav nav-tabs">
 							<li role="presentation" class="active"><a href="#support">我支持的</a></li>
-							<li role="presentation"><a href="#attension">我关注的</a></li>
+							<li role="presentation" onclick="myFollow()"><a href="#attension" >我关注的</a></li>
 							<li role="presentation"><a href="#add">我发起的</a></li>
 							<li class=" pull-right">
 								<button type="button" class="btn btn-warning"
@@ -276,46 +282,7 @@ pageEncoding="UTF-8"%>
 														<td width="120">操作</td>
 													</tr>
 												</thead>
-												<tbody>
-													<tr>
-														<td style="vertical-align: middle;">
-															<div class="thumbnail">
-																<div class="caption">
-																	<p>BAVOSN便携折叠移动电源台灯</p>
-																	<p>
-																		<i class="glyphicon glyphicon-jpy"></i> 已筹集 1000.0元
-																	</p>
-																	<p>
-																	<div style="float: left;">
-																		<i class="glyphicon glyphicon-screenshot" title="目标金额"></i>
-																		已完成 100%
-																	</div>
-																	<div style="float: right;">
-																		<i class="glyphicon glyphicon-calendar"></i> 剩余2天
-																	</div>
-																	</p>
-																	<br>
-																	<div class="progress" style="margin-bottom: 4px;">
-																		<div class="progress-bar progress-bar-success"
-																			role="progressbar" aria-valuenow="40"
-																			aria-valuemin="0" aria-valuemax="100"
-																			style="width: 40%">
-																			<span>众筹中</span>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</td>
-														<td style="vertical-align: middle;">1</td>
-														<td style="vertical-align: middle;">1</td>
-														<td style="vertical-align: middle;">
-															<div class="btn-group-vertical" role="group"
-																aria-label="Vertical button group">
-																<button type="button" class="btn btn-default">取消关注</button>
-															</div>
-														</td>
-													</tr>
-												</tbody>
+												<tbody id="follow"></tbody>
 											</table>
 										</div>
 									</div>
@@ -400,7 +367,7 @@ pageEncoding="UTF-8"%>
 			</div>
 		</div>
 	</div>
-	<div class="container" style="margin-top: 20px;">
+	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-12 column">
 				<div id="footer">
@@ -421,6 +388,7 @@ pageEncoding="UTF-8"%>
 	<script src="${APP_PATH }/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${APP_PATH }/script/docs.min.js"></script>
 	<script src="${APP_PATH }/script/back-to-top.js"></script>
+	<script src="${APP_PATH }/jquery/layer/layer.js"></script>
 	<script>
 		$('#myTab a').click(function(e) {
 			e.preventDefault()
@@ -430,6 +398,70 @@ pageEncoding="UTF-8"%>
 			e.preventDefault()
 			$(this).tab('show')
 		})
+		
+		//获取关注列表
+		function myFollow() {
+			$.ajax({
+				url:"${APP_PATH}/record/myfollow.do",
+				type:"post",
+				success:function(result){
+					
+					if (result.status == 200) {
+						//拼接列表
+						console.log(result.message);
+						$("#follow").empty();
+						$.each(result.message,function(index,item){
+							var content = '<tr>'
+							+'<td style="vertical-align: middle;">'
+							+'<div class="thumbnail">'
+							+'<div class="caption">'
+							+'<h4>'+item.name+'</h4>'
+							+'<p><i class="glyphicon glyphicon-jpy"></i>已筹集 '+item.supportmoney+'元</p>'
+							+'<div style="float: left;"><i class="glyphicon glyphicon-screenshot" title="目标金额"></i>已完成 '+item.completion+'%</div>'
+							+'<div style="float: right;"><i class="glyphicon glyphicon-calendar"></i> '+item.enddate+'</div>'
+							+'<br>'
+							+'<div class="progress" style="margin-bottom: 4px;">'
+							+'<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="'+item.completion+'" aria-valuemin="0" aria-valuemax="100" style="width: '+item.completion+'%">'
+							+'<span>众筹中</span></div></div></div></div></td>'
+							+'<td style="vertical-align: middle;">'+item.supporter+'</td>'
+							+'<td style="vertical-align: middle;">'+item.follower+'</td>'
+							+'<td style="vertical-align: middle;">'
+							+'<div class="btn-group-vertical" role="group" aria-label="Vertical button group">'
+							+'<button type="button" class="btn btn-default" onclick="RemoveConcerns('+item.id+')">取消关注</button>'
+							+'</div></td></tr>';	
+							$("#follow").append(content);
+						})
+					}else {
+						layer.msg(result.message,{time:1000,icon:5,shift:6});
+					}
+				},
+				error:function(result){
+					layer.msg(result.message,{time:1000,icon:5,shift:6})
+				}
+			})
+		}
+		
+		//取消关注
+		function RemoveConcerns(proid) {
+			$.ajax({
+				url:"${APP_PATH}/homepage/cancel.do",
+				type:"post",
+				data:{
+					"proId":proid
+				},
+				success:function(result){
+					if (result.status == 200) {
+						//重新加载
+						myFollow();
+					}else{
+						layer.msg(result.message,{time:1000,icon:5,shift:6})
+					}
+				},
+				error:function(result){
+					layer.msg(result.message,{time:1000,icon:5,shift:6})
+				}
+			})
+		}
 	</script>
 </body>
 </html>
