@@ -59,6 +59,17 @@ pageEncoding="UTF-8"%>
 .thumbnail .caption h4,p{
 	margin: 0 0 8px 0;
 }
+#crowfundStatus li a{
+	padding: .2em .6em .3em;
+	font-size: 75%;
+    font-weight: 700;
+    color: #000;
+}
+#crowfundStatus li.active a{
+	background-color: #f0ad4e;
+	color: #fff;
+}
+
 </style>
 </head>
 <body>
@@ -138,19 +149,17 @@ pageEncoding="UTF-8"%>
 					<li role="presentation"><a href="#profile">众筹资产</a></li>
 				</ul>
 				<div id="myTabContent" class="tab-content" style="margin-top: 10px;">
-					<div role="tabpanel" class="tab-pane fade active in" id="home"
-						aria-labelledby="home-tab">
-
+					<div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
 						<ul id="myTab1" class="nav nav-tabs">
 							<li role="presentation" class="active"><a href="#support">我支持的</a></li>
 							<li role="presentation" onclick="myFollow()"><a href="#attension" >我关注的</a></li>
-							<li role="presentation"><a href="#add">我发起的</a></li>
+							<li role="presentation" onclick="Interaction(0)"><a href="#add">我发起的</a></li>
 							<li class=" pull-right">
-								<button type="button" class="btn btn-warning"
-									onclick="window.location.href='/atcrowdfunding/apply.do'">发起众筹</button>
+								<button type="button" class="btn btn-warning" onclick="window.location.href='/atcrowdfunding/apply.do'">发起众筹</button>
 							</li>
 						</ul>
 						<div id="myTab1" class="tab-content" style="margin-top: 10px;">
+							<!-- 我支持的 -->
 							<div role="tabpanel" class="tab-pane fade active in" id="support"
 								aria-labelledby="home-tab">
 								<div class="container-fluid">
@@ -267,6 +276,7 @@ pageEncoding="UTF-8"%>
 									</div>
 								</div>
 							</div>
+							<!-- 我关注的 -->
 							<div role="tabpanel" class="tab-pane fade" id="attension"
 								aria-labelledby="attension-tab">
 								<div class="container-fluid">
@@ -288,78 +298,28 @@ pageEncoding="UTF-8"%>
 									</div>
 								</div>
 							</div>
-							<div role="tabpanel" class="tab-pane fade  " id="add"
-								aria-labelledby="add-tab">
+							<!-- 我发起的 -->
+							<div role="tabpanel" class="tab-pane fade" id="add" aria-labelledby="add-tab">
 								<div class="container-fluid">
 									<div class="row clearfix">
 										<div class="col-md-12 column">
-											<span class="label label-warning">全部</span> <span
-												class="label" style="color: #000;">众筹中</span> <span
-												class="label " style="color: #000;">众筹成功</span> <span
-												class="label " style="color: #000;">众筹失败</span>
-										</div>
-										<div class="col-md-12 column"
-											style="padding: 0; margin-top: 10px;">
-											<table class="table table-bordered"
-												style="text-align: center;">
-												<thead>
-													<tr style="background-color: #ddd;">
-														<td>项目信息</td>
-														<td width="120">募集金额（元）</td>
-														<td width="80">当前状态</td>
-														<td width="120">操作</td>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td style="vertical-align: middle;">
-															<div class="thumbnail">
-																<div class="caption">
-																	<p>BAVOSN便携折叠移动电源台灯</p>
-																	<p>
-																	<div style="float: left;">
-																		<i class="glyphicon glyphicon-screenshot" title="目标金额"></i>
-																		已完成 100%
-																	</div>
-																	<div style="float: right;">
-																		<i title="截至日期" class="glyphicon glyphicon-calendar"></i>
-																		剩余8天
-																	</div>
-																	</p>
-																	<br>
-																	<div class="progress" style="margin-bottom: 4px;">
-																		<div class="progress-bar progress-bar-success"
-																			role="progressbar" aria-valuenow="40"
-																			aria-valuemin="0" aria-valuemax="100"
-																			style="width: 40%">
-																			<span>众筹中</span>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</td>
-														<td style="vertical-align: middle;">1.00<br>(运费：0.00
-															)
-														</td>
-														<td style="vertical-align: middle;">草稿</td>
-														<td style="vertical-align: middle;">
-															<div class="btn-group-vertical" role="group"
-																aria-label="Vertical button group">
-																<button type="button" class="btn btn-default">项目预览</button>
-																<button type="button" class="btn btn-default">修改项目</button>
-																<button type="button" class="btn btn-default">删除项目</button>
-																<button type="button" class="btn btn-default">问题管理</button>
-															</div>
-														</td>
-													</tr>
-												</tbody>
-											</table>
+											<ul class="nav nav-pills" role="tablist" id="crowfundStatus">
+											    <li role="presentation" class="active"><a href="#all">全部</a></li>
+											    <li role="presentation"><a href="#crowdfunding">众筹中</a></li>
+											    <li role="presentation"><a href="#success">众筹成功</a></li>
+											    <li role="presentation"><a href="#fail">众筹失败</a></li>
+										    </ul>
+										    <div class="tab-content">
+											    <div role="tabpanel" class="tab-pane active" id="all"></div>
+											    <div role="tabpanel" class="tab-pane" id="crowdfunding"></div>
+											    <div role="tabpanel" class="tab-pane" id="success"></div>
+											    <div role="tabpanel" class="tab-pane" id="fail"></div>
+										    </div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-
 					</div>
 					<div role="tabpanel" class="tab-pane fade" id="profile"
 						aria-labelledby="profile-tab">众筹资产</div>
@@ -389,6 +349,7 @@ pageEncoding="UTF-8"%>
 	<script src="${APP_PATH }/script/docs.min.js"></script>
 	<script src="${APP_PATH }/script/back-to-top.js"></script>
 	<script src="${APP_PATH }/jquery/layer/layer.js"></script>
+	<script src="${APP_PATH }/js/atcrowdfunding.js"></script>
 	<script>
 		$('#myTab a').click(function(e) {
 			e.preventDefault()
@@ -398,70 +359,9 @@ pageEncoding="UTF-8"%>
 			e.preventDefault()
 			$(this).tab('show')
 		})
-		
-		//获取关注列表
-		function myFollow() {
-			$.ajax({
-				url:"${APP_PATH}/record/myfollow.do",
-				type:"post",
-				success:function(result){
-					
-					if (result.status == 200) {
-						//拼接列表
-						console.log(result.message);
-						$("#follow").empty();
-						$.each(result.message,function(index,item){
-							var content = '<tr>'
-							+'<td style="vertical-align: middle;">'
-							+'<div class="thumbnail">'
-							+'<div class="caption">'
-							+'<h4>'+item.name+'</h4>'
-							+'<p><i class="glyphicon glyphicon-jpy"></i>已筹集 '+item.supportmoney+'元</p>'
-							+'<div style="float: left;"><i class="glyphicon glyphicon-screenshot" title="目标金额"></i>已完成 '+item.completion+'%</div>'
-							+'<div style="float: right;"><i class="glyphicon glyphicon-calendar"></i> '+item.enddate+'</div>'
-							+'<br>'
-							+'<div class="progress" style="margin-bottom: 4px;">'
-							+'<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="'+item.completion+'" aria-valuemin="0" aria-valuemax="100" style="width: '+item.completion+'%">'
-							+'<span>众筹中</span></div></div></div></div></td>'
-							+'<td style="vertical-align: middle;">'+item.supporter+'</td>'
-							+'<td style="vertical-align: middle;">'+item.follower+'</td>'
-							+'<td style="vertical-align: middle;">'
-							+'<div class="btn-group-vertical" role="group" aria-label="Vertical button group">'
-							+'<button type="button" class="btn btn-default" onclick="RemoveConcerns('+item.id+')">取消关注</button>'
-							+'</div></td></tr>';	
-							$("#follow").append(content);
-						})
-					}else {
-						layer.msg(result.message,{time:1000,icon:5,shift:6});
-					}
-				},
-				error:function(result){
-					layer.msg(result.message,{time:1000,icon:5,shift:6})
-				}
-			})
-		}
-		
-		//取消关注
-		function RemoveConcerns(proid) {
-			$.ajax({
-				url:"${APP_PATH}/homepage/cancel.do",
-				type:"post",
-				data:{
-					"proId":proid
-				},
-				success:function(result){
-					if (result.status == 200) {
-						//重新加载
-						myFollow();
-					}else{
-						layer.msg(result.message,{time:1000,icon:5,shift:6})
-					}
-				},
-				error:function(result){
-					layer.msg(result.message,{time:1000,icon:5,shift:6})
-				}
-			})
-		}
+
 	</script>
+
 </body>
+
 </html>

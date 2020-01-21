@@ -12,4 +12,10 @@ public class Const
   public static final String CHECKEMAIL = "checkemail";
   public static final String SMSCODE = "code";
   public static final String INDEXPROS = "indexpros";
+  public static final String MYFOLLOW = "myfollow";
+  /**
+   *	redis 默认过期时长，单位：秒
+   */
+  public static final long DEFAULT_EXPIRE = 60 ;
+  public static final String MYLAUNCH = "mylaunch";
 }

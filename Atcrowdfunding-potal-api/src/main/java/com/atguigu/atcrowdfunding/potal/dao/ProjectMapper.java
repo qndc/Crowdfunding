@@ -21,4 +21,6 @@ public abstract interface ProjectMapper
   List<Project> selectByPage(@Param("typeid")Integer typeid,@Param("status") Integer status,@Param("sort") Integer sort,@Param("keyWords")String keyWords,@Param("startIndex") Integer startIndex,@Param("pagesize") Integer pagesize);
 
   Integer selectNotByPage(@Param("typeid")Integer typeid, @Param("status")Integer status,@Param("keyWords") String keyWords);
+
+  List<Project> selectByMemberId(Integer memberid);
 }
