@@ -1,6 +1,8 @@
 package com.atguigu.atcrowdfunding.potal.dao;
 
 import com.atguigu.atcrowdfunding.bean.Project;
+import com.atguigu.atcrowdfunding.bean.TProjectDestroy;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +25,6 @@ public abstract interface ProjectMapper
   Integer selectNotByPage(@Param("typeid")Integer typeid, @Param("status")Integer status,@Param("keyWords") String keyWords);
 
   List<Project> selectByMemberId(Integer memberid);
+
+  void insertDesInfo(TProjectDestroy destroy);
 }

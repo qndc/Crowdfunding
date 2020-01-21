@@ -63,7 +63,6 @@ public class AtcrowdfundingRecordController {
 		try {
 			if (StringUtils.isBlank(myfollow)) {
 				List<Project> follows = new ArrayList<Project>();
-				Map<String, Object> map = new HashMap<String, Object>();
 				for (TMemberProjectFollow tMemberProjectFollow : recordService.selectAllFollows(loginMember.getId())) {
 					Project project = homePageService.getProsById(tMemberProjectFollow.getProjectid());
 					project.setEnddate(formatDate(project));
@@ -102,7 +101,7 @@ public class AtcrowdfundingRecordController {
 				for (Project project : pros) {
 					project.setEnddate(formatDate(project));
 				}
-				//redisTemplate.opsForValue().set(Const.MYLAUNCH, JSON.toJSONString(pros));
+				redisTemplate.opsForValue().set(Const.MYLAUNCH, JSON.toJSONString(pros));
 			}else {
 				pros = JSONObject.parseArray(mylaunch,Project.class);
 			}
@@ -139,6 +138,52 @@ public class AtcrowdfundingRecordController {
 	}
 	
 	/**
+	 * 	删除项目
+	 * @param proid
+	 * @return
+	 */
+	@RequestMapping("/delPro")
+	@ResponseBody
+	public Object delProject(@RequestParam(required = true) Integer proId) {
+		AjaxResult result = new AjaxResult();
+		try {
+			recordService.delProject(proId);
+			//删除成功后要移除redis缓存
+			redisTemplate.delete(Const.MYLAUNCH);
+			result.setStatus(200);
+			result.setMessage("删除成功！");
+		} catch (Exception e) {
+			result.setStatus(500);
+			result.setMessage("删除失败！");
+		}
+		return result;
+	}
+	
+	/**
+	 * 	项目预览
+	 * @param proId
+	 * @param model
+	 * @param session
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping({ "/{proId}/preview" })
+	public String detailInfo(@PathVariable Integer proId, Model model,HttpSession session) throws Exception {
+		Project project = recordService.getProById(proId);
+		project.setEnddate(formatDate(project));
+		List<TImgs> imgs = this.homePageService.getProDetailImg(proId);
+		List<TReturn> returntList = this.homePageService.getReturnByProId(proId);
+		TProjectComp comp = this.homePageService.getCompByProId(proId);
+		Member loginMember = (Member) session.getAttribute("member");
+		List<TMemberProjectFollow> list = homePageService.getProjectFollowe(loginMember.getId(),proId);
+		model.addAttribute("project", project);
+		model.addAttribute("imgs", imgs);
+		model.addAttribute("returntList", returntList);
+		model.addAttribute("comp", comp);
+		return "/project/preview";
+	}
+	
+	/**
 	 * 	剩余时间转换器
 	 * @param project
 	 * @return
@@ -162,33 +207,5 @@ public class AtcrowdfundingRecordController {
 		
 	}
 	
-	/**
-	 * 	项目预览
-	 * @param proId
-	 * @param model
-	 * @param session
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping({ "/{proId}/preview" })
-	public String detailInfo(@PathVariable Integer proId, Model model,HttpSession session) throws Exception {
-		Project project = recordService.getProById(proId);
-		project.setEnddate(formatDate(project));
-
-		List<TImgs> imgs = this.homePageService.getProDetailImg(proId);
-
-		List<TReturn> returntList = this.homePageService.getReturnByProId(proId);
-
-		TProjectComp comp = this.homePageService.getCompByProId(proId);
-		
-		
-		Member loginMember = (Member) session.getAttribute("member");
-		List<TMemberProjectFollow> list = homePageService.getProjectFollowe(loginMember.getId(),proId);
-		model.addAttribute("project", project);
-		model.addAttribute("imgs", imgs);
-		model.addAttribute("returntList", returntList);
-		model.addAttribute("comp", comp);
-
-		return "/project/preview";
-	}
+	
 }

@@ -64,15 +64,15 @@ function Interaction(status) {
 					if (item.status == 0) {
 						status = "未开始";
 						btn = '<button type="button" class="btn btn-default">修改项目</button>'
-							+'<button type="button" class="btn btn-default">删除项目</button>';
+							+'<button type="button" class="btn btn-default" onclick = "delProject('+item.id+')">删除项目</button>';
 					}else if (item.status == 1) {
 						status = "众筹中";
 					}else if (item.status == 2) {
 						status = "众筹成功";
-						btn = '<button type="button" class="btn btn-default">删除项目</button>';
-					}else {
+						btn = '<button type="button" class="btn btn-default" onclick = "delProject('+item.id+')">删除项目</button>';
+					}else if (item.status == 3) {
 						status = "众筹失败";
-						btn = '<button type="button" class="btn btn-default">删除项目</button>';
+						btn = '<button type="button" class="btn btn-default" onclick = "delProject('+item.id+')">删除项目</button>';
 					}
 					var content = '<div class="col-md-12 column" style="padding: 0; margin-top: 10px;">'
 					+'<table class="table table-bordered" style="text-align: center;">'
@@ -133,6 +133,28 @@ function RemoveConcerns(proid) {
 	})
 }
 
+//删除项目
+function delProject(proid) {
+	$.ajax({
+		url:"/record/delPro.do",
+		type:"post",
+		data:{
+			"proId":proid
+		},
+		success:function(result){
+			if (result.status == 200) {
+				//重新加载
+				Interaction(0);
+			}else{
+				layer.msg(result.message,{time:1000,icon:5,shift:6});
+			}
+		},
+		error:function(result){
+			layer.msg(result.message,{time:1000,icon:5,shift:6});
+		}
+	})
+}
+
 
 //项目预览
 function preview(proid) {
@@ -142,5 +164,4 @@ function preview(proid) {
 		title:'项目预览',
 		content: 'http://28r30857o8.zicp.vip/record/'+proid+'/preview.htm'
 	}); 
-	
 }

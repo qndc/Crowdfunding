@@ -53,7 +53,7 @@ public class DispatcherController {
 	@Autowired
 	private HomePageService hpService;
 	@Autowired
-	private RedisTemplate redisTemplate;
+	private RedisTemplate<String,String> redisTemplate;
 
 	@RequestMapping({ "/index" })
 	public Object index(Model model) {
@@ -77,6 +77,7 @@ public class DispatcherController {
 						pros.add(pro);
 					}
 				}
+				
 //				type.setPros(pros.subList(0, 3));
 				type.setPros(pros);
 			}

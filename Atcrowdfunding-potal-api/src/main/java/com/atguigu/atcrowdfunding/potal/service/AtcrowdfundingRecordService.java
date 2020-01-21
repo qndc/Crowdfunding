@@ -30,4 +30,10 @@ public interface AtcrowdfundingRecordService {
 	 */
 	Project getProById(Integer proId);
 
+	/**
+	 * 	删除项目
+	 * @param proid
+	 */
+	void delProject(Integer proid);
+
 }

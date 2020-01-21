@@ -67,6 +67,7 @@
     completion, memberid, createdate, follower
     from t_project
   </select>
+  
   <select id="selectByMemberId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select id, name, remark, money, day, status, deploydate, supportmoney, supporter, 
     completion, memberid, createdate, follower
@@ -162,5 +163,18 @@
     	</if>
     </if>
   </select>
+  
+  <insert id="insertDesInfo" parameterType="com.atguigu.atcrowdfunding.bean.TProjectDestroy" >
+    insert into t_project_destroy (id, name, remark, 
+      money, day, status, deploydate, 
+      supportmoney, supporter, completion, 
+      memberid, createdate, follower,deletetdate
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{money,jdbcType=BIGINT}, #{day,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, #{deploydate,jdbcType=CHAR}, 
+      #{supportmoney,jdbcType=BIGINT}, #{supporter,jdbcType=INTEGER}, #{completion,jdbcType=INTEGER}, 
+      #{memberid,jdbcType=INTEGER}, #{createdate,jdbcType=CHAR}, #{follower,jdbcType=INTEGER},#{deletetdate,jdbcType=CHAR}
+      )
+  </insert>
   
 </mapper>

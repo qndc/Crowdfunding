@@ -285,13 +285,6 @@ h3.break>a {
 		</a>
 	</div>
 
-	<!-- /.carousel -->
-
-
-	<!-- Marketing messaging and featurettes
-    ================================================== -->
-	<!-- Wrap the rest of the page in another container to center all the content. -->
-
 	<div class="container marketing">
 
 		<!-- Three columns of text below the carousel -->
@@ -338,9 +331,7 @@ h3.break>a {
 		<!-- /.row -->
 
 		<c:forEach items="${requestScope.types }" var="type" varStatus="r">
-			<%-- <c:if test="${ret.signalpurchase == 1}">
-				
-			</c:if> --%>
+
 			<div class="container">
 			<div class="row clearfix">
 				<div class="col-md-12 column">
@@ -358,9 +349,6 @@ h3.break>a {
 							<c:forEach items="${type.pros }" var="project">
 								<div class="col-md-3">
 									<div class="thumbnail">
-										<%-- <c:if test="${project.imgs.type == 1}">
-											
-										</c:if>	 --%>
 										<img alt="300x200" style="width: 250px;height: 150px" src="${project.imgs.img }" onclick="detailInfo(${project.id})"/>		
 										<div class="caption">
 											<h3 class="break">
