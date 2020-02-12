@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
-	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@page isELIgnored="false"%>
 <!DOCTYPE html>
@@ -59,13 +59,13 @@ pageEncoding="UTF-8"%>
 .thumbnail .caption h4,p{
 	margin: 0 0 8px 0;
 }
-#crowfundStatus li a{
+#crowfundStatus li a,#payStatus li a{
 	padding: .2em .6em .3em;
 	font-size: 75%;
     font-weight: 700;
     color: #000;
 }
-#crowfundStatus li.active a{
+#crowfundStatus li.active a,#payStatus li.active a{
 	background-color: #f0ad4e;
 	color: #fff;
 }
@@ -160,118 +160,18 @@ pageEncoding="UTF-8"%>
 						</ul>
 						<div id="myTab1" class="tab-content" style="margin-top: 10px;">
 							<!-- 我支持的 -->
-							<div role="tabpanel" class="tab-pane fade active in" id="support"
-								aria-labelledby="home-tab">
+							<div role="tabpanel" class="tab-pane fade active in" id="support" aria-labelledby="home-tab">
 								<div class="container-fluid">
 									<div class="row clearfix">
-										<div class="col-md-12 column">
-											<span class="label label-warning">全部</span> <span
-												class="label" style="color: #000;">已支付</span> <span
-												class="label " style="color: #000;">未支付</span>
-										</div>
-										<div class="col-md-12 column"
-											style="margin-top: 10px; padding: 0;">
-											<table class="table table-bordered"
-												style="text-align: center;">
-												<thead>
-													<tr style="background-color: #ddd;">
-														<td>项目信息</td>
-														<td width="90">支持日期</td>
-														<td width="120">支持金额（元）</td>
-														<td width="80">回报数量</td>
-														<td width="80">交易状态</td>
-														<td width="120">操作</td>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td style="vertical-align: middle;">
-															<div class="thumbnail">
-																<div class="caption">
-																	<h3>活性富氢净水直饮机</h3>
-																	<p>订单编号:2x002231111</p>
-																	<p>
-																	<div style="float: left;">
-																		<i class="glyphicon glyphicon-screenshot" title="目标金额"></i>
-																		已完成 100%
-																	</div>
-																	<div style="float: right;">
-																		<i title="截至日期" class="glyphicon glyphicon-calendar"></i>
-																		剩余8天
-																	</div>
-																	</p>
-																	<br>
-																	<div class="progress" style="margin-bottom: 4px;">
-																		<div class="progress-bar progress-bar-danger"
-																			role="progressbar" aria-valuenow="40"
-																			aria-valuemin="0" aria-valuemax="100"
-																			style="width: 40%">
-																			<span>众筹中</span>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</td>
-														<td style="vertical-align: middle;">2017-05-23
-															11:31:22</td>
-														<td style="vertical-align: middle;">1.00<br>(运费：0.00
-															)
-														</td>
-														<td style="vertical-align: middle;">1</td>
-														<td style="vertical-align: middle;">交易关闭</td>
-														<td style="vertical-align: middle;">
-															<div class="btn-group-vertical" role="group"
-																aria-label="Vertical button group">
-																<button type="button" class="btn btn-default">删除订单</button>
-																<button type="button" class="btn btn-default">交易详情</button>
-															</div>
-														</td>
-													</tr>
-													<tr>
-														<td style="vertical-align: middle;">
-															<div class="thumbnail">
-																<div class="caption">
-																	<h3>BAVOSN便携折叠移动电源台灯</h3>
-																	<p>订单编号:2x002231111</p>
-																	<p>
-																	<div style="float: left;">
-																		<i class="glyphicon glyphicon-screenshot" title="目标金额"></i>
-																		已完成 100%
-																	</div>
-																	<div style="float: right;">
-																		<i title="截至日期" class="glyphicon glyphicon-calendar"></i>
-																		剩余8天
-																	</div>
-																	</p>
-																	<br>
-																	<div class="progress" style="margin-bottom: 4px;">
-																		<div class="progress-bar progress-bar-success"
-																			role="progressbar" aria-valuenow="40"
-																			aria-valuemin="0" aria-valuemax="100"
-																			style="width: 40%">
-																			<span>众筹成功</span>
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</td>
-														<td style="vertical-align: middle;">2017-05-23
-															11:31:22</td>
-														<td style="vertical-align: middle;">1.00<br>(运费：0.00
-															)
-														</td>
-														<td style="vertical-align: middle;">1</td>
-														<td style="vertical-align: middle;">交易关闭</td>
-														<td style="vertical-align: middle;">
-															<div class="btn-group-vertical" role="group"
-																aria-label="Vertical button group">
-																<button type="button" class="btn btn-default">删除订单</button>
-																<button type="button" class="btn btn-default">交易详情</button>
-															</div>
-														</td>
-													</tr>
-												</tbody>
-											</table>
+										<ul class="nav nav-pills" role="tablist" id="payStatus">
+											<li role="presentation" class="active"><a href="#orders">全部</a></li>
+										    <li role="presentation" ><a href="#paid">已支付</a></li>
+										    <li role="presentation"><a href="#unpaid">未支付</a></li>
+										</ul>
+										<div class="tab-content">
+											<div role="tabpanel" class="tab-pane active" id="orders"></div>
+										    <div role="tabpanel" class="tab-pane" id="paid"></div>
+										    <div role="tabpanel" class="tab-pane" id="unpaid"></div>
 										</div>
 									</div>
 								</div>

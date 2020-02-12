@@ -1,3 +1,8 @@
+//我支持的
+$(function() {
+	OrderInteraction(0);
+})
+
 //我关注的
 function myFollow() {
 	$.ajax({
@@ -55,8 +60,8 @@ function Interaction(status) {
 		},
 		success:function(result){
 			if (result.status == 200) {
-				console.log(result.message);
 				tabpanel.empty();
+				
 				$.each(result.message,function(index,item){
 					//拼接状态\操作按钮
 					var status = '';
@@ -97,7 +102,7 @@ function Interaction(status) {
 					+'<div class="btn-group-vertical" role="group" aria-label="Vertical button group">'
 					+'<button type="button" class="btn btn-default" onclick="preview('+item.id+')">项目预览</button>'
 					+ btn
-					+'</div></td></tr></tbody></table></div> ';
+					+'</div></td></tr></tbody></table></div>';
 					
 					tabpanel.append(content);
 				})
@@ -164,4 +169,72 @@ function preview(proid) {
 		title:'项目预览',
 		content: 'http://28r30857o8.zicp.vip/record/'+proid+'/preview.htm'
 	}); 
+}
+
+//我支持的/分类显示
+$("#payStatus li").click(function () {
+	var status = $("#payStatus li").index($(this));
+	OrderInteraction(status)
+})
+
+
+//订单ajax交互
+function OrderInteraction(status) {
+	$.ajax({
+		url:"/record/mysupport.do",
+		type:"post",
+		data:{
+			"status":status
+		},
+		success:function(result){
+			if (result.status == 200) {
+				var content = '';
+				$("#support .tab-pane").eq(status).empty();
+				$.each(result.message,function(index,item){
+					 content += '<tr>'
+                        +'<td style="vertical-align:middle;">'
+                        +'<div class="thumbnail">'
+                        +'<div class="caption">'
+                        +'<h4>'+item.project.name+'</h4>'
+                        +'<p>订单编号:'+item.ordernum+'</p><p>'
+                        +'<div style="float:left;"><i class="glyphicon glyphicon-screenshot" title="目标金额" ></i> 已完成'+item.project.completion+'% </div>'
+                        +'<div style="float:right;"><i title="截至日期" class="glyphicon glyphicon-calendar"></i> 剩余8天 </div>'
+                        +'</p><br>'
+                        +'<div class="progress" style="margin-bottom: 4px;">'
+                        +'<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="'+item.project.completion+'" aria-valuemin="0" aria-valuemax="100" style="width: '+item.project.completion+'%">'
+                        +'</div></div></div></div></td>'
+                        +'<td style="vertical-align:middle;">'+item.createdate+'</td>'
+                        +'<td style="vertical-align:middle;">'+item.money+'.00<br>(运费：0.00 )</td>'
+                        +'<td style="vertical-align:middle;">'+item.rtncount+'</td>'
+                        +'<td style="vertical-align:middle;">交易关闭</td>'
+                        +'<td style="vertical-align:middle;">'
+                        +'<div class="btn-group-vertical" role="group" aria-label="Vertical button group">'
+                        +'<button type="button" class="btn btn-default">删除订单</button>'
+                        +'<button type="button" class="btn btn-default">交易详情</button>'
+                        +'</div></td></tr>';
+				});
+				var head = '<div class="col-md-12 column" style="margin-top: 10px; padding: 0;">'
+					+'<table class="table table-bordered" style="text-align: center;">'
+					+'<thead>'
+					+'<tr style="background-color: #ddd;">'
+					+'<td>项目信息</td>'
+					+'<td width="90">支持日期</td>'
+					+'<td width="120">支持金额（元）</td>'
+					+'<td width="80">回报数量</td>'
+					+'<td width="80">交易状态</td>'
+					+'<td width="120">操作</td>'
+					+'</tr>'
+					+'</thead>'
+					+'<tbody>'+content+'</tbody>'
+					+'</table>'
+					+'</div>';
+				$("#support .tab-pane").eq(status).append(head);
+			}else{
+				layer.msg(result.message,{time:1000,icon:5,shift:6});
+			}
+		},
+		error:function(result){
+			layer.msg(result.message,{time:1000,icon:5,shift:6});
+		}
+	})
 }

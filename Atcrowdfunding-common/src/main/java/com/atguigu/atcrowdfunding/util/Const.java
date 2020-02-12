@@ -18,4 +18,5 @@ public class Const
    */
   public static final long DEFAULT_EXPIRE = 60 ;
   public static final String MYLAUNCH = "mylaunch";
+  public static final String MYSUPPORT = "mysupport";
 }

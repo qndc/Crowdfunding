@@ -57,7 +57,6 @@ public class ProjectSettlement implements Job
 	for (TOrder tOrder : list) {
 		memberIds.add(tOrder.getMemberid());
 	}
-	System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSS"))+":Time to start accounting...");
     AlipayConfig.logResult(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSS"))+":Time to start accounting...");
     AlipayConfig.logResult(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSS"))+":Project Info："+new Gson().toJson(project));
     AlipayConfig.logResult(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSS"))+":Originator Info："+new Gson().toJson(member));

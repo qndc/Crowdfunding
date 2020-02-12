@@ -98,5 +98,12 @@ public abstract interface HomePageService
    */
   Integer getProsNotByPage(Integer typeid, Integer status, String keyWords);
 
+  /**
+   * 根据用户id查询订单
+   * @param id
+   * @return
+   */
+  List<TOrder> getOrderByMemberId(Integer id);
+
  
 }

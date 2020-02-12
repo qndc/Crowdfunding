@@ -28,6 +28,8 @@ public class TOrder {
     private String remark;
 
     private String tradeno;
+    
+    private Project project;
 
     public Integer getId() {
         return id;
@@ -141,12 +143,20 @@ public class TOrder {
         this.tradeno = tradeno == null ? null : tradeno.trim();
     }
 
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
 	@Override
 	public String toString() {
 		return "TOrder [id=" + id + ", memberid=" + memberid + ", projectid=" + projectid + ", returnid=" + returnid
 				+ ", ordernum=" + ordernum + ", createdate=" + createdate + ", money=" + money + ", rtncount="
 				+ rtncount + ", status=" + status + ", addressid=" + addressid + ", invoice=" + invoice + ", invoiceid="
-				+ invoiceid + ", remark=" + remark + ", tradeno=" + tradeno + "]";
+				+ invoiceid + ", remark=" + remark + ", tradeno=" + tradeno + ", project=" + project + "]";
 	}
     
     

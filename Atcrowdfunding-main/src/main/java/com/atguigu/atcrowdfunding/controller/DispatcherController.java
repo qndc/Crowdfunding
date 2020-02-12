@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import javax.servlet.http.Cookie;
@@ -77,11 +78,11 @@ public class DispatcherController {
 						pros.add(pro);
 					}
 				}
-				
 //				type.setPros(pros.subList(0, 3));
 				type.setPros(pros);
 			}
 			redisTemplate.opsForValue().set(Const.INDEXPROS, new Gson().toJson(types));
+			redisTemplate.expire(Const.INDEXPROS, Const.DEFAULT_EXPIRE, TimeUnit.SECONDS);
 			model.addAttribute("types", types);
 		}else {
 			List<Type> types = JSONObject.parseArray(indexPros,Type.class);

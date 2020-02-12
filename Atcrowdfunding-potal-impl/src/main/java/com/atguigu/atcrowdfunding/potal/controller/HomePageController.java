@@ -173,6 +173,18 @@ public class HomePageController {
 		return result;
 	}
 
+	/**
+	 * 	缺少运费字段赋值
+	 * @param proid
+	 * @param retid
+	 * @param invoiceid
+	 * @param addrid
+	 * @param orderNum
+	 * @param count
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping({ "/{proid}/{retid}/{invoiceid}/{count}/{addrid}/{orderNum}/toPay" })
 	public Object toPay(@PathVariable Integer proid, @PathVariable Integer retid, @PathVariable String invoiceid,
 			@PathVariable String addrid, @PathVariable String orderNum, @PathVariable Integer count,
@@ -190,7 +202,7 @@ public class HomePageController {
 		order.setProjectid(proid);
 		order.setReturnid(retid);
 		order.setRtncount(count);
-		order.setStatus("0");
+		order.setStatus("2");//未付款
 		LocalDateTime time = LocalDateTime.now();
 		order.setCreatedate(time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		this.homePageService.addOrder(order);
@@ -252,7 +264,7 @@ public class HomePageController {
 				System.err.println(request.getParameter("out_trade_no"));
 				System.err.println(order);
 				for (TOrder tOrder : order) {
-					tOrder.setStatus("1");
+					tOrder.setStatus("1");//已付款
 					tOrder.setTradeno(request.getParameter("trade_no"));
 					homePageService.updateOrder(tOrder);
 					Project project = this.homePageService.getProsById(tOrder.getProjectid());

@@ -194,5 +194,13 @@ public class HomePageServiceImpl implements HomePageService {
 		return projectMapper.selectNotByPage(typeid,status,keyWords);
 	}
 
+	@Override
+	public List<TOrder> getOrderByMemberId(Integer id) {
+		TOrderExample example = new TOrderExample();
+		TOrderExample.Criteria criteria = example.createCriteria();
+		criteria.andMemberidEqualTo(id);
+		return orderMapper.selectByExample(example);
+	}
+
 	
 }

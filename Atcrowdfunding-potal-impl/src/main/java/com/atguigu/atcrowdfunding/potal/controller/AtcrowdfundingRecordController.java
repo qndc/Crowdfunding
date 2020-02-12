@@ -26,11 +26,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.atguigu.atcrowdfunding.bean.Member;
 import com.atguigu.atcrowdfunding.bean.Project;
 import com.atguigu.atcrowdfunding.bean.TImgs;
 import com.atguigu.atcrowdfunding.bean.TMemberProjectFollow;
+import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.bean.TProjectComp;
 import com.atguigu.atcrowdfunding.bean.TReturn;
 import com.atguigu.atcrowdfunding.potal.service.AtcrowdfundingRecordService;
@@ -38,6 +40,7 @@ import com.atguigu.atcrowdfunding.potal.service.AtcrowdfundingService;
 import com.atguigu.atcrowdfunding.potal.service.HomePageService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.Const;
+import com.google.gson.Gson;
 
 @Controller
 @RequestMapping({"/record"})
@@ -102,6 +105,8 @@ public class AtcrowdfundingRecordController {
 					project.setEnddate(formatDate(project));
 				}
 				redisTemplate.opsForValue().set(Const.MYLAUNCH, JSON.toJSONString(pros));
+				//设置过期时间
+				redisTemplate.expire(Const.MYLAUNCH, Const.DEFAULT_EXPIRE, TimeUnit.SECONDS);
 			}else {
 				pros = JSONObject.parseArray(mylaunch,Project.class);
 			}
@@ -125,14 +130,51 @@ public class AtcrowdfundingRecordController {
 		return result;
 	}
 	
-	
-	@RequestMapping("/mySupport")
-	public Object mySupport() {
+	/**
+	 * 我的支持
+	 * @param status
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping("/mysupport")
+	@ResponseBody
+	public Object mySupport(@RequestParam(defaultValue = "0")Integer status,HttpSession session) {
 		AjaxResult result = new AjaxResult();
+		Member loginMember = (Member) session.getAttribute(Const.LOGIN_MEMBER);
+		String mysupport = (String)redisTemplate.opsForValue().get(Const.MYSUPPORT);
+		List<TOrder> orders = new ArrayList<>();
 		try {
-			
+			//redis中不存在就查询数据库，并添加到redis中
+			if (StringUtils.isBlank(mysupport)) {
+				orders = homePageService.getOrderByMemberId(loginMember.getId());
+				redisTemplate.opsForValue().set(Const.MYSUPPORT,JSON.toJSONString(orders));
+				//设置过期时间
+				redisTemplate.expire(Const.MYSUPPORT, Const.DEFAULT_EXPIRE, TimeUnit.SECONDS);
+			}else {
+				orders = JSONObject.parseArray(mysupport,TOrder.class);
+			}
+			//0 - 全部 ，1 - 已付款， 2 - 未付款， 3 - 交易关闭
+			if (status == 0) {
+				for (TOrder tOrder : orders) {
+					Project project = homePageService.getProsById(tOrder.getProjectid());
+					tOrder.setProject(project);
+				}
+				result.setMessage(orders);
+			}else {
+				List<TOrder> temp = new ArrayList<>();
+				for (TOrder tOrder : orders) {
+					if (Integer.parseInt(tOrder.getStatus()) == status) {
+						Project project = homePageService.getProsById(tOrder.getProjectid());
+						tOrder.setProject(project);
+						temp.add(tOrder);
+					}
+				}
+				result.setMessage(temp);
+			}
+			result.setStatus(200);
 		} catch (Exception e) {
-			
+			result.setStatus(500);
+			result.setMessage("查询失败！");
 		}
 		return result;
 	}
@@ -203,6 +245,7 @@ public class AtcrowdfundingRecordController {
 		long hours = diff % 86400000L / 3600000L;
 		long minutes = diff % 3600000L / 60000L;
 		long seconds = diff % 60000L / 1000L;
+		
 		return "剩余" + days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
 		
 	}
