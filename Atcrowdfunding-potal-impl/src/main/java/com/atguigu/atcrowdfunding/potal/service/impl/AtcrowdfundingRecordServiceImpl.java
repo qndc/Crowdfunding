@@ -10,9 +10,12 @@ import org.springframework.stereotype.Service;
 import com.atguigu.atcrowdfunding.bean.Project;
 import com.atguigu.atcrowdfunding.bean.TMemberProjectFollow;
 import com.atguigu.atcrowdfunding.bean.TMemberProjectFollowExample;
+import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.bean.TProjectDestroy;
+import com.atguigu.atcrowdfunding.manager.dao.OrderMapper;
 import com.atguigu.atcrowdfunding.potal.dao.ProjectMapper;
 import com.atguigu.atcrowdfunding.potal.dao.TMemberProjectFollowMapper;
+import com.atguigu.atcrowdfunding.potal.dao.TOrderMapper;
 import com.atguigu.atcrowdfunding.potal.service.AtcrowdfundingRecordService;
 @Service
 public class AtcrowdfundingRecordServiceImpl implements AtcrowdfundingRecordService {
@@ -21,6 +24,8 @@ public class AtcrowdfundingRecordServiceImpl implements AtcrowdfundingRecordServ
 	private TMemberProjectFollowMapper followMapper;
 	@Autowired
 	private ProjectMapper projectMapper;
+	@Autowired
+	private TOrderMapper orderMapper;
 
 	@Override
 	public List<TMemberProjectFollow> selectAllFollows(Integer id) {
@@ -51,8 +56,14 @@ public class AtcrowdfundingRecordServiceImpl implements AtcrowdfundingRecordServ
 						project.getSupporter(), project.getCompletion(), project.getMemberid(), project.getCreatedate(),
 						project.getFollower(), deletetdate);
 		projectMapper.insertDesInfo(destroy);
-//		projectMapper.deleteByPrimaryKey(proid);
 		
+	}
+
+	@Override
+	public void delOrder(Integer id) {
+		TOrder order = orderMapper.selectByPrimaryKey(id);
+		order.setStatus("4");
+		orderMapper.updateByPrimaryKey(order);
 	}
 
 }

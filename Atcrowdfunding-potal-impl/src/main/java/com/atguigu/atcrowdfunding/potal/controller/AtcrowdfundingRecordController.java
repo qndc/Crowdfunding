@@ -153,10 +153,11 @@ public class AtcrowdfundingRecordController {
 			}else {
 				orders = JSONObject.parseArray(mysupport,TOrder.class);
 			}
-			//0 - 全部 ，1 - 已付款， 2 - 未付款， 3 - 交易关闭
+			//0 - 全部 ，1 - 已付款， 2 - 未付款， 3 - 交易关闭，4-已删除
 			if (status == 0) {
 				for (TOrder tOrder : orders) {
 					Project project = homePageService.getProsById(tOrder.getProjectid());
+					project.setEnddate(formatDate(project));
 					tOrder.setProject(project);
 				}
 				result.setMessage(orders);
@@ -165,6 +166,7 @@ public class AtcrowdfundingRecordController {
 				for (TOrder tOrder : orders) {
 					if (Integer.parseInt(tOrder.getStatus()) == status) {
 						Project project = homePageService.getProsById(tOrder.getProjectid());
+						project.setEnddate(formatDate(project));
 						tOrder.setProject(project);
 						temp.add(tOrder);
 					}
@@ -175,6 +177,28 @@ public class AtcrowdfundingRecordController {
 		} catch (Exception e) {
 			result.setStatus(500);
 			result.setMessage("查询失败！");
+		}
+		return result;
+	}
+	
+	/**
+	 * 	删除订单
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/delOrder")
+	@ResponseBody
+	public Object delOrder(@RequestParam(required = true) Integer id) {
+		AjaxResult result = new AjaxResult();
+		try {
+			recordService.delOrder(id);
+			//删除成功后要移除redis缓存
+			redisTemplate.delete(Const.MYSUPPORT);
+			result.setStatus(200);
+			result.setMessage("删除成功！");
+		} catch (Exception e) {
+			result.setStatus(500);
+			result.setMessage("删除失败！");
 		}
 		return result;
 	}

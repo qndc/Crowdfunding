@@ -199,6 +199,7 @@ public class HomePageServiceImpl implements HomePageService {
 		TOrderExample example = new TOrderExample();
 		TOrderExample.Criteria criteria = example.createCriteria();
 		criteria.andMemberidEqualTo(id);
+		criteria.andStatusNotEqualTo("4");
 		return orderMapper.selectByExample(example);
 	}
 

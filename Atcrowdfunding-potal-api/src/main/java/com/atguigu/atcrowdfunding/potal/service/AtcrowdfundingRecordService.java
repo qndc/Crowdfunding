@@ -36,4 +36,10 @@ public interface AtcrowdfundingRecordService {
 	 */
 	void delProject(Integer proid);
 
+	/**
+	 * 删除订单
+	 * @param id
+	 */
+	void delOrder(Integer id);
+
 }

@@ -191,6 +191,14 @@ function OrderInteraction(status) {
 				var content = '';
 				$("#support .tab-pane").eq(status).empty();
 				$.each(result.message,function(index,item){
+					var sInfo = '';
+					if (item.status == 1) {
+						sInfo = "已付款";
+					}else if (item.status == 2) {
+						sInfo = "未付款";
+					}else {
+						sInfo = "交易关闭";
+					}
 					 content += '<tr>'
                         +'<td style="vertical-align:middle;">'
                         +'<div class="thumbnail">'
@@ -198,7 +206,7 @@ function OrderInteraction(status) {
                         +'<h4>'+item.project.name+'</h4>'
                         +'<p>订单编号:'+item.ordernum+'</p><p>'
                         +'<div style="float:left;"><i class="glyphicon glyphicon-screenshot" title="目标金额" ></i> 已完成'+item.project.completion+'% </div>'
-                        +'<div style="float:right;"><i title="截至日期" class="glyphicon glyphicon-calendar"></i> 剩余8天 </div>'
+                        +'<div style="float:right;"><i title="截至日期" class="glyphicon glyphicon-calendar"></i> '+item.project.enddate+' </div>'
                         +'</p><br>'
                         +'<div class="progress" style="margin-bottom: 4px;">'
                         +'<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="'+item.project.completion+'" aria-valuemin="0" aria-valuemax="100" style="width: '+item.project.completion+'%">'
@@ -206,10 +214,10 @@ function OrderInteraction(status) {
                         +'<td style="vertical-align:middle;">'+item.createdate+'</td>'
                         +'<td style="vertical-align:middle;">'+item.money+'.00<br>(运费：0.00 )</td>'
                         +'<td style="vertical-align:middle;">'+item.rtncount+'</td>'
-                        +'<td style="vertical-align:middle;">交易关闭</td>'
+                        +'<td style="vertical-align:middle;">'+sInfo+'</td>'
                         +'<td style="vertical-align:middle;">'
                         +'<div class="btn-group-vertical" role="group" aria-label="Vertical button group">'
-                        +'<button type="button" class="btn btn-default">删除订单</button>'
+                        +'<button type="button" class="btn btn-default" onclick="delOrder('+item.id+','+status+')">删除订单</button>'
                         +'<button type="button" class="btn btn-default">交易详情</button>'
                         +'</div></td></tr>';
 				});
@@ -229,6 +237,30 @@ function OrderInteraction(status) {
 					+'</table>'
 					+'</div>';
 				$("#support .tab-pane").eq(status).append(head);
+			}else{
+				layer.msg(result.message,{time:1000,icon:5,shift:6});
+			}
+		},
+		error:function(result){
+			layer.msg(result.message,{time:1000,icon:5,shift:6});
+		}
+	})
+}
+
+
+//删除订单
+function delOrder(id,status) {
+	$.ajax({
+		url:"/record/delOrder.do",
+		type:"post",
+		data:{
+			"id":id
+		},
+		success:function(result){
+			if (result.status == 200) {
+				//重新加载
+				OrderInteraction(status);
+				layer.msg(result.message,{time:1000,icon:6,shift:6});
 			}else{
 				layer.msg(result.message,{time:1000,icon:5,shift:6});
 			}
