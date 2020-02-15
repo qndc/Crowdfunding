@@ -30,6 +30,8 @@ public class TOrder {
     private String tradeno;
     
     private Project project;
+    
+    private TReturn tReturn;
 
     public Integer getId() {
         return id;
@@ -149,6 +151,14 @@ public class TOrder {
 
 	public void setProject(Project project) {
 		this.project = project;
+	}
+
+	public TReturn gettReturn() {
+		return tReturn;
+	}
+
+	public void settReturn(TReturn tReturn) {
+		this.tReturn = tReturn;
 	}
 
 	@Override

@@ -12,7 +12,8 @@ function myFollow() {
 			if (result.status == 200) {
 				//拼接列表
 				$("#follow").empty();
-				$.each(result.message,function(index,item){
+				if (result.message != null) {
+					$.each(result.message,function(index,item){
 					var content = '<tr>'
 					+'<td style="vertical-align: middle;">'
 					+'<div class="thumbnail">'
@@ -33,6 +34,8 @@ function myFollow() {
 					+'</div></td></tr>';	
 					$("#follow").append(content);
 				})
+				}
+
 			}else {
 				layer.msg(result.message,{time:1000,icon:5,shift:6});
 			}
@@ -61,7 +64,7 @@ function Interaction(status) {
 		success:function(result){
 			if (result.status == 200) {
 				tabpanel.empty();
-				
+				var body = "";
 				$.each(result.message,function(index,item){
 					//拼接状态\操作按钮
 					var status = '';
@@ -79,14 +82,8 @@ function Interaction(status) {
 						status = "众筹失败";
 						btn = '<button type="button" class="btn btn-default" onclick = "delProject('+item.id+')">删除项目</button>';
 					}
-					var content = '<div class="col-md-12 column" style="padding: 0; margin-top: 10px;">'
-					+'<table class="table table-bordered" style="text-align: center;">'
-					+'<thead><tr style="background-color: #ddd;">'
-					+'<td>项目信息</td>'
-					+'<td width="120">募集金额（元）</td>'
-					+'<td width="80">当前状态</td>'
-					+'<td width="120">操作</td>'
-					+'</tr></thead><tbody><tr>'
+					
+					body += '<tr>'
 					+'<td style="vertical-align: middle;">'
 					+'<div class="thumbnail">'
 					+'<div class="caption">'
@@ -102,10 +99,21 @@ function Interaction(status) {
 					+'<div class="btn-group-vertical" role="group" aria-label="Vertical button group">'
 					+'<button type="button" class="btn btn-default" onclick="preview('+item.id+')">项目预览</button>'
 					+ btn
-					+'</div></td></tr></tbody></table></div>';
+					+'</div></td></tr>';
 					
-					tabpanel.append(content);
-				})
+				});
+				
+				var content = '<div class="col-md-12 column" style="padding: 0; margin-top: 10px;">'
+					+'<table class="table table-bordered" style="text-align: center;">'
+					+'<thead><tr style="background-color: #ddd;">'
+					+'<td>项目信息</td>'
+					+'<td width="120">募集金额（元）</td>'
+					+'<td width="80">当前状态</td>'
+					+'<td width="120">操作</td>'
+					+'</tr></thead><tbody>'+body+'</tbody></table></div>';
+				
+				tabpanel.append(content);
+				
 			}else{
 				layer.msg(result.message,{time:1000,icon:5,shift:6})
 			}
@@ -212,7 +220,7 @@ function OrderInteraction(status) {
                         +'<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="'+item.project.completion+'" aria-valuemin="0" aria-valuemax="100" style="width: '+item.project.completion+'%">'
                         +'</div></div></div></div></td>'
                         +'<td style="vertical-align:middle;">'+item.createdate+'</td>'
-                        +'<td style="vertical-align:middle;">'+item.money+'.00<br>(运费：0.00 )</td>'
+                        +'<td style="vertical-align:middle;">'+item.money+'.00<br>(运费：'+item.tReturn.freight+'.00 )</td>'
                         +'<td style="vertical-align:middle;">'+item.rtncount+'</td>'
                         +'<td style="vertical-align:middle;">'+sInfo+'</td>'
                         +'<td style="vertical-align:middle;">'

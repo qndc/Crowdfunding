@@ -62,21 +62,13 @@ public class AtcrowdfundingRecordController {
 	public Object myFollow(HttpSession session) {
 		AjaxResult result = new AjaxResult();
 		Member loginMember = (Member) session.getAttribute(Const.LOGIN_MEMBER);
-		String myfollow = (String)redisTemplate.opsForValue().get(Const.MYFOLLOW);
 		try {
-			if (StringUtils.isBlank(myfollow)) {
-				List<Project> follows = new ArrayList<Project>();
-				for (TMemberProjectFollow tMemberProjectFollow : recordService.selectAllFollows(loginMember.getId())) {
-					Project project = homePageService.getProsById(tMemberProjectFollow.getProjectid());
-					project.setEnddate(formatDate(project));
-					follows.add(project);
-					result.setMessage(follows);
-				}
-				redisTemplate.opsForValue().set(Const.MYFOLLOW, JSON.toJSONString(follows));
-				//设置过期时间
-				redisTemplate.expire(Const.MYFOLLOW, Const.DEFAULT_EXPIRE, TimeUnit.SECONDS);
-			}else {
-				result.setMessage(JSONObject.parseArray(myfollow,Project.class));
+			List<Project> follows = new ArrayList<Project>();
+			for (TMemberProjectFollow tMemberProjectFollow : recordService.selectAllFollows(loginMember.getId())) {
+				Project project = homePageService.getProsById(tMemberProjectFollow.getProjectid());
+				project.setEnddate(formatDate(project));
+				follows.add(project);
+				result.setMessage(follows);
 			}
 			result.setStatus(200);
 		} catch (Exception e) {
@@ -95,20 +87,10 @@ public class AtcrowdfundingRecordController {
 	public Object myLaunch(@RequestParam(defaultValue = "0")Integer status,HttpSession session) {
 		AjaxResult result = new AjaxResult();
 		Member loginMember = (Member) session.getAttribute(Const.LOGIN_MEMBER);
-		String mylaunch = (String)redisTemplate.opsForValue().get(Const.MYLAUNCH);
-		List<Project> pros = new ArrayList<>();
 		try {
-			//先查询redis中是否存在，如果不存在就从数据库查询并添加到redis中
-			if (StringUtils.isBlank(mylaunch)) {
-				pros = recordService.selectByMemberId(loginMember.getId());
-				for (Project project : pros) {
-					project.setEnddate(formatDate(project));
-				}
-				redisTemplate.opsForValue().set(Const.MYLAUNCH, JSON.toJSONString(pros));
-				//设置过期时间
-				redisTemplate.expire(Const.MYLAUNCH, Const.DEFAULT_EXPIRE, TimeUnit.SECONDS);
-			}else {
-				pros = JSONObject.parseArray(mylaunch,Project.class);
+			List<Project> pros = recordService.selectByMemberId(loginMember.getId());
+			for (Project project : pros) {
+				project.setEnddate(formatDate(project));
 			}
 			//0 - 全部 1 - 众筹中， 2 - 众筹成功， 3 - 众筹失败，判断是那种类型并根据类型返回值
 			if (status == 0) {
@@ -141,24 +123,16 @@ public class AtcrowdfundingRecordController {
 	public Object mySupport(@RequestParam(defaultValue = "0")Integer status,HttpSession session) {
 		AjaxResult result = new AjaxResult();
 		Member loginMember = (Member) session.getAttribute(Const.LOGIN_MEMBER);
-		String mysupport = (String)redisTemplate.opsForValue().get(Const.MYSUPPORT);
-		List<TOrder> orders = new ArrayList<>();
 		try {
-			//redis中不存在就查询数据库，并添加到redis中
-			if (StringUtils.isBlank(mysupport)) {
-				orders = homePageService.getOrderByMemberId(loginMember.getId());
-				redisTemplate.opsForValue().set(Const.MYSUPPORT,JSON.toJSONString(orders));
-				//设置过期时间
-				redisTemplate.expire(Const.MYSUPPORT, Const.DEFAULT_EXPIRE, TimeUnit.SECONDS);
-			}else {
-				orders = JSONObject.parseArray(mysupport,TOrder.class);
-			}
+			List<TOrder> orders = homePageService.getOrderByMemberId(loginMember.getId());
 			//0 - 全部 ，1 - 已付款， 2 - 未付款， 3 - 交易关闭，4-已删除
 			if (status == 0) {
 				for (TOrder tOrder : orders) {
 					Project project = homePageService.getProsById(tOrder.getProjectid());
 					project.setEnddate(formatDate(project));
 					tOrder.setProject(project);
+					tOrder.settReturn(homePageService.getReturnById(tOrder.getReturnid()));
+					
 				}
 				result.setMessage(orders);
 			}else {
@@ -168,6 +142,7 @@ public class AtcrowdfundingRecordController {
 						Project project = homePageService.getProsById(tOrder.getProjectid());
 						project.setEnddate(formatDate(project));
 						tOrder.setProject(project);
+						tOrder.settReturn(homePageService.getReturnById(tOrder.getReturnid()));
 						temp.add(tOrder);
 					}
 				}
@@ -192,8 +167,6 @@ public class AtcrowdfundingRecordController {
 		AjaxResult result = new AjaxResult();
 		try {
 			recordService.delOrder(id);
-			//删除成功后要移除redis缓存
-			redisTemplate.delete(Const.MYSUPPORT);
 			result.setStatus(200);
 			result.setMessage("删除成功！");
 		} catch (Exception e) {
@@ -214,8 +187,6 @@ public class AtcrowdfundingRecordController {
 		AjaxResult result = new AjaxResult();
 		try {
 			recordService.delProject(proId);
-			//删除成功后要移除redis缓存
-			redisTemplate.delete(Const.MYLAUNCH);
 			result.setStatus(200);
 			result.setMessage("删除成功！");
 		} catch (Exception e) {
@@ -240,8 +211,6 @@ public class AtcrowdfundingRecordController {
 		List<TImgs> imgs = this.homePageService.getProDetailImg(proId);
 		List<TReturn> returntList = this.homePageService.getReturnByProId(proId);
 		TProjectComp comp = this.homePageService.getCompByProId(proId);
-		Member loginMember = (Member) session.getAttribute("member");
-		List<TMemberProjectFollow> list = homePageService.getProjectFollowe(loginMember.getId(),proId);
 		model.addAttribute("project", project);
 		model.addAttribute("imgs", imgs);
 		model.addAttribute("returntList", returntList);

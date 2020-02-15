@@ -69,6 +69,14 @@ pageEncoding="UTF-8"%>
 	background-color: #f0ad4e;
 	color: #fff;
 }
+.no-result .info .empty {
+    float: left;
+    width: 50px;
+    height: 50px;
+    font-size: 14px;
+    overflow: hidden;
+    background: url(../img/crowdfunding.jpg) -13px 0px no-repeat;
+}
 
 </style>
 </head>

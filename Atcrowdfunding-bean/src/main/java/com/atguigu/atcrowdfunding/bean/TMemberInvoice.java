@@ -70,4 +70,12 @@ public class TMemberInvoice {
     public void setType(String type) {
         this.type = type == null ? null : type.trim();
     }
+
+	@Override
+	public String toString() {
+		return "TMemberInvoice [id=" + id + ", memberid=" + memberid + ", invoice=" + invoice + ", tax=" + tax
+				+ ", addrtel=" + addrtel + ", banknum=" + banknum + ", type=" + type + "]";
+	}
+    
+    
 }

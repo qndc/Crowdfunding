@@ -162,9 +162,11 @@ public class HomePageController {
 		try {
 			Member loginMember = (Member) session.getAttribute("member");
 			tMemberInvoice.setMemberid(loginMember.getId());
-			this.homePageService.addInvoice(tMemberInvoice);
+//			this.homePageService.addInvoice(tMemberInvoice);
+			System.err.println(tMemberInvoice);
 			result.setStatus(Integer.valueOf(200));
-			result.setMessage(tMemberInvoice.getId());
+//			result.setMessage(tMemberInvoice.getId());
+			result.setMessage("添加成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.setStatus(Integer.valueOf(500));

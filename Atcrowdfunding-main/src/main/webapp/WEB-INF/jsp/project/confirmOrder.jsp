@@ -103,7 +103,7 @@ px
 			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="container">
 					<div class="navbar-header">
-						<a class="navbar-brand" href="index.html" style="font-size: 32px;">尚筹网-创意产品众筹平台</a>
+						<a class="navbar-brand" href="${APP_PATH }/index.htm" style="font-size: 32px;">尚筹网-创意产品众筹平台</a>
 					</div>
 					<div id="navbar" class="navbar-collapse collapse"
 						style="float: right;">
@@ -112,12 +112,12 @@ px
 								data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>
 									张三<span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="member.html"><i
+									<li><a href="${APP_PATH }/member.htm"><i
 											class="glyphicon glyphicon-scale"></i> 会员中心</a></li>
 									<li><a href="#"><i class="glyphicon glyphicon-comment"></i>
 											消息</a></li>
 									<li class="divider"></li>
-									<li><a href="index.html"><i
+									<li><a href="${APP_PATH }/logout.do"><i
 											class="glyphicon glyphicon-off"></i> 退出系统</a></li>
 								</ul></li>
 						</ul>
@@ -222,11 +222,11 @@ px
 										</c:forEach>
 										
 										<div class="radio">
-											<label> <input type="radio" onclick="showForm()"
-												id="optionsRadios2" value="option2"> 新增地址
+											<label> 
+												<input type="radio" name="address" id="addAddr" value="add"> 新增地址
 											</label>
 										</div>
-										<div id="d1" style="border: 10px solid #f60; border-bottom-color: #eceeef; border-width: 10px; width: 20px; margin-left: 20px; margin-top: -20px; border-left-color: rgba(221, 221, 221, 0); border-top-color: rgba(221, 221, 221, 0); border-right-color: rgba(221, 221, 221, 0);display: none"></div>
+										<!-- <div id="d1" style="border: 10px solid #f60; border-bottom-color: #eceeef; border-width: 10px; width: 20px; margin-left: 20px; margin-top: -20px; border-left-color: rgba(221, 221, 221, 0); border-top-color: rgba(221, 221, 221, 0); border-right-color: rgba(221, 221, 221, 0);display: none"></div> -->
 										<div id="d2" class="panel panel-default" style="border-style: dashed; background-color: #eceeef;display: none">
 											<div class="panel-body">
 												<div class="col-md-12 column">
@@ -291,13 +291,13 @@ px
 									</div>
 									<div class="col-md-12 column" style="padding: 0 120px;">
 										<div class="radio">
-											<label> <input type="radio" name="optionsRadios1"
-												id="optionsRadios1" value="option1" checked> 无需发票
+											<label> 
+												<input type="radio" name="optionsRadios1" value="option1" checked> 无需发票
 											</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="optionsRadios1" id= "comp"
-												id="optionsRadios2" value="option2"> 新增发票
+											<label>
+												<input type="radio" name="optionsRadios1" id= "comp" value="option2"> 新增发票
 											</label>
 										</div>
 										<div
@@ -307,6 +307,17 @@ px
 											<div class="panel-body">
 												<div class="col-md-12 column">
 													<form class="form-horizontal" id="invoiceForm">
+														<div class="form-group">
+															<label class="col-sm-2 control-label">发票类型</label>
+															<div class="col-sm-10">
+																<label class="radio-inline">
+																  <input type="radio" name="type" value="0" checked="checked"> 企业单位
+																</label>
+																<label class="radio-inline">
+																  <input type="radio" name="type" value="1"> 个人/非企业单位
+																</label>
+															</div>
+														</div>
 														<div class="form-group">
 															<label class="col-sm-2 control-label">发票抬头（*）</label>
 															<div class="col-sm-10">
@@ -362,7 +373,7 @@ px
 									</div>
 									<div class="col-md-12 column">
 										<table class="table table-bordered"
-											style="text-align: center;">
+											style="text-align: center;margin-top: 10px">
 											<thead>
 												<tr style="background-color: #ddd;">
 													<td>项目名称</td>
@@ -390,15 +401,7 @@ px
 											</tbody>
 										</table>
 									</div>
-									<div class="col-md-12 column">
-										<div class="form-group">
-											<label class="col-sm-2 control-label">备注</label>
-											<div class="col-sm-10">
-												<textarea class="form-control" rows="1"
-													placeholder="填写关于回报或发起人希望您备注的信息"></textarea>
-											</div>
-										</div>
-									</div>
+									
 									<div class="col-md-12 column">
 										<blockquote
 											style="border-left: 5px solid #f60; color: #f60; padding: 0 0 0 20px;">
@@ -407,7 +410,7 @@ px
 									</div>
 									<div class="col-md-12 column">
 										<div class="alert alert-warning alert-dismissable"
-											style="text-align: right; border: 2px solid #ffc287;">
+											style="text-align: right; border: 2px solid #ffc287;margin-top: 10px;">
 											<ul style="list-style: none;">
 												<li style="margin-top: 10px;">支持金额：<span
 													style="color: red;">￥${ret.supportmoney * num }.00</span></li>
@@ -434,7 +437,7 @@ px
 												</li>
 												<li style="margin-top: 10px;">
 													<div class="checkbox">
-														<label> <input type="checkbox" id="rule" checked >
+														<label> <input type="checkbox" id="rule">
 															我已了解风险和规则
 														</label>
 													</div>
@@ -516,7 +519,6 @@ px
 				data:$("#addrForm").serialize(),
 				success:function(result){
 					if (result.status == 200) {
-						layer.msg("添加成功",{time:1000,icon:6})
 						//将添加的信息追加到页面进行显示
 						var name = $("input[name = 'name']").val();
 						var phone = $("input[name = 'phone']").val();
@@ -527,12 +529,11 @@ px
 						var radio = $(".radios .radio").eq($(".radios .radio").size()-2);
 						var content = "<div class='radio'>"
 						+"<label>"
-						+"<input type='radio' name='optionsRadios' value='"+result.message+"'>"
+						+"<input type='radio' name='address' value='"+result.message+"'>"
 						+ name +" " + phone + " " + province + " " + city + " " + district + " " + detail 
 						+"</label>"
 						+"</div>";
-						radio.after(content);
-						
+						radio.before(content);
 					}else{
 						layer.msg(result.message,{time:1000,icon:5,shift:6})
 					}
@@ -543,28 +544,42 @@ px
 			})
 		}
 		
-		//切换地址添加面板
-		function showForm() {
-			$("#d1").toggle(500);
-			$("#d2").toggle(500);
-		}
-		
-		$("#comp").click(function () {
-			$(this).parent().parent().next().toggle("slow").next().toggle("slow");
+		//切换地址/发票添加面板
+		$("#addAddr").click(function () {
+			$("#d2").show(500);
 		})
 		
+		$("#comp").click(function () {
+			$(this).parent().parent().next().show("slow").next().show("slow");
+		})
 		
-		//添加发票
+		//选中地址/了解详情
+		$("input[name='address']").click(function () {
+			if ($("#rule").is(":checked")) {
+				$("#toPay").removeAttr("disabled");
+			}
+		})
+		
+		$("#rule").click(function () {
+			if ($("input[name='address']").is(":checked")) {
+				$("#toPay").removeAttr("disabled");
+			}
+		})
+		
+		//添加发票,发票类型切换
+		
+		
+		
 		function addInvoice(){
-			if ($("#cIn").val().trim() != "" && $("#tax").val().trim() != "") {
+			if ($("input[name = 'invoice']").val().trim() != "" && $("input[name = 'tax']").val().trim() != "") {
+				console.log($("#invoiceForm").serialize());
 				$.ajax({
 					url:"${APP_PATH}/homepage/addInvoice.do",
 					type:"post",
-					data:$("#compIn").serialize(),
+					data:$("#invoiceForm").serialize(),
 					success:function(result){
 						if (result.status == 200) {
 							console.log(result.message);
-							layer.msg("添加成功",{time:1000,icon:6})
 							//将添加的信息追加到页面进行显示
 							/* var name = $("input[name = 'name']").val();
 							var phone = $("input[name = 'phone']").val();
@@ -593,13 +608,6 @@ px
 				layer.msg("发票抬头税号不能为空",{time:1000,icon:5,shift:6})
 			}
 		}			
-	
-		//选中地址
-		$("input[name='address']").click(function () {
-			if ($("#rule").is(":checked")) {
-				$("#toPay").removeAttr("disabled");
-			}
-		})
 		
 		//去付款
 		$("#toPay").click(function () {
@@ -626,7 +634,6 @@ px
 			sNow += String(vNow.getMinutes());
 			sNow += String(vNow.getSeconds());
 			sNow += String(vNow.getMilliseconds());
-			//document.getElementById("WIDout_trade_no").value =  sNow;
 			return sNow;
 		}
 		
