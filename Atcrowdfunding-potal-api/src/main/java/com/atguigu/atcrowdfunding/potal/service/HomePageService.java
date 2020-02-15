@@ -99,11 +99,18 @@ public abstract interface HomePageService
   Integer getProsNotByPage(Integer typeid, Integer status, String keyWords);
 
   /**
-   * 根据用户id查询订单
+   * 	根据用户id查询订单
    * @param id
    * @return
    */
   List<TOrder> getOrderByMemberId(Integer id);
+
+  /**
+   *	 根据用户id查询发票信息
+   * @param id
+   * @return
+   */
+  List<TMemberInvoice> getInvoiceByMemberId(Integer id);
 
  
 }

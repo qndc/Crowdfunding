@@ -110,7 +110,7 @@ px
 						<ul class="nav navbar-nav">
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>
-									张三<span class="caret"></span></a>
+									${sessionScope.member.username }<span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="${APP_PATH }/member.htm"><i
 											class="glyphicon glyphicon-scale"></i> 会员中心</a></li>
@@ -292,12 +292,19 @@ px
 									<div class="col-md-12 column" style="padding: 0 120px;">
 										<div class="radio">
 											<label> 
-												<input type="radio" name="optionsRadios1" value="option1" checked> 无需发票
+												<input type="radio" name="ince" value="0" > 无需发票
 											</label>
 										</div>
+										<c:forEach items="${requestScope.invoices }" var="invoice">
+											<div class="radio">
+												<label> 
+													<input type="radio" name="ince" value="${invoice.id }"> ${invoice.invoice } ${invoice.tax } 
+												</label>
+											</div>
+										</c:forEach>
 										<div class="radio">
 											<label>
-												<input type="radio" name="optionsRadios1" id= "comp" value="option2"> 新增发票
+												<input type="radio" name="ince" id= "comp" value="add"> 新增发票
 											</label>
 										</div>
 										<div
@@ -311,7 +318,7 @@ px
 															<label class="col-sm-2 control-label">发票类型</label>
 															<div class="col-sm-10">
 																<label class="radio-inline">
-																  <input type="radio" name="type" value="0" checked="checked"> 企业单位
+																  <input type="radio" name="type" value="0"> 企业单位
 																</label>
 																<label class="radio-inline">
 																  <input type="radio" name="type" value="1"> 个人/非企业单位
@@ -325,7 +332,7 @@ px
 																	style="width: 300px;">
 															</div>
 														</div>
-														<div class="form-group">
+														<div class="form-group" id="tax">
 															<label class="col-sm-2 control-label">税号（*）</label>
 															<div class="col-sm-10">
 																<input type="text" name="tax" class="form-control" placeholder="税号"
@@ -349,7 +356,7 @@ px
 														<div class="form-group">
 															<label for="inputEmail3" class="col-sm-2 control-label"></label>
 															<div class="col-sm-10">
-																<button type="button" onclick="addInvoice()" class="btn btn-primary">确认发票信息</button>
+																<button type="button" onclick="addInvoiceCheck()" class="btn btn-primary">确认发票信息</button>
 															</div>
 														</div>
 													</form>
@@ -567,47 +574,60 @@ px
 		})
 		
 		//添加发票,发票类型切换
+		$("input[name = 'type']").eq(0).click(function () {
+			$("#tax").show(500);
+		})
 		
+		$("input[name = 'type']").eq(1).click(function () {
+			$("#tax").hide(500);
+			$("#tax input").val("");
+		})
 		
+		function addInvoiceCheck(){
+			if ($("input[name = 'type']:checked").val() == 0 ) {
+				if ($("input[name = 'invoice']").val().trim() == "" || $("input[name = 'tax']").val().trim() == "") {
+					layer.msg("企业单位抬头税号不能为空",{time:1000,icon:5,shift:6});
+				}else{
+					addInvoice();
+				}
+			}else if($("input[name = 'type']:checked").val() == 1){
+				if ($("input[name = 'invoice']").val().trim() == "") {
+					layer.msg("个人/非企业单位抬头不能为空",{time:1000,icon:5,shift:6});
+				}else{
+					addInvoice();
+				}
+			}else{
+				layer.msg("发票信息不能为空",{time:1000,icon:5,shift:6});
+			}
+		}		
 		
-		function addInvoice(){
-			if ($("input[name = 'invoice']").val().trim() != "" && $("input[name = 'tax']").val().trim() != "") {
-				console.log($("#invoiceForm").serialize());
-				$.ajax({
-					url:"${APP_PATH}/homepage/addInvoice.do",
-					type:"post",
-					data:$("#invoiceForm").serialize(),
-					success:function(result){
-						if (result.status == 200) {
-							console.log(result.message);
-							//将添加的信息追加到页面进行显示
-							/* var name = $("input[name = 'name']").val();
-							var phone = $("input[name = 'phone']").val();
-							var province = $("#province").val();
-							var city = $("#city").val();
-							var district = $("#district").val();
-							var detail = $("#detail").val();
-							var radio = $(".radios .radio").eq($(".radios .radio").size()-2);
-							var content = "<div class='radio'>"
-							+"<label>"
-							+"<input type='radio' name='optionsRadios' value='"+result.message+"'>"
-							+ name +" " + phone + " " + province + " " + city + " " + district + " " + detail 
-							+"</label>"
-							+"</div>";
-							radio.after(content); */
-							
-						}else{
-							layer.msg(result.message,{time:1000,icon:5,shift:6})
-						}
-					},
-					error:function(result){
+		function addInvoice() {
+			$.ajax({
+				url:"${APP_PATH}/homepage/addInvoice.do",
+				type:"post",
+				data:$("#invoiceForm").serialize(),
+				success:function(result){
+					if (result.status == 200) {
+						console.log(result.message);
+						//将添加的信息追加到页面进行显示
+						var invoice = $("input[name = 'invoice']").val();
+						var tax = $("input[name = 'tax']").val();
+						var radio = $("#comp").parent().parent();
+						var content = '<div class="radio">'
+						+'<label>'
+						+'	<input type="radio" name="ince" value="'+result.message+'"> '+invoice+' '+tax+''
+						+'</label>'
+						+'</div>';
+						radio.before(content);
+					}else{
 						layer.msg(result.message,{time:1000,icon:5,shift:6})
 					}
-				})
-			}else{
-				layer.msg("发票抬头税号不能为空",{time:1000,icon:5,shift:6})
-			}
-		}			
+				},
+				error:function(result){
+					layer.msg(result.message,{time:1000,icon:5,shift:6})
+				}
+			})
+		}
 		
 		//去付款
 		$("#toPay").click(function () {
@@ -615,11 +635,17 @@ px
 				//地址编号
 				var addrid = $("input[name='address']:checked").val();
 				//发票编号:先默认为0，不开发票
-				//订单编号
-				var orderNum = GetDateNow();
-				window.open('${APP_PATH }/homepage/${ret.projectid}/${ret.id}/0/${requestScope.num}/'+addrid+'/'+orderNum+'/toPay.do');
+				var invoiceid = $("input[name='ince']:checked").val();
+				
+				if (invoiceid == "add" || addrid == "add") {
+					layer.msg("无法识别的地址或者发票信息",{time:1000,icon:5,shift:6});
+				}else{
+					//订单编号
+					var orderNum = GetDateNow();
+					window.location.href = '${APP_PATH }/homepage/${ret.projectid}/${ret.id}/'+invoiceid+'/${requestScope.num}/'+addrid+'/'+orderNum+'/toPay.do';
+				}
 			}else{
-				layer.msg("请阅读风险提示，并进行勾选",{time:1000,icon:5,shift:6})
+				layer.msg("请阅读风险提示，并进行勾选",{time:1000,icon:5,shift:6});
 			}
 		})
 		

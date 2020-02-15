@@ -8,6 +8,7 @@ import com.atguigu.atcrowdfunding.bean.TImgsExample.Criteria;
 import com.atguigu.atcrowdfunding.bean.TMemberAddress;
 import com.atguigu.atcrowdfunding.bean.TMemberAddressExample;
 import com.atguigu.atcrowdfunding.bean.TMemberInvoice;
+import com.atguigu.atcrowdfunding.bean.TMemberInvoiceExample;
 import com.atguigu.atcrowdfunding.bean.TMemberProjectFollow;
 import com.atguigu.atcrowdfunding.bean.TMemberProjectFollowExample;
 import com.atguigu.atcrowdfunding.bean.TOrder;
@@ -201,6 +202,14 @@ public class HomePageServiceImpl implements HomePageService {
 		criteria.andMemberidEqualTo(id);
 		criteria.andStatusNotEqualTo("4");
 		return orderMapper.selectByExample(example);
+	}
+
+	@Override
+	public List<TMemberInvoice> getInvoiceByMemberId(Integer id) {
+		TMemberInvoiceExample example = new TMemberInvoiceExample();
+		TMemberInvoiceExample.Criteria criteria = example.createCriteria();
+		criteria.andMemberidEqualTo(id);
+		return invoiceMapper.selectByExample(example);
 	}
 
 	

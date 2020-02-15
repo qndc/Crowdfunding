@@ -126,12 +126,15 @@ public class HomePageController {
 		TProjectComp comp = this.homePageService.getCompByProId(proId);
 
 		List<TMemberAddress> addresses = this.homePageService.getAddrByMemberId(loginMember.getId());
+		
+		List<TMemberInvoice> invoices = homePageService.getInvoiceByMemberId(loginMember.getId());
 
 		model.addAttribute("ret", ret);
 		model.addAttribute("comp", comp);
 		model.addAttribute("project", project);
 		model.addAttribute("num", num);
 		model.addAttribute("addresses", addresses);
+		model.addAttribute("invoices", invoices);
 		return "/project/confirmOrder";
 	}
 
@@ -162,10 +165,10 @@ public class HomePageController {
 		try {
 			Member loginMember = (Member) session.getAttribute("member");
 			tMemberInvoice.setMemberid(loginMember.getId());
-//			this.homePageService.addInvoice(tMemberInvoice);
+			this.homePageService.addInvoice(tMemberInvoice);
 			System.err.println(tMemberInvoice);
 			result.setStatus(Integer.valueOf(200));
-//			result.setMessage(tMemberInvoice.getId());
+			result.setMessage(tMemberInvoice.getId());
 			result.setMessage("添加成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -176,7 +179,6 @@ public class HomePageController {
 	}
 
 	/**
-	 * 	缺少运费字段赋值
 	 * @param proid
 	 * @param retid
 	 * @param invoiceid
@@ -197,7 +199,12 @@ public class HomePageController {
 
 		TOrder order = new TOrder();
 		order.setAddressid(addrid.toString());
-		order.setInvoice(invoiceid);
+		if (invoiceid.equals("0")) {
+			order.setInvoice(invoiceid);
+		}else {
+			order.setInvoice("1");
+			order.setInvoiceid(invoiceid);
+		}
 		order.setMemberid(loginMember.getId());
 		order.setMoney(Integer.valueOf(ret.getSupportmoney().intValue() * count.intValue()));
 		order.setOrdernum(orderNum);

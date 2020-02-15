@@ -136,7 +136,7 @@ px
 						<ul class="nav navbar-nav">
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>
-									张三<span class="caret"></span></a>
+									${sessionScope.member.username }<span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="member.html"><i
 											class="glyphicon glyphicon-scale"></i> 会员中心</a></li>
