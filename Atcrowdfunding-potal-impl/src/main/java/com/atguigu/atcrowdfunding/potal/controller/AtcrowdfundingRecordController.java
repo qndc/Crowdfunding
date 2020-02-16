@@ -31,6 +31,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.atguigu.atcrowdfunding.bean.Member;
 import com.atguigu.atcrowdfunding.bean.Project;
 import com.atguigu.atcrowdfunding.bean.TImgs;
+import com.atguigu.atcrowdfunding.bean.TMemberAddress;
+import com.atguigu.atcrowdfunding.bean.TMemberInvoice;
 import com.atguigu.atcrowdfunding.bean.TMemberProjectFollow;
 import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.bean.TProjectComp;
@@ -50,8 +52,6 @@ public class AtcrowdfundingRecordController {
 	private AtcrowdfundingRecordService recordService;
 	@Autowired
 	private HomePageService homePageService;
-	@Autowired
-	private RedisTemplate<String, String> redisTemplate;
 	
 	/**
 	 * 	我的关注
@@ -216,6 +216,55 @@ public class AtcrowdfundingRecordController {
 		model.addAttribute("returntList", returntList);
 		model.addAttribute("comp", comp);
 		return "/project/preview";
+	}
+	
+	/**
+	 * 订单详情
+	 * @param orderid
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping({"/{orderid}/orderdetail"})
+	public String orderdetail(@PathVariable Integer orderid,Model model) {
+		TOrder order = homePageService.getOrderById(orderid);
+		switch (order.getStatus()) {
+		case "1":
+			order.setStatus("已付款");
+			break;
+		case "2":
+			order.setStatus("未付款");
+			break;
+		case "3":
+			order.setStatus("交易关闭");
+			break;
+		case "5":
+			order.setStatus("已发货");
+			break;
+		case "6":
+			order.setStatus("已收货");
+			break;
+		default:
+			break;
+		}
+		//查询地址
+		TMemberAddress address = homePageService.getAddrById(order.getAddressid());
+		//查询发票:0 - 不开发票， 1 - 开发票
+		if (order.getInvoice().equals("1")) {
+			TMemberInvoice invoice = homePageService.getInvoiceById(order.getInvoiceid());
+			model.addAttribute("invoice", invoice);
+		}
+		//查询项目
+		Project project = homePageService.getProById(order.getProjectid());
+		//查询回报
+		TReturn tReturn = homePageService.getReturnById(order.getReturnid());
+		//查询公司
+		TProjectComp comp = homePageService.getCompByProId(project.getId());
+		model.addAttribute("order", order);
+		model.addAttribute("address", address);
+		model.addAttribute("project", project);
+		model.addAttribute("tReturn", tReturn);
+		model.addAttribute("comp", comp);
+		return "/project/orderdetail";
 	}
 	
 	/**

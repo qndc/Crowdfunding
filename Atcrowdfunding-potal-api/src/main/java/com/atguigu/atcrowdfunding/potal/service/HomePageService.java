@@ -112,5 +112,33 @@ public abstract interface HomePageService
    */
   List<TMemberInvoice> getInvoiceByMemberId(Integer id);
 
+  /**
+   * 	根据订单id查询订单
+   * @param orderid
+   * @return
+   */
+  TOrder getOrderById(Integer orderid);
+
+  /**
+   * 根据id查询地址
+   * @param addressid
+   * @return
+   */
+  TMemberAddress getAddrById(String addressid);
+
+  /**
+   * 根据id查询发票
+   * @param invoiceid
+   * @return
+   */
+  TMemberInvoice getInvoiceById(String invoiceid);
+
+  /**
+   * 根据id查询项目
+   * @param projectid
+   * @return
+   */
+  Project getProById(Integer projectid);
+
  
 }

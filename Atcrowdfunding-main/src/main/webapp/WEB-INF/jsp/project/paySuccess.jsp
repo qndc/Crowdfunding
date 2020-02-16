@@ -62,21 +62,8 @@
 }
 
 #typeList
-  
-:not
- 
-(
-:first-child
- 
-)
-{
-margin-top
-:
- 
-20
-px
-;
-
+:not(:first-child){
+margin-top:20px;
 
 }
 .label-txt {

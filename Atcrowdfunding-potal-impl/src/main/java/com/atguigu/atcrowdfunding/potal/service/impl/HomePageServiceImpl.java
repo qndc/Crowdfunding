@@ -212,5 +212,29 @@ public class HomePageServiceImpl implements HomePageService {
 		return invoiceMapper.selectByExample(example);
 	}
 
+	@Override
+	public TOrder getOrderById(Integer orderid) {
+		
+		return orderMapper.selectByPrimaryKey(orderid);
+	}
+
+	@Override
+	public TMemberAddress getAddrById(String addressid) {
+		
+		return addressMapper.selectByPrimaryKey(Integer.valueOf(addressid));
+	}
+
+	@Override
+	public TMemberInvoice getInvoiceById(String invoiceid) {
+		
+		return invoiceMapper.selectByPrimaryKey(Integer.valueOf(invoiceid));
+	}
+
+	@Override
+	public Project getProById(Integer projectid) {
+		
+		return projectMapper.selectByPrimaryKey(projectid);
+	}
+
 	
 }

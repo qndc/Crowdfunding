@@ -11,6 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
+<title>尚筹网-创意产品众筹平台</title>
 <link rel="stylesheet"
 	href="${APP_PATH }/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="${APP_PATH }/css/font-awesome.min.css">
