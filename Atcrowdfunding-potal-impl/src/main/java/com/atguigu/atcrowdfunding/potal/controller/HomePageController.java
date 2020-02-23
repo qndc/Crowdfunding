@@ -51,17 +51,11 @@ public class HomePageController {
 
 	@RequestMapping({ "/{proId}/detailInfo" })
 	public String detailInfo(@PathVariable Integer proId, Model model,HttpSession session) {
-		
 		boolean isFollow = false;
-		
 		Project project = this.homePageService.getProsById(proId);
-
 		List<TImgs> imgs = this.homePageService.getProDetailImg(proId);
-
 		List<TReturn> returntList = this.homePageService.getReturnByProId(proId);
-
 		TProjectComp comp = this.homePageService.getCompByProId(proId);
-		
 		//时间显示
 		LocalDateTime start = LocalDateTime.parse(project.getDeploydate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		LocalDateTime end = start.plusDays(project.getDay());
@@ -72,17 +66,11 @@ public class HomePageController {
 		try {
 			beginTime = sdf.parse(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 			endTime = sdf.parse(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
 			long diff = endTime.getTime() - beginTime.getTime();
-
 			long days = diff / 86400000L;
-
 			long hours = diff % 86400000L / 3600000L;
-
 			long minutes = diff % 3600000L / 60000L;
-
 			long seconds = diff % 60000L / 1000L;
-
 			model.addAttribute("time", "剩余" + days + "天" + hours + "小时" + minutes + "分" + seconds + "秒");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -97,7 +85,7 @@ public class HomePageController {
 		model.addAttribute("returntList", returntList);
 		model.addAttribute("comp", comp);
 		model.addAttribute("isFollow", isFollow);
-
+		model.addAttribute("member", loginMember);
 		return "/project/detailInfo";
 	}
 
@@ -194,9 +182,7 @@ public class HomePageController {
 			@PathVariable String addrid, @PathVariable String orderNum, @PathVariable Integer count,
 			HttpSession session, Model model) {
 		Member loginMember = (Member) session.getAttribute("member");
-
 		TReturn ret = this.homePageService.getReturnById(retid);
-
 		TOrder order = new TOrder();
 		order.setAddressid(addrid.toString());
 		if (invoiceid.equals("0")) {
@@ -215,7 +201,6 @@ public class HomePageController {
 		LocalDateTime time = LocalDateTime.now();
 		order.setCreatedate(time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		this.homePageService.addOrder(order);
-
 		AliPayBean bean = new AliPayBean();
 		bean.setOut_trade_no(orderNum);
 		bean.setTotal_amount(ret.getSupportmoney().intValue() * count.intValue() + "");
@@ -229,6 +214,7 @@ public class HomePageController {
 		}
 		model.addAttribute("result", result);
 		return "temp";
+		
 	}
 
 	@RequestMapping({ "/paySuccess" })
@@ -253,25 +239,11 @@ public class HomePageController {
 
 	@RequestMapping({ "/notifyOrder" })
 	public void notifyOrder(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		Map<String, String> params = new HashMap<String, String>();
-//		Map requestParams = request.getParameterMap();
-//		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
-//			String name = (String) iter.next();
-//			String[] values = (String[]) requestParams.get(name);
-//			String valueStr = "";
-//			for (int i = 0; i < values.length; i++) {
-//				valueStr = valueStr + values[i] + ",";
-//			}
-//			params.put(name, valueStr);
-//		}
-//		boolean signVerified = AlipaySignature.rsaCheckV1(params, AlipayConfig.alipay_public_key, "UTF-8","RSA2");
 		try {
 			
 			String trade_status = request.getParameter("trade_status");
 			if (trade_status.equals("TRADE_SUCCESS")) {
 				List<TOrder> order = this.homePageService.selectOrder(request.getParameter("out_trade_no"));
-				System.err.println(request.getParameter("out_trade_no"));
-				System.err.println(order);
 				for (TOrder tOrder : order) {
 					tOrder.setStatus("1");//已付款
 					tOrder.setTradeno(request.getParameter("trade_no"));
@@ -363,13 +335,13 @@ public class HomePageController {
 	
 	/**
 	 * 	查询全部
-	 * 	redis缓存
 	 * @param model
 	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping({"/{typeid}/{status}/{sort}/{pageno}/projects"})
-	public String getProsByTypeId(@PathVariable Integer typeid,@PathVariable Integer status,@PathVariable Integer sort,@PathVariable Integer pageno,Model model,String keyWords) throws Exception {
+	public String getProsByTypeId(@PathVariable Integer typeid,@PathVariable Integer status,@PathVariable Integer sort,
+			@PathVariable Integer pageno,Model model,String keyWords) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		//总记录数、页数
 		PageVo<Project> vo = new PageVo<>(pageno, 12);

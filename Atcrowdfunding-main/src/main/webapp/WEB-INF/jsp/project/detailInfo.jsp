@@ -117,13 +117,13 @@
 						<div class="collapse navbar-collapse"
 							id="bs-example-navbar-collapse-1">
 							<ul class="nav navbar-nav">
-								<li><a rel="nofollow" href="index.html"><i
+								<li><a rel="nofollow" href="${APP_PATH }/index.htm"><i
 										class="glyphicon glyphicon-home"></i> 众筹首页</a></li>
-								<li><a rel="nofollow" href="projects.html"><i
+								<li><a rel="nofollow" href="${APP_PATH }/homepage/0/3/0/1/projects.htm"><i
 										class="glyphicon glyphicon-th-large"></i> 众筹项目</a></li>
-								<li><a rel="nofollow" href="start.html"><i
+								<li><a rel="nofollow" href="${APP_PATH }/atcrowdfunding/apply.do"><i
 										class="glyphicon glyphicon-edit"></i> 发起众筹</a></li>
-								<li><a rel="nofollow" href="minecrowdfunding.html"><i
+								<li><a rel="nofollow" href="javascript:;" onclick="toAtcrowd()"><i
 										class="glyphicon glyphicon-user"></i> 我的众筹</a></li>
 							</ul>
 						</div>
@@ -224,7 +224,7 @@
 									<h3>
 										￥${ret.supportmoney }.00 
 										<button type="button" class="btn  btn-warning btn-ms" style="float: right;margin-top: -8px"
-										onclick="window.location.href='/homepage/${project.id}/${ret.id }/confirmReturn.htm'">支持</button>
+										onclick="toSupport(${project.id},${ret.id })">支持</button>
 									</h3>
 								</div>
 								<div class="panel-body">
@@ -358,7 +358,7 @@
 									style="width: 60px;height: 60px;cursor: pointer;margin-bottom:10px;border: 1px solid rgb(227,227,227);">
 									<p>${ret.returndesc }</p>
 									<button type="button" class="btn  btn-warning btn-lg "
-										onclick="window.location.href='/homepage/${project.id}/${ret.id }/confirmReturn.htm'">支持</button>
+										onclick="toSupport(${project.id},${ret.id })">支持</button>
 									<hr>
 								</c:forEach>
 							</div>
@@ -380,6 +380,33 @@
 		$(".prjtip img").click(function() {
 			window.location.href = 'project.html';
 		});
+		
+		function toAtcrowd() {
+			$.ajax({
+				url:"${APP_PATH}/atcrowdfunding/toIndex.htm",
+				type:"GET",
+				success:function(result){
+					console.log(result);
+					if (result.status == 200) {
+						window.location.href='/atcrowdfunding/index.htm';
+					}else {
+						layer.msg(result.message,{time:1000,icon:5,shift:6});
+					}
+				},
+				error:function(result){
+					layer.msg(result.message,{time:1000,icon:5,shift:6})
+				}
+			})
+		}
+		
+		//实名认证后才可支持项目
+		function toSupport(proid,retid) {
+			if (${sessionScope.member.authstatus} != 2) {
+				layer.msg("请先实名认证！",{time:1000,icon:5,shift:6});
+			}else{
+				window.location.href='/homepage/'+proid+'/'+retid+'/confirmReturn.htm';
+			}
+		}
 		
 		//关注
 		$("#follower").click(function () {
@@ -427,7 +454,7 @@
 					}
 				})
 			}
-		})
+		});
 	</script>
 </body>
 </html>

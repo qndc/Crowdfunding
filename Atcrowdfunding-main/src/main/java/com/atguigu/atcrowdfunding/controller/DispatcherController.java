@@ -92,9 +92,9 @@ public class DispatcherController {
 	}
 
 	/**
-	 * 点击主页登录按钮，如果有在cookie中记住登录，就自动登录 没有记住登录就跳转到登录页面
-	 * 
+	 * 	点击主页登录按钮，如果有在cookie中记住登录，就自动登录 没有记住登录就跳转到登录页面
 	 * @param request
+	 * @param session
 	 * @return
 	 */
 	@RequestMapping("/login")
@@ -166,6 +166,16 @@ public class DispatcherController {
 		return "redirect:/index.htm";
 	}
 
+	/**
+	 * 	记住两周，自动登录
+	 * @param loginacct
+	 * @param userpswd
+	 * @param ftype
+	 * @param rememberme
+	 * @param session
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("/doLogin")
 	@ResponseBody
 	public Object doLogin(String loginacct, String userpswd, String ftype, Integer rememberme, HttpSession session,

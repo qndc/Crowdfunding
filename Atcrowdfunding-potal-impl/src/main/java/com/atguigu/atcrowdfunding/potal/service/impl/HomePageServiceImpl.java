@@ -226,7 +226,6 @@ public class HomePageServiceImpl implements HomePageService {
 
 	@Override
 	public TMemberInvoice getInvoiceById(String invoiceid) {
-		
 		return invoiceMapper.selectByPrimaryKey(Integer.valueOf(invoiceid));
 	}
 

@@ -635,8 +635,13 @@ px
 				//地址编号
 				var addrid = $("input[name='address']:checked").val();
 				//发票编号:先默认为0，不开发票
-				var invoiceid = $("input[name='ince']:checked").val();
-				
+				var invoiceid = "";
+				if (${ret.invoice} == 0) {
+					invoiceid = "0";
+				}else{
+					invoiceid = $("input[name='ince']:checked").val();
+				}
+
 				if (invoiceid == "add" || addrid == "add") {
 					layer.msg("无法识别的地址或者发票信息",{time:1000,icon:5,shift:6});
 				}else{
