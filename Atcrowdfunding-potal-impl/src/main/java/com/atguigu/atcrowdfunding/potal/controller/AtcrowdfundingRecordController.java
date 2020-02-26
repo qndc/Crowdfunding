@@ -90,7 +90,11 @@ public class AtcrowdfundingRecordController {
 		try {
 			List<Project> pros = recordService.selectByMemberId(loginMember.getId());
 			for (Project project : pros) {
-				project.setEnddate(formatDate(project));
+				if (!StringUtils.isBlank(project.getDeploydate())) {
+					project.setEnddate(formatDate(project));
+				}else {
+					project.setEnddate("即将开始");
+				}
 			}
 			//0 - 全部 1 - 众筹中， 2 - 众筹成功， 3 - 众筹失败，判断是那种类型并根据类型返回值
 			if (status == 0) {
@@ -106,6 +110,7 @@ public class AtcrowdfundingRecordController {
 			}
 			result.setStatus(200);
 		} catch (Exception e) {
+			e.printStackTrace();
 			result.setStatus(500);
 			result.setMessage("查询失败！");
 		}
@@ -207,7 +212,11 @@ public class AtcrowdfundingRecordController {
 	@RequestMapping({ "/{proId}/preview" })
 	public String detailInfo(@PathVariable Integer proId, Model model,HttpSession session) throws Exception {
 		Project project = recordService.getProById(proId);
-		project.setEnddate(formatDate(project));
+		if (!StringUtils.isBlank(project.getDeploydate())) {
+			project.setEnddate(formatDate(project));
+		}else {
+			project.setEnddate("即将开始");
+		}
 		List<TImgs> imgs = this.homePageService.getProDetailImg(proId);
 		List<TReturn> returntList = this.homePageService.getReturnByProId(proId);
 		TProjectComp comp = this.homePageService.getCompByProId(proId);

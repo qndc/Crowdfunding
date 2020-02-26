@@ -258,35 +258,30 @@ public class AtcrowdfundingController {
 		AjaxResult result = new AjaxResult();
 		try {
 			Member member = (Member) session.getAttribute("member");
-
 			project.setStatus("0");
-
 			Date date = new Date();
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
 			project.setCreatedate(format.format(date));
 			project.setMemberid(member.getId());
-
-			this.ptService.insertProject(project);
-
-			Map<String, Object> param = new HashMap();
+			project.setCompletion(0);
+			project.setSupportmoney(0l);
+			project.setSupporter(0);
+			project.setFollower(0);
+			ptService.insertProject(project);
+			Map<String, Object> param = new HashMap<>();
 			param.put("loginacct", member.getLoginacct());
 			param.put("passListener", new YesListener());
 			param.put("refuseListener", new NoListener());
-
 			ProcessDefinitionQuery processDefinitionQuery = this.repositoryService.createProcessDefinitionQuery();
 			ProcessDefinition processDefinition = (ProcessDefinition) processDefinitionQuery
 					.processDefinitionKey("project").latestVersion().singleResult();
-
 			ProcessInstance processInstance = this.runtimeService.startProcessInstanceById(processDefinition.getId(),
 					param);
-
 			TProjectTicket ticket = this.ptService.getTicketByMemId(member.getId());
 			ticket.setPstep("projectInfo");
 			ticket.setProid(project.getId());
 			ticket.setPid(processInstance.getId());
-			this.ptService.updateProjectTicket(ticket);
-
+			ptService.updateProjectTicket(ticket);
 			result.setStatus(Integer.valueOf(200));
 			result.setMessage(project.getId());
 		} catch (Exception e) {

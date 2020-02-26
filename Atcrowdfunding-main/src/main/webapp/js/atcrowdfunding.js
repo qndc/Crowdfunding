@@ -63,6 +63,7 @@ function Interaction(status) {
 		},
 		success:function(result){
 			if (result.status == 200) {
+				console.log(result.message);
 				tabpanel.empty();
 				var body = "";
 				$.each(result.message,function(index,item){
@@ -71,8 +72,7 @@ function Interaction(status) {
 					var btn = '';
 					if (item.status == 0) {
 						status = "未开始";
-						btn = '<button type="button" class="btn btn-default">修改项目</button>'
-							+'<button type="button" class="btn btn-default" onclick = "delProject('+item.id+')">删除项目</button>';
+						btn = '<button type="button" class="btn btn-default" onclick = "delProject('+item.id+')">删除项目</button>';
 					}else if (item.status == 1) {
 						status = "众筹中";
 					}else if (item.status == 2) {
@@ -92,7 +92,7 @@ function Interaction(status) {
 					+'<i title="截至日期" class="glyphicon glyphicon-calendar"></i>'+item.enddate+'</div></p><br>'
 					+'<div class="progress" style="margin-bottom: 4px;">'
 					+'<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="'+item.completion+'" aria-valuemin="0" aria-valuemax="100" style="width: '+item.completion+'%">'
-					+'<span>众筹中</span></div></div></div></div></td>'
+					+'<span></span></div></div></div></div></td>'
 					+'<td style="vertical-align: middle;">'+item.money+'.00</td>'
 					+'<td style="vertical-align: middle;">'+status+'</td>'
 					+'<td style="vertical-align: middle;">'
