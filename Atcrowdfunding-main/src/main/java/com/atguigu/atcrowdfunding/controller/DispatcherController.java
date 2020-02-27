@@ -43,6 +43,7 @@ import com.atguigu.atcrowdfunding.util.Const;
 import com.atguigu.atcrowdfunding.util.MD5Util;
 import com.atguigu.atcrowdfunding.util.SmsUtil;
 import com.google.gson.Gson;
+import com.vaadin.terminal.gwt.client.Console;
 
 @Controller
 public class DispatcherController {
@@ -59,7 +60,8 @@ public class DispatcherController {
 	@RequestMapping({ "/index" })
 	public Object index(Model model) {
 		String indexPros = (String)redisTemplate.opsForValue().get(Const.INDEXPROS);
-		//redis取出来的为空，就查询数据库
+		String hotPros = redisTemplate.opsForValue().get(Const.HOTPROS);
+		//redis取出来的为空，就查询数据库，分类查询商品
 		if (StringUtils.isBlank(indexPros)) {
 			List<Type> types = hpService.typeList();
 			for (Type type : types) {
@@ -78,8 +80,11 @@ public class DispatcherController {
 						pros.add(pro);
 					}
 				}
-//				type.setPros(pros.subList(0, 3));
-				type.setPros(pros);
+				if (pros.size() > 4) {
+					type.setPros(pros.subList(0,4));
+				}else {
+					type.setPros(pros);
+				}
 			}
 			redisTemplate.opsForValue().set(Const.INDEXPROS, new Gson().toJson(types));
 			redisTemplate.expire(Const.INDEXPROS, Const.DEFAULT_EXPIRE, TimeUnit.SECONDS);
@@ -87,6 +92,22 @@ public class DispatcherController {
 		}else {
 			List<Type> types = JSONObject.parseArray(indexPros,Type.class);
 			model.addAttribute("types", types);
+		}
+		//查询热门商品
+		if (StringUtils.isBlank(hotPros)) {
+			List<Project> hots = hpService.getProsOrderByCompletion().subList(0, 3);
+			for (Project project : hots) {
+				List<TImgs> proImg = hpService.getProImg(project.getId());
+				for (TImgs img : proImg) {
+					project.setImgs(img);
+				}
+			}
+			redisTemplate.opsForValue().set(Const.HOTPROS, new Gson().toJson(hots));
+			redisTemplate.expire(Const.HOTPROS, Const.DEFAULT_EXPIRE, TimeUnit.SECONDS);
+			model.addAttribute("hots", hots);
+		}else {
+			List<Project> hots = JSONObject.parseArray(hotPros,Project.class);
+			model.addAttribute("hots", hots);
 		}
 		return "iindex";
 	}

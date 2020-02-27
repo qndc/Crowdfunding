@@ -106,17 +106,11 @@ public class HomePageController {
 	public String confirmOrder(@PathVariable Integer retId, @PathVariable Integer proId, @PathVariable Integer num,
 			Model model, HttpSession session) {
 		Member loginMember = (Member) session.getAttribute("member");
-
 		Project project = this.homePageService.getProsById(proId);
-
 		TReturn ret = this.homePageService.getReturnById(retId);
-
 		TProjectComp comp = this.homePageService.getCompByProId(proId);
-
 		List<TMemberAddress> addresses = this.homePageService.getAddrByMemberId(loginMember.getId());
-		
 		List<TMemberInvoice> invoices = homePageService.getInvoiceByMemberId(loginMember.getId());
-
 		model.addAttribute("ret", ret);
 		model.addAttribute("comp", comp);
 		model.addAttribute("project", project);

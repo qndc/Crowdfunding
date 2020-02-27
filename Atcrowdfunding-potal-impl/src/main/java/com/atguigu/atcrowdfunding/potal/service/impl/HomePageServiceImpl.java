@@ -235,5 +235,11 @@ public class HomePageServiceImpl implements HomePageService {
 		return projectMapper.selectByPrimaryKey(projectid);
 	}
 
+	@Override
+	public List<Project> getProsOrderByCompletion() {
+		
+		return projectMapper.getProsOrderByCompletion();
+	}
+
 	
 }

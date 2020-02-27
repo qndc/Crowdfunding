@@ -93,7 +93,7 @@
 			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="container">
 					<div class="navbar-header">
-						<a class="navbar-brand" href="index.html" style="font-size: 32px;">尚筹网-创意产品众筹平台</a>
+						<a class="navbar-brand" href="/" style="font-size: 32px;">尚筹网-创意产品众筹平台</a>
 					</div>
 					<div id="navbar" class="navbar-collapse collapse"
 						style="float: right;">
@@ -102,7 +102,7 @@
 								data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>
 									${sessionScope.member.username }<span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="member.html"><i
+									<li><a href="${APP_PATH }/member.htm"><i
 											class="glyphicon glyphicon-scale"></i> 会员中心</a></li>
 									<li><a href="#"><i class="glyphicon glyphicon-comment"></i>
 											消息</a></li>
@@ -268,7 +268,7 @@
 											<div class="col-md-6 column" style="margin-top: 22px;">
 												<div class="panel panel-default">
 													<div class="panel-body" style="padding: 40px;">
-														<i class="glyphicon glyphicon-user"></i> 当前账户名：18801282948<br>
+														<i class="glyphicon glyphicon-user"></i> 当前账户名：${member.loginacct }<br>
 														<br>
 														<span style="margin-left: 20px;">您正在使用该账号发起众筹项目</span><br>
 														<span style="margin-left: 20px;">如果您是个人经营用户或者不使用当前认证的企业进行众筹，请先填写委托的企业信息，并下载<a href="${APP_PATH }/atcrowdfunding/template.doc/download.do" style="cursor: pointer;color: blue;">众筹委托书</a>，上传委托书扫描件！</span>

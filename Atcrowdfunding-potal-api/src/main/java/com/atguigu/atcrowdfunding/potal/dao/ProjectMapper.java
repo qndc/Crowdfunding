@@ -27,4 +27,6 @@ public abstract interface ProjectMapper
   List<Project> selectByMemberId(Integer memberid);
 
   void insertDesInfo(TProjectDestroy destroy);
-}
+
+  List<Project> getProsOrderByCompletion();
+} 

@@ -40,4 +40,11 @@ public class TImgs {
     public void setType(String type) {
         this.type = type == null ? null : type.trim();
     }
+
+	@Override
+	public String toString() {
+		return "TImgs [id=" + id + ", proid=" + proid + ", img=" + img + ", type=" + type + "]";
+	}
+    
+    
 }

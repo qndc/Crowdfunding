@@ -75,6 +75,13 @@
     where memberid = #{id,jdbcType=INTEGER}
   </select>
   
+  <select id="getProsOrderByCompletion" resultMap="BaseResultMap">
+    select id, name, remark, money, day, status, deploydate, supportmoney, supporter, 
+    completion, memberid, createdate, follower
+    from t_project
+    order by completion desc;
+  </select>
+  
   <!-- 此次需要动态拼接sql -->
   <select id="selectByPage" resultMap="BaseResultMap" >
     select 

@@ -120,25 +120,31 @@ public abstract interface HomePageService
   TOrder getOrderById(Integer orderid);
 
   /**
-   * 根据id查询地址
+   * 	根据id查询地址
    * @param addressid
    * @return
    */
   TMemberAddress getAddrById(String addressid);
 
   /**
-   * 根据id查询发票
+   * 	根据id查询发票
    * @param invoiceid
    * @return
    */
   TMemberInvoice getInvoiceById(String invoiceid);
 
   /**
-   * 根据id查询项目
+   * 	根据id查询项目
    * @param projectid
    * @return
    */
   Project getProById(Integer projectid);
+
+  /**
+   * 	查询热门商品
+   * @return
+   */
+  List<Project> getProsOrderByCompletion();
 
  
 }

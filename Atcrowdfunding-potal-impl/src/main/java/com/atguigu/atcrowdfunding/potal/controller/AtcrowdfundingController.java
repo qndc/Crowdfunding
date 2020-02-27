@@ -33,6 +33,7 @@ import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -93,7 +94,9 @@ public class AtcrowdfundingController {
 	}
 
 	@RequestMapping({ "/atcrowdfunding/confirm" })
-	public String toConfirm() {
+	public String toConfirm(HttpSession session,Model model) {
+		Member member = (Member) session.getAttribute("member");
+		model.addAttribute("member", member);
 		return "/atcrowdfunding/confirm";
 	}
 
@@ -143,7 +146,6 @@ public class AtcrowdfundingController {
 	public String ActivityControlle(HttpSession session, Integer projectId, Map map) {
 		Member member = (Member) session.getAttribute("member");
 		TProjectTicket projectTicket = this.ptService.getTicketByMemId(member.getId());
-
 		if (projectTicket == null) {
 			projectTicket = new TProjectTicket();
 			projectTicket.setMemberid(member.getId());
