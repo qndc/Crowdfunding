@@ -4,3 +4,5 @@ target
 .classpath
 .bpmn
 .factorypath
+/Atcrowdfunding-common/src/main/java/com/atguigu/atcrowdfunding/util/SmsUtil.java
+/Atcrowdfunding-common/src/main/java/com/atguigu/atcrowdfunding/util/AlipayConfig.java
