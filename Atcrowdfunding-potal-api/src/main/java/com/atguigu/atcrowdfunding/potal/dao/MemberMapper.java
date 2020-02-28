@@ -1,8 +1,12 @@
 package com.atguigu.atcrowdfunding.potal.dao;
 
 import com.atguigu.atcrowdfunding.bean.Member;
+import com.atguigu.atcrowdfunding.bean.User;
+
 import java.util.List;
 import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 public abstract interface MemberMapper
 {
@@ -29,10 +33,9 @@ public abstract interface MemberMapper
   public abstract Member selectByTel(String paramString);
   
   public abstract Member selectByLoginacct(String paramString);
+  
+  //后台用户维护
+  public abstract List<Member> queryList(@Param("start") Integer paramInteger1, @Param("pageSize") Integer paramInteger2, @Param("queryText") String paramString);
+  
+  public abstract Integer queryCounts(@Param("queryText") String paramString);
 }
-
-
-/* Location:              C:\Users\dc\Desktop\jar包\Atcrowdfunding-potal-api-0.0.1-SNAPSHOT.jar!\com\atguigu\atcrowdfunding\potal\dao\MemberMapper.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       0.7.1
- */

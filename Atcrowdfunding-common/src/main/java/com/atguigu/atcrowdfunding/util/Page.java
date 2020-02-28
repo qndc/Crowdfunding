@@ -35,7 +35,6 @@ public class Page {
 	public void setCounts(Integer counts) {
 		this.counts = counts;
 		this.pageCounts = counts%pageSize == 0?counts/pageSize:counts/pageSize+1;
-		System.err.println("总页数："+this.pageCounts);
 	}
 	public List getData() {
 		return data;

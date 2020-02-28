@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title></title>
+<title>管理员维护</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
@@ -39,7 +39,7 @@ table tbody td:nth-child(even) {
 		<div class="navbar-header">
 			<div>
 				<a class="navbar-brand" style="font-size: 32px;" href="#">众筹平台 -
-					用户维护</a>
+					管理员维护</a>
 			</div>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">

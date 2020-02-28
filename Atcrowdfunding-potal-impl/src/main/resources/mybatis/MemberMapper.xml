@@ -72,7 +72,6 @@
     where loginacct = #{loginacct,jdbcType=VARCHAR}
   </select>
   
-  
    <update id="updateAcctType" parameterType="com.atguigu.atcrowdfunding.bean.Member" >
     update t_member
     set 
@@ -89,8 +88,6 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   
-  
-  
   <update id="updateEmail">
   update t_member
     set 
@@ -105,5 +102,26 @@
     where id = #{id}
   </update>
   
-  
+  <select id="queryList" resultMap="BaseResultMap" >
+		select id, loginacct, userpswd, username, email, authstatus, usertype, realname, 
+	    cardnum, accttype,tel
+	    from t_member
+		<where>
+			<if test="queryText != null">
+				tel like '%${queryText}%'
+			</if>
+		</where>
+		ORDER BY id DESC
+		limit #{start},#{pageSize}
+	</select>
+	
+	<select id="queryCounts" resultType="int">
+		select count(*)
+		from t_member 
+		<where>
+			<if test="queryText != null">
+				tel like '%${queryText}%'
+			</if>
+		</where>
+	</select>
 </mapper>
