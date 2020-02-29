@@ -63,12 +63,39 @@
 				  <li class="active">显示会员信息</li>
 				</ol>
 			<div class="panel panel-default">
-              <div class="panel-heading">显示会员资质信息<div style="float:right;cursor:pointer;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-question-sign"></i></div></div>
+              <div class="panel-heading">显示会员信息<div style="float:right;cursor:pointer;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-question-sign"></i></div></div>
 			  <div class="panel-body">
 			  <div class="panel-body">
 				<form>
 				  <div class="form-group">
-					<label for="frealname">会员真实姓名：</label>
+					<label for="frealname">登录账号：</label>
+					${member.loginacct }
+				  </div>
+				  <div class="form-group">
+					<label for="frealname">用户名：</label>
+					${member.username }
+				  </div>
+				  <div class="form-group">
+					<label for="frealname">邮箱：</label>
+					${member.email }
+				  </div>
+				  <div class="form-group">
+					<label for="frealname">状态：</label>
+					<c:if test="${member.authstatus == 0}">
+						未实名认证
+					</c:if>
+					<c:if test="${member.authstatus == 1}">
+						实名认证申请中
+					</c:if>
+					<c:if test="${member.authstatus == 2}">
+						已实名认证
+					</c:if>
+					<c:if test="${member.authstatus == 3}">
+						已停用
+					</c:if>
+				  </div>
+				  <div class="form-group">
+					<label for="frealname">真实姓名：</label>
 					${member.realname }
 				  </div>
 				  <div class="form-group">
@@ -76,20 +103,31 @@
 					${member.cardnum }
 				  </div>
 				  <div class="form-group">
+					<label for="fcardnum">账号类型：</label>
+					<c:if test="${member.accttype == 0}">
+						企业
+					</c:if>
+					<c:if test="${member.accttype == 1}">
+						个体工商户
+					</c:if>
+					<c:if test="${member.accttype == 2}">
+						个人
+					</c:if>
+					<c:if test="${member.accttype == 3}">
+						政府及事业单位
+					</c:if>
+				  </div>
+				  <div class="form-group">
 					<label for="ftel">会员电话号：</label>
 					${member.tel }
 				  </div>
-				  
 				  <hr>
-				  <c:forEach items="${list}" var="map">				  
+				  <c:forEach items="${requestScope.list}" var="map">				  
 					  <div class="form-group">
 						<label for="frealname">${map.certname }</label><br>
 						<img src="${map.iconpath}" style="width: 250px;height: 200px">
 					  </div>
 				  </c:forEach>
-				  
-				  <button id="passBtn" type="button" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> 通过</button>
-				  <button id="refuseBtn" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i> 拒绝</button>
 				</form>
 			  </div>
 			  </div>

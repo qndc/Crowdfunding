@@ -142,49 +142,6 @@ $(function() {
 	queryPage(1);
 });
 
-/* 全选/取消全选效果，批量删除 */
-$("#allChoose").click(function () {
-	var status = this.checked;
-	$("tbody tr td input[type='checkbox']").prop("checked",status)
-})
-$("#deleteAllChecked").click(function () {
-	var idArr = "";
-	var allChecked = $("tbody tr td input:checked");
-	if (allChecked.length == 0) {
-		layer.msg("至少选择一个用户进行删除！",{time:1000,icon:5,shift:6})
-		return false;	
-	}
-	$.each(allChecked,function(index,item){
-		idArr += ( "id=" + item.id + "&");
-	})
-	idArr = idArr.substring(0,idArr.length-1);
-	layer.confirm("确定批量删除用户吗？",{icon:3,title:'提示'},function(cindex){
-			$.ajax({
-				url:"${APP_PATH}/user/deleteAll.do",
-				type:"POST",
-				data:idArr,
-				beforeSend:function(){
-					return true;
-				},
-				success:function(result){
-					layer.close(loadingIndex);
-					if (result.status == 200) {
-						queryPage(1);
-					}else {
-						layer.msg(result.message,{time:1000,icon:5,shift:6})
-					}
-				},
-				error:function(result){
-					layer.msg(result.message,{time:1000,icon:5,shift:6})
-				}
-			})
-			layer.close(cindex);
-		},function(cindex){
-			layer.close(cindex); 
-		})
-})
-
-
 /* 异步加载用户列表 */
 var loadingIndex = -1;
 function queryPage(pageNum,queryText) {
@@ -209,6 +166,12 @@ function queryPage(pageNum,queryText) {
    				$("tbody").empty();
    				$(".pagination").empty();
    				$.each(result.message.data,function(index,item){
+   					var btn ="";
+   					if (item.authstatus == 3) {
+						btn += "<button type='button' title='停用'   class='btn btn-danger btn-xs disabled' onclick='prohibition("+item.id+","+result.message.pageTotal+")'><i class='fa fa-remove'></i></a><button type='button' title='恢复'  class='btn btn-primary btn-xs' onclick='recover("+item.id+","+result.message.pageTotal+")'><i class='fa fa-reply'></i></button>"
+					}else{
+						btn += "<button type='button' title='停用'   class='btn btn-danger btn-xs' onclick='prohibition("+item.id+","+result.message.pageTotal+")'><i class='fa fa-remove'></i></a><button type='button' title='恢复'  class='btn btn-primary btn-xs disabled' onclick='recover("+item.id+","+result.message.pageTotal+")'><i class='fa fa-reply'></i></button>"
+					}
    					var content = "<tr>"
 						+"<td>"+item.id +"</td>"
 						+"<td><input type='checkbox' id="+item.id +"></td>"
@@ -218,12 +181,10 @@ function queryPage(pageNum,queryText) {
 						+"<td>"+item.realname +"</td>"
 						+"<td>"+item.cardnum +"</td>"
 						+"<td>"
-						+"	<a type='button' class='btn btn-success btn-xs' href='${APP_PATH}/member/info.htm?id="+item.id+"'>"
-						+"		<i class=' glyphicon glyphicon-check'></i>"
+						+"	<a type='button' title='查看详情' class='btn btn-success btn-xs' href='${APP_PATH}/member/info.htm?id="+item.id+"'>"
+						+"		<i class='fa fa-info-circle'></i>"
 						+"	</a>"
-						+"	<button type='button' class='btn btn-danger btn-xs' onclick='deleteUser("+item.id+")'>"
-						+"		<i class=' glyphicon glyphicon-remove'></i>"
-						+"	</button>"
+						+ btn
 						+"</td>"
 					+"</tr>";
 					$("tbody").append(content);	
@@ -269,11 +230,44 @@ $("#queryBtn").click(function () {
 	queryPage(1,queryText);
 })
 
-/* 删除用户 */
-function deleteUser(fid) {
-	layer.confirm("确定删除该用户吗？",{icon:3,title:'提示'},function(cindex){
+/* 禁用用户 */
+function prohibition(fid,page,obj) {
+	layer.confirm("确定禁用该用户吗？",{icon:3,title:'提示'},function(cindex){
 		$.ajax({
-			url:"${APP_PATH}/user/delete.do",
+			url:"${APP_PATH}/member/prohibition.do",
+			type:"POST",
+			data:{
+				id:fid
+			},
+			beforeSend:function(){
+				console.log(obj);
+				return true;
+			},
+			success:function(result){
+				layer.close(loadingIndex);
+				if (result.status == 200) {
+					layer.msg(result.message,{time:1000,icon:6});
+					queryPage(page);
+					//禁用按钮
+				}else {
+					layer.msg(result.message,{time:1000,icon:5,shift:6});
+				}
+			},
+			error:function(result){
+				layer.msg(result.message,{time:1000,icon:5,shift:6})
+			}
+		})
+		layer.close(cindex);
+	},function(cindex){
+		layer.close(cindex); 
+	})
+}
+
+/*恢复*/
+function recover(fid,page) {
+	layer.confirm("确定恢复该用户吗？",{icon:3,title:'提示'},function(cindex){
+		$.ajax({
+			url:"${APP_PATH}/member/recover.do",
 			type:"POST",
 			data:{
 				id:fid
@@ -284,7 +278,8 @@ function deleteUser(fid) {
 			success:function(result){
 				layer.close(loadingIndex);
 				if (result.status == 200) {
-					queryPage(1);
+					layer.msg(result.message,{time:1000,icon:6});
+					queryPage(page);
 				}else {
 					layer.msg(result.message,{time:1000,icon:5,shift:6})
 				}

@@ -130,4 +130,13 @@ public class AuthServiceImpl implements AuthService {
 		return (TProjectTicket) this.ttMapper.selectByExample(example).get(0);
 	}
 
+	@Override
+	public List<TTicket> getTicketByMemid(Integer id) {
+		TTicketExample example = new TTicketExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andMemberidEqualTo(id);
+		List<TTicket> list = ticketMapper.selectByExample(example);
+		return list;
+	}
+
 }

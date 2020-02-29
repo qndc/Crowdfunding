@@ -39,4 +39,6 @@ public abstract interface AuthService
   public abstract Tag getTagById(Integer paramInteger);
   
   public abstract TProjectTicket getTicketByProId(Integer paramInteger);
+
+  public abstract List<TTicket> getTicketByMemid(Integer id);
 }
