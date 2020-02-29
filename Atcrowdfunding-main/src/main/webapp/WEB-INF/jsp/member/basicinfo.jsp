@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="${APP_PATH }/css/font-awesome.min.css">
 	<link rel="stylesheet" href="${APP_PATH }/css/theme.css">
 	<link rel="stylesheet" href="${APP_PATH }/bootstrap/css/bootstrapValidator.css">
+	<link rel="icon" href="${APP_PATH }/img/crowdfunding.png" sizes="32x32" type="image/png">
 	<style>
 #footer {
     padding: 15px 0;

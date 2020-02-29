@@ -12,9 +12,8 @@
 	<link rel="stylesheet" href="${APP_PATH }/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="${APP_PATH }/css/font-awesome.min.css">
 	<link rel="stylesheet" href="${APP_PATH }/css/login.css">
-	<style>
-
-	</style>
+	<link rel="icon" href="${APP_PATH }/img/crowdfunding.png" sizes="32x32" type="image/png">
+	<title>登录</title>
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -100,7 +99,7 @@
 					}else if(result.message == "admin"){
 						window.location.href = "${APP_PATH}/main.htm";
 					}else {
-						layer.msg("登录失败！！",{time:1000,icon:5,shift:6})
+						layer.msg(result.message,{time:1000,icon:5,shift:6})
 					}	
 				}else{
 					layer.msg(result.message,{time:1000,icon:5,shift:6})

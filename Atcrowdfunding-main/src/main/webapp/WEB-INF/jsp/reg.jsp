@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="${APP_PATH }/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="${APP_PATH }/css/font-awesome.min.css">
 	<link rel="stylesheet" href="${APP_PATH }/css/login.css">
+	<link rel="icon" href="${APP_PATH }/img/crowdfunding.png" sizes="32x32" type="image/png">
 </head>
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">

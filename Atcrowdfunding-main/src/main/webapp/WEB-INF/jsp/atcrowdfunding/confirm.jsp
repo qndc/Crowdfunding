@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="${APP_PATH }/jquery/layui/css/layui.css">
 <link href="${APP_PATH }/bootstrap/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 <link rel="stylesheet" href="${APP_PATH }/css/jtoggler.styles.css">
+<link rel="icon" href="${APP_PATH }/img/crowdfunding.png" sizes="32x32" type="image/png">
 <style>
 #footer {
 	padding: 15px 0;

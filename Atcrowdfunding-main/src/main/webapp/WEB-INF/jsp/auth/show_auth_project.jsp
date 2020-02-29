@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-
+<link rel="icon" href="${APP_PATH }/img/crowdfunding.png" sizes="32x32" type="image/png">
 <link rel="stylesheet"
 	href="${APP_PATH }/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="${APP_PATH }/css/font-awesome.min.css">

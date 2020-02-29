@@ -135,7 +135,6 @@ public class DispatcherController {
 						String[] split = info.split("=");
 						map.put(split[0], split[1]);
 					}
-
 					// 如果用户类型是admin,就跳转到管理员页面
 					if ("admin".equals(map.get("type"))) {
 						User user = userService.queryUserlogin(map);
@@ -187,16 +186,6 @@ public class DispatcherController {
 		return "redirect:/index.htm";
 	}
 
-	/**
-	 * 	记住两周，自动登录
-	 * @param loginacct
-	 * @param userpswd
-	 * @param ftype
-	 * @param rememberme
-	 * @param session
-	 * @param response
-	 * @return
-	 */
 	@RequestMapping("/doLogin")
 	@ResponseBody
 	public Object doLogin(String loginacct, String userpswd, String ftype, Integer rememberme, HttpSession session,
@@ -209,11 +198,10 @@ public class DispatcherController {
 			paramMap.put("type", ftype);
 			if ("member".equals(ftype)) {
 				Member member = memberService.queryMemberlogin(paramMap);
-
+				//为空代表不存在
 				if (member == null) {
-					result.setStatus(500);
-					result.setMessage("登录失败！请检查账户及密码！");
-				} else {
+					result.setMessage("当前用户不存在");
+				}else if(member.getUserpswd().equals(MD5Util.getMD5(userpswd))){
 					session.setAttribute(Const.LOGIN_MEMBER, member);
 					if (rememberme == 1) {
 						String logincode = "loginacct=" + member.getLoginacct() + "&userpswd=" + member.getUserpswd()
@@ -223,17 +211,16 @@ public class DispatcherController {
 						cookie.setPath("/"); // 表示任何请求路径都可以访问cookie
 						response.addCookie(cookie);
 					}
-					result.setStatus(200);
 					result.setMessage(ftype);
+				}else{
+					result.setMessage("密码错误");
 				}
 			} else if ("admin".equals(ftype)) {
 				User user = userService.queryUserlogin(paramMap);
-
 				if (user == null) {
 					result.setStatus(500);
-					result.setMessage("不存在该管理员！");
-				} else {
-					// session中保存登录用户信息
+					result.setMessage("当前管理员不存在,请联系系统管理员");
+				}else if(user.getUserpswd().equals(MD5Util.getMD5(userpswd))){
 					session.setAttribute(Const.LOGIN_USER, user);
 					if (rememberme == 1) {
 						String logincode = "loginacct=" + user.getLoginacct() + "&userpswd=" + user.getUserpswd()
@@ -247,20 +234,21 @@ public class DispatcherController {
 					getPermissions(user, session);
 					result.setStatus(200);
 					result.setMessage(ftype);
+				}else {
+					result.setMessage("密码错误");
 				}
 			}
-			return result;
+			result.setStatus(200);
 		} catch (Exception e) {
-			result.setStatus(500);
-			result.setMessage("登录失败!");
 			e.printStackTrace();
+			result.setStatus(500);
+			result.setMessage("登录失败，系统错误");
 		}
 		return result;
 	}
 
 	/**
-	 * 查询用户权限方法抽取
-	 * 
+	 * 	查询用户权限方法抽取
 	 * @param user
 	 * @param session
 	 */
@@ -292,7 +280,7 @@ public class DispatcherController {
 	}
 
 	/**
-	 * 发送短信验证码
+	 * 	发送短信验证码
 	 * 
 	 * @param tel
 	 * @param session
@@ -387,8 +375,7 @@ public class DispatcherController {
 	}
 
 	/**
-	 * 随机生成四位验证码
-	 * 
+	 *	 随机生成四位验证码
 	 * @return
 	 */
 	public static String randomCode() {

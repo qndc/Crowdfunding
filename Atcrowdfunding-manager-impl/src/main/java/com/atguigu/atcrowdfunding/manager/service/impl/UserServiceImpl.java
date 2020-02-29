@@ -42,13 +42,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User queryUserlogin(Map<String, Object> paramMap) {
-		
-		
 		User user = userMapper.queryUserlogin(paramMap);
-		if(user==null){
-			throw new LoginFailException("用户账号或密码不正确!");
-		}
-		
 		return user;
 	}
 

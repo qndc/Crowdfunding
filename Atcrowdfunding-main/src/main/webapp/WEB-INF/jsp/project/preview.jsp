@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="${APP_PATH }/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="${APP_PATH }/css/font-awesome.min.css">
 <link rel="stylesheet" href="${APP_PATH }/css/theme.css">
+<link rel="icon" href="${APP_PATH }/img/crowdfunding.png" sizes="32x32" type="image/png">
 <title>项目详情</title>
 <style>
 #footer {

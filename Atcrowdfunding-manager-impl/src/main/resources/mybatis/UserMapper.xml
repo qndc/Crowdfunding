@@ -53,7 +53,7 @@
 	<select id="queryUserlogin" parameterType="map" resultMap="BaseResultMap">
 		select id, loginacct, userpswd,
 		username, email, createtime
-		from t_user where loginacct=#{loginacct} and userpswd=#{userpswd}
+		from t_user where loginacct=#{loginacct}
 	</select>
 	
 	<select id="queryList" resultMap="BaseResultMap" >

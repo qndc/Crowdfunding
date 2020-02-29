@@ -59,11 +59,10 @@
     cardnum, accttype,tel
     from t_member
   </select>
-  
   <select id="queryMebmerlogin" resultMap="BaseResultMap" >
   	select id, loginacct, userpswd, username, email, authstatus, usertype, realname, 
     cardnum, accttype
-    from t_member where loginacct=#{loginacct} and userpswd=#{userpswd}
+    from t_member where loginacct=#{loginacct}
   </select>
   <select id="selectByLoginacct" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select id, loginacct, userpswd, username, email, authstatus, usertype, realname, 
