@@ -56,6 +56,27 @@ public class DispatcherController {
 	private HomePageService hpService;
 	@Autowired
 	private RedisTemplate<String,String> redisTemplate;
+	
+	@RequestMapping("/reg")
+	public String reg() {
+		return "reg";
+	}
+
+	@RequestMapping("/main")
+	public String main() {
+		return "main";
+	}
+
+	@RequestMapping("/member")
+	public String member() {
+		return "member/member";
+	}
+
+	@RequestMapping("logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:/index.htm";
+	}
 
 	@RequestMapping({ "/index" })
 	public Object index(Model model) {
@@ -165,27 +186,16 @@ public class DispatcherController {
 		return "login";
 	}
 
-	@RequestMapping("/reg")
-	public String reg() {
-		return "reg";
-	}
-
-	@RequestMapping("/main")
-	public String main() {
-		return "main";
-	}
-
-	@RequestMapping("/member")
-	public String member() {
-		return "member/member";
-	}
-
-	@RequestMapping("logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
-		return "redirect:/index.htm";
-	}
-
+	/**
+	 * 	登录
+	 * @param loginacct
+	 * @param userpswd
+	 * @param ftype
+	 * @param rememberme
+	 * @param session
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("/doLogin")
 	@ResponseBody
 	public Object doLogin(String loginacct, String userpswd, String ftype, Integer rememberme, HttpSession session,
@@ -201,6 +211,8 @@ public class DispatcherController {
 				//为空代表不存在
 				if (member == null) {
 					result.setMessage("当前用户不存在");
+				}else if (member.getAuthstatus().equals("3")) {
+					result.setMessage("当前用户已停用");
 				}else if(member.getUserpswd().equals(MD5Util.getMD5(userpswd))){
 					session.setAttribute(Const.LOGIN_MEMBER, member);
 					if (rememberme == 1) {
@@ -281,7 +293,6 @@ public class DispatcherController {
 
 	/**
 	 * 	发送短信验证码
-	 * 
 	 * @param tel
 	 * @param session
 	 * @return
@@ -310,7 +321,7 @@ public class DispatcherController {
 	}
 
 	/**
-	 * 注册用户
+	 * 	注册用户
 	 * @param member
 	 * @param session
 	 * @return
@@ -348,8 +359,7 @@ public class DispatcherController {
 	}
 
 	/**
-	 * 校验当前号码是否已经注册
-	 * 
+	 *	 校验当前号码是否已经注册
 	 * @param tel
 	 * @return
 	 */

@@ -102,6 +102,9 @@
 									<c:when test="${member.authstatus eq '2' }">
 										<span class="label label-success" style="cursor: pointer;">已实名认证</span>
 									</c:when>
+									<c:when test="${member.authstatus eq '3' }">
+										<span class="label label-danger" style="cursor: pointer;">已停用</span>
+									</c:when>
 									<c:otherwise>
 										<span class="label label-danger" style="cursor: pointer;" 
 										onclick="window.location.href='${APP_PATH}/member/toAcctType.htm'">未实名认证</span>

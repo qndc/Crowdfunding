@@ -92,7 +92,6 @@
     			return true;
     		},    		
     		success:function(result){
-    			
     			if (result.status == 200) {
     				if (result.message == "member") {
     					window.location.href = "${APP_PATH}/member.htm";
