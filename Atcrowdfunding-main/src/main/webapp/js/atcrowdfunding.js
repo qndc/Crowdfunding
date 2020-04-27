@@ -200,16 +200,14 @@ function OrderInteraction(status) {
 				$("#support .tab-pane").eq(status).empty();
 				$.each(result.message,function(index,item){
 					var sInfo = '';
+					var btns = '<button type="button" class="btn btn-default" onclick="delOrder('+item.id+','+status+')">删除订单</button><button type="button" class="btn btn-default" onclick="toDetail('+item.id+')">交易详情</button>';
 					if (item.status == 1) {
 						sInfo = "已付款";
 					}else if (item.status == 2) {
 						sInfo = "未付款";
+						btns += '<a type="button" class="btn btn-default" href="/homepage/'+item.ordernum+'/repay.do">去支付</a>';
 					}else if (item.status == 3) {
 						sInfo = "交易关闭";
-					}else if (item.status == 5) {
-						sInfo = "已发货";
-					}else if (item.status == 6) {
-						sInfo = "已收货";
 					}
 					 content += '<tr>'
                         +'<td style="vertical-align:middle;">'
@@ -229,8 +227,7 @@ function OrderInteraction(status) {
                         +'<td style="vertical-align:middle;">'+sInfo+'</td>'
                         +'<td style="vertical-align:middle;">'
                         +'<div class="btn-group-vertical" role="group" aria-label="Vertical button group">'
-                        +'<button type="button" class="btn btn-default" onclick="delOrder('+item.id+','+status+')">删除订单</button>'
-                        +'<button type="button" class="btn btn-default" onclick="toDetail('+item.id+')">交易详情</button>'
+                        +btns
                         +'</div></td></tr>';
 				});
 				var head = '<div class="col-md-12 column" style="margin-top: 10px; padding: 0;">'
@@ -258,6 +255,7 @@ function OrderInteraction(status) {
 		}
 	})
 }
+
 
 function toDetail(orderid) {
 	window.open("/record/"+orderid+"/orderdetail.htm");

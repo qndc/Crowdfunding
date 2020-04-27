@@ -1,5 +1,7 @@
 package com.atguigu.atcrowdfunding.controller;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
+import javax.jms.MapMessage;
+import javax.jms.Session;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.h2.util.New;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +61,8 @@ public class DispatcherController {
 	private HomePageService hpService;
 	@Autowired
 	private RedisTemplate<String,String> redisTemplate;
+	@Autowired
+    private JmsTemplate jmsTemplate;
 	
 	@RequestMapping("/reg")
 	public String reg() {
@@ -299,19 +306,18 @@ public class DispatcherController {
 	 */
 	@RequestMapping("/sendCode")
 	@ResponseBody
-	public Object sendCode(String tel, HttpSession session) {
+	public Object sendCode(String tel, HttpSession httpSession) {
 		AjaxResult result = new AjaxResult();
 		try {
 			String code = randomCode();
-
-			Map<String, String> map = new HashMap();
-			map.put("code", code);
-
-			String bizId = SmsUtil.sendSms("SMS_180355463", new Gson().toJson(map), tel, "我的学习分享");
-
-			SmsUtil.querySendDetails(bizId);
-
-			session.setAttribute("code", code);
+			jmsTemplate.send((Session session) -> {
+				MapMessage mapMessage = session.createMapMessage();
+	            mapMessage.setString("tel",tel);
+	            mapMessage.setString("code", code);
+	            mapMessage.setString("templateCode", "SMS_180355463");
+	            return mapMessage;
+			});
+			httpSession.setAttribute("code", code);
 			result.setStatus(Integer.valueOf(200));
 		} catch (Exception e) {
 			e.printStackTrace();

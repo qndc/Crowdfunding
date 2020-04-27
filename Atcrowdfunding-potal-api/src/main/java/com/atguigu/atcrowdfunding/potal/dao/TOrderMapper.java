@@ -4,6 +4,7 @@ import com.atguigu.atcrowdfunding.bean.TOrder;
 import com.atguigu.atcrowdfunding.bean.TOrderExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 public abstract interface TOrderMapper
 {
@@ -28,10 +29,7 @@ public abstract interface TOrderMapper
   public abstract int updateByPrimaryKeySelective(TOrder paramTOrder);
   
   public abstract int updateByPrimaryKey(TOrder paramTOrder);
+
+  @Select("select * from t_order where ordernum = #{ordernum}")
+  public abstract TOrder selectByOrderNum(String ordernum);
 }
-
-
-/* Location:              C:\Users\dc\Desktop\jar包\Atcrowdfunding-potal-api-0.0.1-SNAPSHOT.jar!\com\atguigu\atcrowdfunding\potal\dao\TOrderMapper.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       0.7.1
- */

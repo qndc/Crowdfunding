@@ -23,6 +23,8 @@ public class Project {
 	private TProjectComp projectComp;
 	private String enddate;
 	private Member member;
+	
+	private Boolean isExpire = true;
 
 	public Integer getId() {
 		return this.id;
@@ -182,6 +184,15 @@ public class Project {
 
 	public void setEnddate(String enddate) {
 		this.enddate = enddate;
+	}
+	
+
+	public Boolean getIsExpire() {
+		return isExpire;
+	}
+
+	public void setIsExpire(Boolean isExpire) {
+		this.isExpire = isExpire;
 	}
 
 	@Override

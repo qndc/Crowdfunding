@@ -73,6 +73,45 @@
 	
 	<aop:config>
 		<aop:advisor advice-ref="transactionAdvice" pointcut="execution(* com.atguigu.atcrowdfunding..*ServiceImpl.*(..))"/>
-	</aop:config>		
+	</aop:config>	
+	
+	<!-- 配置activemq工厂类 -->
+	<bean id="connectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
+		 <property name="connectionFactory">
+		 	<bean class="org.apache.activemq.ActiveMQConnectionFactory">
+		 		<property name="brokerURL" value="tcp://192.168.80.128:61616"/>
+		 	</bean>
+		 </property>
+		 <property name="maxConnections" value="100"/>
+	</bean>
+	
+	<!--配置目的地-->
+	 <bean id="queue" class="org.apache.activemq.command.ActiveMQQueue">
+        <!--构造注入，spring-active-queue为队列名-->
+        <constructor-arg index="0" value="ems-queue"/>
+    </bean>
+    
+    <!--配置JMS模板工具类,它可以进行消息的发送、接收等-->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <!--配置操作的工厂-->
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <!--配置默认目的地-->
+        <property name="defaultDestination" ref="queue"/>
+        <!--配置消息转换器-->
+        <property name="messageConverter">
+            <bean class="org.springframework.jms.support.converter.SimpleMessageConverter"/>
+        </property>
+    </bean>
+    
+    <!--配置监听器容器-->
+    <bean id="listenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="destination" ref="queue"/>
+        <!--配置监听器，自定义类-->
+        <property name="messageListener" ref="EmsMessageListener"/>
+    </bean>
+    
+    <!--配置自定义MessageListener-->
+	<bean id="EmsMessageListener" class="com.atguigu.atcrowdfunding.listener.EmsMessageListener"/>
 
 </beans>

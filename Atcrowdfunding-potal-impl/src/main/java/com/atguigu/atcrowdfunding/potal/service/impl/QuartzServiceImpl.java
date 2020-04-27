@@ -121,15 +121,6 @@ public class QuartzServiceImpl implements QuartzService {
 		}
 	}
 
-	public void startSchedule() {
-		try {
-			Scheduler sched = this.quartzScheduler;
-			sched.start();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	public void shutdownSchedule() {
 		try {
 			Scheduler sched = this.quartzScheduler;
@@ -140,4 +131,21 @@ public class QuartzServiceImpl implements QuartzService {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public void startSchedule(String jobName, String jobGroupName) {
+		try {
+			Scheduler sched = this.quartzScheduler;
+			JobKey jobKey = JobKey.jobKey(jobName, jobGroupName);
+			//先触发
+			sched.triggerJob(jobKey);
+			//然后删除定时任务
+			//sched.deleteJob(jobKey);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+	}
+
+	
 }

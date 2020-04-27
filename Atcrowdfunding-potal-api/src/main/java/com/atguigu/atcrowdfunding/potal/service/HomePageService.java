@@ -146,5 +146,12 @@ public abstract interface HomePageService
    */
   List<Project> getProsOrderByCompletion();
 
+  /**
+   * 	根据订单编号查询订单
+   * @param ordernum
+   * @return
+   */
+TOrder getOrderByNum(String ordernum);
+
  
 }

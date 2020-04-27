@@ -8,6 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.jms.MapMessage;
+import javax.jms.Session;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.quartz.CronExpression;
@@ -15,6 +18,7 @@ import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
@@ -24,6 +28,7 @@ import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -54,6 +59,10 @@ public class TestQuartz {
 	private MemberService memberService;
 	@Autowired
 	private RedisTemplate redisTemplate;
+	@Autowired
+    private JmsTemplate jmsTemplate;
+	@Autowired
+	private Scheduler quartzScheduler;
 	
 	
 	@Test
@@ -85,6 +94,36 @@ public class TestQuartz {
 //		for (String string : range) {
 //			System.err.println(string);
 //		}
+		
+	}
+	
+	@Test
+	public void mqDemo() {
+		
+//		jmsTemplate.send((Session session) -> {
+//			MapMessage mapMessage = session.createMapMessage();
+//            mapMessage.setLong("tel",18229735193L);
+//            mapMessage.setString("msg","交易成功！");
+//            return mapMessage;
+//		});
+		
+//		System.err.println("send success !");
+		
+	}
+	
+	@Test
+	public void startJob() {
+//		try {
+//			Scheduler sched = this.quartzScheduler;
+//			JobKey jobKey = JobKey.jobKey("13_jname", "9_jgname");
+//			sched.triggerJob(jobKey);
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+	}
+	
+	@Test
+	public void name() {
 		
 	}
 }

@@ -112,7 +112,7 @@ public class AuthController {
 	}
 
 	/**
-	 * 查看当前用户需要审核的信息
+	 * 	查看当前用户需要审核的信息
 	 * 
 	 * @return
 	 */

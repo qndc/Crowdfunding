@@ -241,5 +241,11 @@ public class HomePageServiceImpl implements HomePageService {
 		return projectMapper.getProsOrderByCompletion();
 	}
 
+	@Override
+	public TOrder getOrderByNum(String ordernum) {
+		
+		return orderMapper.selectByOrderNum(ordernum);
+	}
+
 	
 }

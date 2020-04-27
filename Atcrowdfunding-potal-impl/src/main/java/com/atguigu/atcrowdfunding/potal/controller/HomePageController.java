@@ -3,7 +3,6 @@ package com.atguigu.atcrowdfunding.potal.controller;
 import com.atguigu.atcrowdfunding.bean.AliPayBean;
 import com.atguigu.atcrowdfunding.bean.Member;
 import com.atguigu.atcrowdfunding.bean.Project;
-import com.atguigu.atcrowdfunding.bean.ProjectType;
 import com.atguigu.atcrowdfunding.bean.TImgs;
 import com.atguigu.atcrowdfunding.bean.TMemberAddress;
 import com.atguigu.atcrowdfunding.bean.TMemberInvoice;
@@ -13,13 +12,11 @@ import com.atguigu.atcrowdfunding.bean.TProjectComp;
 import com.atguigu.atcrowdfunding.bean.TReturn;
 import com.atguigu.atcrowdfunding.bean.Type;
 import com.atguigu.atcrowdfunding.potal.service.HomePageService;
-import com.atguigu.atcrowdfunding.potal.service.QuartzService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.AliPayUtil;
 import com.atguigu.atcrowdfunding.util.PageVo;
 
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -28,7 +25,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +36,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -161,6 +156,7 @@ public class HomePageController {
 	}
 
 	/**
+	 * 第一次支付
 	 * @param proid
 	 * @param retid
 	 * @param invoiceid
@@ -208,9 +204,28 @@ public class HomePageController {
 		}
 		model.addAttribute("result", result);
 		return "temp";
-		
 	}
-
+	
+	//重新支付
+	@RequestMapping({"/{ordernum}/repay"})
+	public Object Repay(@PathVariable String ordernum,Model model) {
+		TOrder order = homePageService.getOrderByNum(ordernum);
+		TReturn ret = this.homePageService.getReturnById(order.getReturnid());
+		AliPayBean bean = new AliPayBean();
+		bean.setOut_trade_no(ordernum);
+		bean.setTotal_amount(order.getMoney() + "");
+		bean.setSubject(ret.getContent());
+		bean.setBody(ret.getReturndesc());
+		String result = "";
+		try {
+			result = AliPayUtil.pay(bean);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		model.addAttribute("result", result);
+		return "temp";
+	}
+	
 	@RequestMapping({ "/paySuccess" })
 	public String succes(HttpServletRequest request, Model model) {
 		String out_trade_no = request.getParameter("out_trade_no");
@@ -234,9 +249,9 @@ public class HomePageController {
 	@RequestMapping({ "/notifyOrder" })
 	public void notifyOrder(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		try {
-			
 			String trade_status = request.getParameter("trade_status");
 			if (trade_status.equals("TRADE_SUCCESS")) {
+				//根据商户订单查询订单
 				List<TOrder> order = this.homePageService.selectOrder(request.getParameter("out_trade_no"));
 				for (TOrder tOrder : order) {
 					tOrder.setStatus("1");//已付款

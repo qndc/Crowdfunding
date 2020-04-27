@@ -1,5 +1,8 @@
 package com.atguigu.atcrowdfunding.manager.service;
 
+import com.atguigu.atcrowdfunding.bean.Member;
+import com.atguigu.atcrowdfunding.bean.Project;
+import com.atguigu.atcrowdfunding.bean.TProjectComp;
 import com.atguigu.atcrowdfunding.bean.Type;
 import java.util.List;
 
@@ -20,4 +23,10 @@ public abstract interface ProjectTypeService
   public abstract void deleteTag(Integer paramInteger1, Integer paramInteger2);
   
   public abstract void addTag(Integer paramInteger, String paramString);
+
+public abstract List<Project> selectPros();
+
+public abstract TProjectComp selectComp(Integer id);
+
+public abstract Member selectMember(Integer memberid);
 }

@@ -13,9 +13,10 @@ public abstract interface QuartzService
   public abstract void resumeJob(String paramString1, String paramString2);
   
   public abstract void removeJob(String paramString1, String paramString2, String paramString3, String paramString4);
-  
-  public abstract void startSchedule();
+ 
   
   public abstract void shutdownSchedule();
+  
+  public abstract void startSchedule(String jobName, String jobGroupName);
 }
 
