@@ -177,13 +177,13 @@ px
 						<div class="collapse navbar-collapse"
 							id="bs-example-navbar-collapse-1">
 							<ul class="nav navbar-nav">
-								<li><a rel="nofollow" href="index.html"><i
+								<li><a rel="nofollow" href="/"><i
 										class="glyphicon glyphicon-home"></i> 众筹首页</a></li>
-								<li><a rel="nofollow" href="projects.html"><i
+								<li ><a rel="nofollow" href="/homepage/0/3/0/1/projects.htm"><i
 										class="glyphicon glyphicon-th-large"></i> 项目总览</a></li>
-								<li class="active"><a rel="nofollow" href="javascript:;"><i
-										class="glyphicon glyphicon-edit"></i> 发起项目</a></li>
-								<li><a rel="nofollow" href="minecrowdfunding.html"><i
+								<li class="active"><a rel="nofollow" style="cursor: pointer;" onclick="toStart()"><i
+										class="glyphicon glyphicon-edit"></i> 发起众筹</a></li>
+								<li><a rel="nofollow" style="cursor: pointer;" onclick="toAtcrowd()"><i
 										class="glyphicon glyphicon-user"></i> 我的众筹</a></li>
 							</ul>
 						</div>
@@ -506,6 +506,49 @@ px
 			e.preventDefault()
 			$(this).tab('show')
 		})
+		
+		function toProInfo() {
+		$.ajax({
+			url:"${APP_PATH}/atcrowdfunding/agree.do",
+			type:"post",
+			success:function(result){
+				if (result.status == 200) {
+					window.location.href='/atcrowdfunding/apply.do';
+				}else {
+					layer.msg(result.message,{time:1000,icon:5,shift:6});
+				}	
+			},
+			error:function(result){
+				layer.msg("程序出错！",{time:1000,icon:5,shift:6})
+			}
+		})
+	}
+	
+	function toAtcrowd() {
+		$.ajax({
+			url:"${APP_PATH}/atcrowdfunding/toIndex.htm",
+			type:"GET",
+			success:function(result){
+				console.log(result);
+				if (result.status == 200) {
+					window.location.href='/atcrowdfunding/index.htm';
+				}else {
+					layer.msg(result.message,{time:1000,icon:5,shift:6});
+				}
+			},
+			error:function(result){
+				layer.msg(result.message,{time:1000,icon:5,shift:6})
+			}
+		})
+	}
+	
+	function toStart() {
+		if (${sessionScope.member.authstatus} != 2) {
+			layer.msg("请先实名认证！",{time:1000,icon:5,shift:6});
+		}else{
+			window.location.href="/atcrowdfunding/start.htm";
+		}
+	}
 		
 		//删除回报
 		var loadingIndex = -1;

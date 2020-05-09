@@ -232,10 +232,10 @@
 								<p style="font-size: 22px">${ret.content }</p>
 								<p>${ret.returndesc }</p>
 								<c:if test="${ret.count == 0 }">
-									<p style="font-size: 12px;color: #999;">不限额，<span style="color: #fd6359">0</span>位支持者</p>
+									<p style="font-size: 12px;color: #999;">不限额，<span style="color: #fd6359">${ ret.retCount}</span>位支持者</p>
 								</c:if>
 								<c:if test="${ret.count != 0 }">
-									<p style="font-size: 12px;color: #999;">限额<span style="color: #fd6359">${ret.count}</span>位，剩余<span style="color: #fd6359">${ret.count}</span>位</p>
+									<p style="font-size: 12px;color: #999;">限额<span style="color: #fd6359">${ret.count}</span>位，剩余<span style="color: #fd6359">${ret.count - ret.retCount}</span>位</p>
 								</c:if>
 								<c:if test="${ret.freight == 0 }">	
 									<p style="font-size: 12px;color: #999;">配送费用：包邮</p>

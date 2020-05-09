@@ -29,6 +29,8 @@ public class TOrder {
 
     private String tradeno;
     
+    private String enddata;//订单结束时间，15分钟后结束
+    
     private Project project;
     
     private TReturn tReturn;
@@ -145,6 +147,15 @@ public class TOrder {
         this.tradeno = tradeno == null ? null : tradeno.trim();
     }
 
+    
+	public String getEnddata() {
+		return enddata;
+	}
+
+	public void setEnddata(String enddata) {
+		this.enddata = enddata;
+	}
+
 	public Project getProject() {
 		return project;
 	}
@@ -166,8 +177,11 @@ public class TOrder {
 		return "TOrder [id=" + id + ", memberid=" + memberid + ", projectid=" + projectid + ", returnid=" + returnid
 				+ ", ordernum=" + ordernum + ", createdate=" + createdate + ", money=" + money + ", rtncount="
 				+ rtncount + ", status=" + status + ", addressid=" + addressid + ", invoice=" + invoice + ", invoiceid="
-				+ invoiceid + ", remark=" + remark + ", tradeno=" + tradeno + ", project=" + project + "]";
+				+ invoiceid + ", remark=" + remark + ", tradeno=" + tradeno + ", enddata=" + enddata + ", project="
+				+ project + ", tReturn=" + tReturn + "]";
 	}
+
+	
     
     
 }

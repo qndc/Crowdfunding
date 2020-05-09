@@ -81,6 +81,9 @@ function Interaction(status) {
 					}else if (item.status == 3) {
 						status = "众筹失败";
 						btn = '<button type="button" class="btn btn-default" onclick = "delProject('+item.id+')">删除项目</button>';
+					}else if (item.status == 5) {
+						status = "审核失败";
+						btn = '<button type="button" class="btn btn-default" onclick = "delProject('+item.id+')">删除项目</button>';
 					}
 					
 					body += '<tr>'
@@ -199,6 +202,7 @@ function OrderInteraction(status) {
 				var content = '';
 				$("#support .tab-pane").eq(status).empty();
 				$.each(result.message,function(index,item){
+					console.log(item);
 					var sInfo = '';
 					var btns = '<button type="button" class="btn btn-default" onclick="delOrder('+item.id+','+status+')">删除订单</button><button type="button" class="btn btn-default" onclick="toDetail('+item.id+')">交易详情</button>';
 					if (item.status == 1) {
@@ -206,6 +210,7 @@ function OrderInteraction(status) {
 					}else if (item.status == 2) {
 						sInfo = "未付款";
 						btns += '<a type="button" class="btn btn-default" href="/homepage/'+item.ordernum+'/repay.do">去支付</a>';
+						//定义定时器
 					}else if (item.status == 3) {
 						sInfo = "交易关闭";
 					}

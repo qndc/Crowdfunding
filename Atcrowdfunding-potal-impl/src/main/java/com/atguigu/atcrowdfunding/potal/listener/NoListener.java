@@ -28,7 +28,7 @@ public class NoListener implements ExecutionListener {
 		ProjectTicketService ticketService = (ProjectTicketService) applicationContext
 				.getBean(ProjectTicketService.class);
 		Project project = ticketService.getProjectByProId(proId);
-		project.setStatus("0");
+		project.setStatus("5");//审核失败
 		ticketService.updateProject(project);
 
 		TProjectTicketMapper mapper = (TProjectTicketMapper) applicationContext.getBean(TProjectTicketMapper.class);

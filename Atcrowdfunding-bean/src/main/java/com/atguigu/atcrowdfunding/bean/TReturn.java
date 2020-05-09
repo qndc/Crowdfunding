@@ -26,8 +26,19 @@ public class TReturn {
     private String img;
 
     private String returndesc;
+    
+    //每一个回报支持的人数
+    private Integer retCount;
 
-    public Integer getId() {
+    public Integer getRetCount() {
+		return retCount;
+	}
+
+	public void setRetCount(Integer retCount) {
+		this.retCount = retCount;
+	}
+
+	public Integer getId() {
         return id;
     }
 

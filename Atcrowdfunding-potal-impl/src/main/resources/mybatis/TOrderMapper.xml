@@ -16,6 +16,7 @@
     <result column="invoiceid" property="invoiceid" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="tradeno" property="tradeno" jdbcType="VARCHAR" />
+    <result column="enddata" property="enddata" jdbcType="CHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -77,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, memberid, projectid, returnid, ordernum, createdate, money, rtncount, status, 
-    addressid, invoice, invoiceid, remark, tradeno
+    addressid, invoice, invoiceid, remark, tradeno, enddata
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.atguigu.atcrowdfunding.bean.TOrderExample" >
     select
@@ -114,12 +115,14 @@
       returnid, ordernum, createdate, 
       money, rtncount, status, 
       addressid, invoice, invoiceid, 
-      remark, tradeno)
+      remark, tradeno, enddata
+      )
     values (#{id,jdbcType=INTEGER}, #{memberid,jdbcType=INTEGER}, #{projectid,jdbcType=INTEGER}, 
       #{returnid,jdbcType=INTEGER}, #{ordernum,jdbcType=VARCHAR}, #{createdate,jdbcType=CHAR}, 
       #{money,jdbcType=INTEGER}, #{rtncount,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, 
       #{addressid,jdbcType=VARCHAR}, #{invoice,jdbcType=CHAR}, #{invoiceid,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{tradeno,jdbcType=VARCHAR})
+      #{remark,jdbcType=VARCHAR}, #{tradeno,jdbcType=VARCHAR}, #{enddata,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.atguigu.atcrowdfunding.bean.TOrder" >
     insert into t_order
@@ -166,6 +169,9 @@
       <if test="tradeno != null" >
         tradeno,
       </if>
+      <if test="enddata != null" >
+        enddata,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -209,6 +215,9 @@
       </if>
       <if test="tradeno != null" >
         #{tradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="enddata != null" >
+        #{enddata,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -263,6 +272,9 @@
       <if test="record.tradeno != null" >
         tradeno = #{record.tradeno,jdbcType=VARCHAR},
       </if>
+      <if test="record.enddata != null" >
+        enddata = #{record.enddata,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -283,7 +295,8 @@
       invoice = #{record.invoice,jdbcType=CHAR},
       invoiceid = #{record.invoiceid,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
-      tradeno = #{record.tradeno,jdbcType=VARCHAR}
+      tradeno = #{record.tradeno,jdbcType=VARCHAR},
+      enddata = #{record.enddata,jdbcType=CHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -330,6 +343,9 @@
       <if test="tradeno != null" >
         tradeno = #{tradeno,jdbcType=VARCHAR},
       </if>
+      <if test="enddata != null" >
+        enddata = #{enddata,jdbcType=CHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -347,7 +363,8 @@
       invoice = #{invoice,jdbcType=CHAR},
       invoiceid = #{invoiceid,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      tradeno = #{tradeno,jdbcType=VARCHAR}
+      tradeno = #{tradeno,jdbcType=VARCHAR},
+      enddata = #{enddata,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -82,6 +82,11 @@ public class AtcrowdfundingController {
 	public String index() {
 		return "/atcrowdfunding/index";
 	}
+	
+	@RequestMapping({ "/atcrowdfunding/personal" })
+	public String personal() {
+		return "/atcrowdfunding/personal";
+	}
 
 	@RequestMapping({ "/atcrowdfunding/start" })
 	public String start() {

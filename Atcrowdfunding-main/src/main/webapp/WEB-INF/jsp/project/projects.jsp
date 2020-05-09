@@ -200,7 +200,8 @@ h3.break>a {
 				<div class="col-md-12 column">
 					<div class="row">
 						<c:forEach items="${map.page.data }" var="typeAndPro">
-							<div class="col-md-3">
+							<c:if test="${typeAndPro.status != 5}">
+								<div class="col-md-3">
 							<div class="thumbnail">
 								<img alt="300x200"  style="width: 250px;height: 150px;cursor: pointer;" src="${typeAndPro.imgs.img }" onclick="detailInfo(${typeAndPro.id},${ typeAndPro.status})"/>
 								<div class="caption">
@@ -233,6 +234,7 @@ h3.break>a {
 								</div>
 							</div>
 						</div>
+							</c:if>
 						</c:forEach>
 					</div>
 

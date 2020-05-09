@@ -3,6 +3,7 @@ package com.atguigu.atcrowdfunding.controller;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,6 +86,11 @@ public class DispatcherController {
 		return "redirect:/index.htm";
 	}
 
+	/**
+	 * 	首页获取项目
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping({ "/index" })
 	public Object index(Model model) {
 		String indexPros = (String)redisTemplate.opsForValue().get(Const.INDEXPROS);
@@ -105,7 +111,13 @@ public class DispatcherController {
 						LocalDateTime start = LocalDateTime.parse(pro.getDeploydate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 						LocalDateTime end = start.plusDays(pro.getDay());
 						pro.setEnddate(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-						pros.add(pro);
+						//判断如果结束时间小于当前时间就比较已经超时
+						Long nowTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+						Long endTime = end.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+						if (endTime > nowTime) {
+							pros.add(pro);
+						}
+						
 					}
 				}
 				if (pros.size() > 4) {

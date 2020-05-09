@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -92,6 +93,8 @@ public class AtcrowdfundingRecordController {
 			for (Project project : pros) {
 				if (!StringUtils.isBlank(project.getDeploydate())) {
 					project.setEnddate(formatDate(project));
+				}else if (project.getStatus().equals("5")) {
+					project.setEnddate("审核失败");
 				}else {
 					project.setEnddate("即将开始");
 				}
@@ -286,18 +289,26 @@ public class AtcrowdfundingRecordController {
 		LocalDateTime start = LocalDateTime.parse(project.getDeploydate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		LocalDateTime end = start.plusDays(project.getDay());
 		LocalDateTime now = LocalDateTime.now();
-		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date beginTime = null;
-		Date endTime = null;
-		beginTime = sdf.parse(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-		endTime = sdf.parse(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-		long diff = endTime.getTime() - beginTime.getTime();
-		long days = diff / 86400000L;
-		long hours = diff % 86400000L / 3600000L;
-		long minutes = diff % 3600000L / 60000L;
-		long seconds = diff % 60000L / 1000L;
+		//判断如果结束时间小于当前时间就比较已经超时
+		Long nowTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+		Long endTimee = end.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+		if (endTimee > nowTime) {
+			DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date beginTime = null;
+			Date endTime = null;
+			beginTime = sdf.parse(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			endTime = sdf.parse(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+			long diff = endTime.getTime() - beginTime.getTime();
+			long days = diff / 86400000L;
+			long hours = diff % 86400000L / 3600000L;
+			long minutes = diff % 3600000L / 60000L;
+			long seconds = diff % 60000L / 1000L;
+			
+			return "剩余" + days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
+		}else {
+			return "众筹结束";
+		}
 		
-		return "剩余" + days + "天" + hours + "小时" + minutes + "分" + seconds + "秒";
 		
 	}
 	

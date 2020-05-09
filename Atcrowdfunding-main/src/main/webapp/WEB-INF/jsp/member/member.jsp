@@ -124,6 +124,11 @@
 						我的众筹<span class="badge"><i
 							class="glyphicon glyphicon-chevron-right"></i></span>
 					</div>
+					<div class="list-group-item" style="cursor: pointer;"
+						onclick="window.location.href='/atcrowdfunding/personal.htm'">
+						个人中心<span class="badge"><i
+							class="glyphicon glyphicon-chevron-right"></i></span>
+					</div>
 				</div>
 			</div>
 			<div class="col-sm-9 col-md-9 column">

@@ -289,22 +289,6 @@ h3.break>a {
 
 	<div class="container marketing">
 
-		<div class="row">
-			<c:forEach items="${requestScope.hots }" var="hotpro">
-				<div class="col-lg-4">
-					<img class="" src="${hotpro.imgs.img }"
-						alt="Generic placeholder image"
-						style="width: 240px; height: 140px;">
-					<h2>${hotpro.name }</h2>
-					<p>${hotpro.remark }</p>
-					<p>
-						<a class="btn btn-default" href="/homepage/${hotpro.id}/detailInfo.htm" role="button">项目详情
-							&raquo;</a>
-					</p>
-				</div>
-			</c:forEach>
-		</div>
-
 		<c:forEach items="${requestScope.types }" var="type" varStatus="r">
 
 			<div class="container">
@@ -313,7 +297,7 @@ h3.break>a {
 					<div class="box ui-draggable" id="mainBox">
 						<div class="mHd" style="">
 							<div class="path">
-								<a href="/homepage/0/3/0/1/projects.htm">更多...</a>
+								<a href="/homepage/${type.id }/3/1/1/projects.htm">更多...</a>
 							</div>
 							<h3>
 								${type.name } <small style="color: #FFF;">${type.remark }</small>
@@ -322,6 +306,9 @@ h3.break>a {
 						<div class="mBd" style="padding-top: 10px;">
 							<div class="row">
 							<c:forEach items="${type.pros }" var="project">
+								<%-- <c:if test="${project.isEnded == false }">
+													
+								</c:if> --%>
 								<div class="col-md-3">
 									<div class="thumbnail">
 										<img alt="300x200" style="width: 250px;height: 150px" src="${project.imgs.img }" onclick="detailInfo(${project.id})"/>		
@@ -337,6 +324,8 @@ h3.break>a {
 											<div style="float: right;">
 												<i title="截至日期" class="glyphicon glyphicon-calendar"></i>
 												${project.enddate }
+												
+												
 											</div>
 											</p>
 											<br>

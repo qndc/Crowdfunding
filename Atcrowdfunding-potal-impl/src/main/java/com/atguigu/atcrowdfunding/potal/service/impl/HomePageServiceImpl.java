@@ -91,7 +91,12 @@ public class HomePageServiceImpl implements HomePageService {
 		TReturnExample example = new TReturnExample();
 		TReturnExample.Criteria criteria = example.createCriteria();
 		criteria.andProjectidEqualTo(proId);
-		return this.returnMapper.selectByExample(example);
+		List<TReturn> list = this.returnMapper.selectByExample(example);
+		list.forEach(ret -> {
+			Integer count = orderMapper.getRetSuportCount(ret.getId(),"1");
+			ret.setRetCount(count);
+		});
+		return list;
 	}
 
 	public TProjectComp getCompByProId(Integer proId) {

@@ -1023,6 +1023,76 @@ public class TOrderExample {
             addCriterion("tradeno not between", value1, value2, "tradeno");
             return (Criteria) this;
         }
+
+        public Criteria andEnddataIsNull() {
+            addCriterion("enddata is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataIsNotNull() {
+            addCriterion("enddata is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataEqualTo(String value) {
+            addCriterion("enddata =", value, "enddata");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataNotEqualTo(String value) {
+            addCriterion("enddata <>", value, "enddata");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataGreaterThan(String value) {
+            addCriterion("enddata >", value, "enddata");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataGreaterThanOrEqualTo(String value) {
+            addCriterion("enddata >=", value, "enddata");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataLessThan(String value) {
+            addCriterion("enddata <", value, "enddata");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataLessThanOrEqualTo(String value) {
+            addCriterion("enddata <=", value, "enddata");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataLike(String value) {
+            addCriterion("enddata like", value, "enddata");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataNotLike(String value) {
+            addCriterion("enddata not like", value, "enddata");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataIn(List<String> values) {
+            addCriterion("enddata in", values, "enddata");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataNotIn(List<String> values) {
+            addCriterion("enddata not in", values, "enddata");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataBetween(String value1, String value2) {
+            addCriterion("enddata between", value1, value2, "enddata");
+            return (Criteria) this;
+        }
+
+        public Criteria andEnddataNotBetween(String value1, String value2) {
+            addCriterion("enddata not between", value1, value2, "enddata");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

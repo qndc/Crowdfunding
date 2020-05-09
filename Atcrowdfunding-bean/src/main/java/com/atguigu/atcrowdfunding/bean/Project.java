@@ -23,6 +23,8 @@ public class Project {
 	private TProjectComp projectComp;
 	private String enddate;
 	private Member member;
+	//项目是否已经过期
+	private Boolean isEnded = false;
 	
 	private Boolean isExpire = true;
 
@@ -193,6 +195,14 @@ public class Project {
 
 	public void setIsExpire(Boolean isExpire) {
 		this.isExpire = isExpire;
+	}
+
+	public Boolean getIsEnded() {
+		return isEnded;
+	}
+
+	public void setIsEnded(Boolean isEnded) {
+		this.isEnded = isEnded;
 	}
 
 	@Override

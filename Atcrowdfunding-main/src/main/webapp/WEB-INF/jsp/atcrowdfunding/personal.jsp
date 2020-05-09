@@ -7,7 +7,7 @@ pageEncoding="UTF-8"%>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>我的众筹</title>
+<title>个人中心</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
@@ -17,6 +17,9 @@ pageEncoding="UTF-8"%>
 <link rel="stylesheet" href="${APP_PATH }/css/theme.css">
 <link rel="icon" href="${APP_PATH }/img/crowdfunding.png" sizes="32x32" type="image/png">
 <style>
+em, i {
+    font-style: normal;
+}
 #footer {
 	padding: 15px 0;
 	background: #fff;
@@ -78,7 +81,208 @@ pageEncoding="UTF-8"%>
     overflow: hidden;
     background: url(../img/crowdfunding.jpg) -13px 0px no-repeat;
 }
+.control-label {
+    float: left;
+    width: 194px;
+    text-align: right;
+    line-height: 26px;
+    color: #666;
+}
+.control-label em {
+    color: #f00;
+}
+.form-group {
+    margin-bottom: 10px;
+}
 
+/*地址管理样式*/
+.address-def .default {
+    margin-top: 19px;
+    height: 149px;
+}
+.default .defau-mod {
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+.defau-mod {
+    margin: 0;
+    padding: 0;
+    width: 243px;
+    height: 148px;
+    box-shadow: none;
+    border: solid #DDD;
+    border-width: 0 1px 1px 1px;
+    float: left;
+    position: relative;
+}
+.defau-mod .addr-state {
+    margin-top: 6px;
+    padding: 0 10px;
+}
+.defau-mod:hover .addr-topbg {
+    background-position: 0 -188px;
+}
+.defau-mod:hover .compile {
+    display: block;
+}
+.defau-mod:hover .delete {
+    display: block;
+}
+.default .def-addr-sure {
+    display: block;
+}
+.addr-state .def-addr-sure {
+    float: none;
+    height: 22px;
+    clear: none;
+}
+
+.def-addr-sure .setdef {
+    float: left;
+}
+.default .addr-info-sure {
+    margin-top: 12px;
+}
+
+.addr-info-sure {
+    padding: 0 20px;
+}
+.addr-ne {
+    padding-bottom: 7px;
+    border-bottom: 1px dashed #DDD;
+}
+.default .def-addr-sure a {
+    float: left;
+    line-height: 22px;
+}
+.def-addr-sure a {
+    color: #F60;
+    text-decoration: none;
+}
+.default .def-addr-sure .home {
+	font-size:10px;
+    float: left;
+    margin-top:5px;
+    margin-right: 5px;
+}
+
+.addr-ne {
+    height: 24px;
+    line-height: 18px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.addr-hd {
+     margin-top: 3px;
+     height: 26px;
+    line-height: 18px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.addr-ne .name {
+    padding-right: 13px;
+    font-weight: 400;
+}
+.addr-ne .iphone {
+    font-family: "Arial";
+}
+
+.addr-info-sure span {
+    color: #333;
+}
+.defau-mod span, .defau-mod a {
+    font-size: 12px;
+    line-height: 18px;
+    font-family: "SimSun";
+}
+.addr-hd span {
+    line-height: 26px;
+}
+
+.addr-info-sure span {
+    color: #333;
+}
+.addr-hd span {
+    padding-right: 8px;
+}
+.addr-deail span {
+    color: #999;
+}
+.defau-mod span, .defau-mod a {
+    font-size: 12px;
+    line-height: 18px;
+    font-family: "SimSun";
+}
+.def-addr-sure .way {
+    position: relative;
+    float: right;
+    margin-top: 6px;
+    margin-left: 9px;
+    cursor: pointer;
+    *z-index: 1;
+}
+.delete {
+    display: none;
+    height: 12px;
+    width: 14px;
+    background: url(../img/newbg.png) no-repeat -28px 0;
+    overflow: hidden;
+}
+.compile {
+    display: none;
+    height: 12px;
+    width: 14px;
+    background: url(../img/newbg.png) no-repeat -14px 0;
+    overflow: hidden;
+}
+.def-addr-sure .way p {
+    display: none;
+    position: absolute;
+    top: -27px;
+    padding: 0 4px;
+    line-height: 20px;
+    background-color: #FFF;
+    border: 1px solid #AAA;
+    text-align: center;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.defau-mod .addr-topbg {
+    position: absolute;
+    top: 0;
+    left: -1px;
+    width: 243px;
+    height: 6px;
+    background: url(../img/newbg.png) no-repeat 0 -194px;
+    overflow: hidden;
+}
+
+.defau-mod .addr-botbg {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    _right: -2px;
+    _bottom: -2px;
+    width: 20px;
+    height: 20px;
+    background: url(../img/newbg.png) no-repeat 0 -168px;
+    overflow: hidden;
+}
+.add-addr {
+    width: 245px;
+    height: 149px;
+    overflow: hidden;
+}
+.add-addr {
+    float: left;
+    width: 250px;
+    height: 149px;
+    background: url(../img/add-adder.png) no-repeat 0 0;
+    cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -143,12 +347,12 @@ pageEncoding="UTF-8"%>
 						资产总览<span class="badge"><i
 							class="glyphicon glyphicon-chevron-right"></i></span>
 					</div>
-					<div class="list-group-item active" style="cursor: pointer;"
+					<div class="list-group-item" style="cursor: pointer;"
 						onclick="window.location.href='/atcrowdfunding/index.htm'">
 						我的众筹<span class="badge"><i
 							class="glyphicon glyphicon-chevron-right"></i></span>
 					</div>
-					<div class="list-group-item" style="cursor: pointer;"
+					<div class="list-group-item active" style="cursor: pointer;"
 						onclick="window.location.href='/atcrowdfunding/personal.htm'">
 						个人中心<span class="badge"><i
 							class="glyphicon glyphicon-chevron-right"></i></span>
@@ -156,87 +360,77 @@ pageEncoding="UTF-8"%>
 				</div>
 			</div>
 			<div class="col-sm-9 col-md-9 column">
-				<ul id="myTab" style="" class="nav nav-pills" role="tablist">
-					<li role="presentation" class="active"><a href="#home"
-						role="tab" data-toggle="tab" aria-controls="home"
-						aria-expanded="true">我的众筹</a></li>
-					<li role="presentation"><a href="#profile">众筹资产</a></li>
-				</ul>
 				<div id="myTabContent" class="tab-content" style="margin-top: 10px;">
 					<div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
 						<ul id="myTab1" class="nav nav-tabs">
-							<li role="presentation" class="active"><a href="#support">我支持的</a></li>
-							<li role="presentation" onclick="myFollow()"><a href="#attension" >我关注的</a></li>
-							<li role="presentation" onclick="Interaction(0)"><a href="#add">我发起的</a></li>
-							<li class=" pull-right">
-								<button type="button" class="btn btn-warning" onclick="window.location.href='/atcrowdfunding/apply.do'">发起众筹</button>
-							</li>
+							<li role="presentation" class="active"><a href="#info">个人信息</a></li>
+							<li role="presentation" onclick="Loadaddr()"><a href="#addr" >地址管理</a></li>
+							<li role="presentation" onclick=""><a href="#invoice">发票管理</a></li>
 						</ul>
 						<div id="myTab1" class="tab-content" style="margin-top: 10px;">
-							<!-- 我支持的 -->
-							<div role="tabpanel" class="tab-pane fade active in" id="support" aria-labelledby="home-tab">
+							<!--个人信息 -->
+							<div role="tabpanel" class="tab-pane fade active in" id="info" aria-labelledby="home-tab">
 								<div class="container-fluid">
 									<div class="row clearfix">
-										<ul class="nav nav-pills" role="tablist" id="payStatus">
-											<li role="presentation" class="active"><a href="#orders">全部</a></li>
-										    <li role="presentation" ><a href="#paid">已支付</a></li>
-										    <li role="presentation"><a href="#unpaid">未支付</a></li>
-										</ul>
-										<div class="tab-content">
-											<div role="tabpanel" class="tab-pane active" id="orders"></div>
-										    <div role="tabpanel" class="tab-pane" id="paid"></div>
-										    <div role="tabpanel" class="tab-pane" id="unpaid"></div>
-										</div>
+										<form class="form-horizontal">
+											<div class="form-group">
+												<label for="realname" class="col-sm-2 control-label"><em>*</em>真实姓名：</label>
+												<div class="col-sm-6"  style="padding-top: 3px">
+													<input type="email" class="form-control" id="realname">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="username" class="col-sm-2 control-label">昵称：</label>
+												<div class="col-sm-6"  style="padding-top: 3px">
+													<input type="text" class="form-control" id="username">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="username" class="col-sm-2 control-label"><em>*</em>性别：</label>
+												<div class="col-sm-6" style="padding-top: 3px">
+													<label class="radio-inline"> <input type="radio"
+														name="sex" id="inlineRadio1" value="option1">
+														男
+													</label> 
+													<label class="radio-inline"> <input
+														type="radio" name="inlineRadioOptions" id="inlineRadio2"
+														value="option2">女
+													</label>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="username" class="col-sm-2 control-label">手机：</label>
+												<div class="col-sm-6"  style="padding-top: 3px;line-height: 20px">
+													18229735193
+												</div>
+											</div>
+											
+										</form>
 									</div>
 								</div>
 							</div>
-							<!-- 我关注的 -->
-							<div role="tabpanel" class="tab-pane fade" id="attension"
+							<!-- 地址管理 -->
+							<div role="tabpanel" class="tab-pane fade" id="addr"
 								aria-labelledby="attension-tab">
 								<div class="container-fluid">
-									<div class="row clearfix">
-										<div class="col-md-12 column" style="padding: 0;">
-											<table class="table table-bordered"
-												style="text-align: center;">
-												<thead>
-													<tr style="background-color: #ddd;">
-														<td>项目信息</td>
-														<td width="120">支持人数</td>
-														<td width="120">关注人数</td>
-														<td width="120">操作</td>
-													</tr>
-												</thead>
-												<tbody id="follow"></tbody>
-											</table>
-										</div>
-									</div>
+									<div class="default clearfix" id="addrs">
+										<div name="address_index_info_address01" class="add-addr"></div>
+						            </div>
+						            
 								</div>
 							</div>
-							<!-- 我发起的 -->
-							<div role="tabpanel" class="tab-pane fade" id="add" aria-labelledby="add-tab">
+							<!-- 发票管理 -->
+							<div role="tabpanel" class="tab-pane fade" id="invoice" aria-labelledby="add-tab">
 								<div class="container-fluid">
 									<div class="row clearfix">
 										<div class="col-md-12 column">
-											<ul class="nav nav-pills" role="tablist" id="crowfundStatus">
-											    <li role="presentation" class="active"><a href="#all">全部</a></li>
-											    <li role="presentation"><a href="#crowdfunding">众筹中</a></li>
-											    <li role="presentation"><a href="#success">众筹成功</a></li>
-											    <li role="presentation"><a href="#fail">众筹失败</a></li>
-										    </ul>
-										    <div class="tab-content">
-											    <div role="tabpanel" class="tab-pane active" id="all"></div>
-											    <div role="tabpanel" class="tab-pane" id="crowdfunding"></div>
-											    <div role="tabpanel" class="tab-pane" id="success"></div>
-											    <div role="tabpanel" class="tab-pane" id="fail"></div>
-										    </div>
+											发票管理
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div role="tabpanel" class="tab-pane fade" id="profile"
-						aria-labelledby="profile-tab">众筹资产</div>
 				</div>
 			</div>
 		</div>
@@ -264,6 +458,7 @@ pageEncoding="UTF-8"%>
 	<script src="${APP_PATH }/script/back-to-top.js"></script>
 	<script src="${APP_PATH }/jquery/layer/layer.js"></script>
 	<script src="${APP_PATH }/js/atcrowdfunding.js"></script>
+	<script src="${APP_PATH }/js/personal.js"></script>
 	<script>
 		$('#myTab a').click(function(e) {
 			e.preventDefault()

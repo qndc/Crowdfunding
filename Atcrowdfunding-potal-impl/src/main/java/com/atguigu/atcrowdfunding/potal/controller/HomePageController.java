@@ -20,6 +20,7 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
@@ -55,20 +56,27 @@ public class HomePageController {
 		LocalDateTime start = LocalDateTime.parse(project.getDeploydate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 		LocalDateTime end = start.plusDays(project.getDay());
 		LocalDateTime now = LocalDateTime.now();
-		DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Date beginTime = null;
-		Date endTime = null;
-		try {
-			beginTime = sdf.parse(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-			endTime = sdf.parse(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-			long diff = endTime.getTime() - beginTime.getTime();
-			long days = diff / 86400000L;
-			long hours = diff % 86400000L / 3600000L;
-			long minutes = diff % 3600000L / 60000L;
-			long seconds = diff % 60000L / 1000L;
-			model.addAttribute("time", "剩余" + days + "天" + hours + "小时" + minutes + "分" + seconds + "秒");
-		} catch (Exception e) {
-			e.printStackTrace();
+		//判断如果结束时间小于当前时间就比较已经超时
+		Long nowTime = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+		Long endTimee = end.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+		if (endTimee > nowTime) {
+			DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date beginTime = null;
+			Date endTime = null;
+			try {
+				beginTime = sdf.parse(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+				endTime = sdf.parse(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+				long diff = endTime.getTime() - beginTime.getTime();
+				long days = diff / 86400000L;
+				long hours = diff % 86400000L / 3600000L;
+				long minutes = diff % 3600000L / 60000L;
+				long seconds = diff % 60000L / 1000L;
+				model.addAttribute("time", "剩余" + days + "天" + hours + "小时" + minutes + "分" + seconds + "秒");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else {
+			model.addAttribute("time", "众筹结束");
 		}
 		Member loginMember = (Member) session.getAttribute("member");
 		List<TMemberProjectFollow> list = homePageService.getProjectFollowe(loginMember.getId(),proId);
@@ -190,7 +198,10 @@ public class HomePageController {
 		order.setStatus("2");//未付款
 		LocalDateTime time = LocalDateTime.now();
 		order.setCreatedate(time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+		LocalDateTime plusMinutes = time.plusMinutes(15L);
+		order.setEnddata(plusMinutes.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		this.homePageService.addOrder(order);
+		
 		AliPayBean bean = new AliPayBean();
 		bean.setOut_trade_no(orderNum);
 		bean.setTotal_amount(ret.getSupportmoney().intValue() * count.intValue() + "");
@@ -357,6 +368,7 @@ public class HomePageController {
 		//分页查询
 		vo = homePageService.getProsByPage(vo,typeid,status,sort,keyWords);
 		for (Project project : vo.getData()) {
+			
 			List<TImgs> img = homePageService.getProImg(project.getId());
 			if (!img.isEmpty()) {
 				project.setImgs(img.get(0));
@@ -364,7 +376,15 @@ public class HomePageController {
 			if (!StringUtils.isBlank(project.getDeploydate())) {
 				LocalDateTime start = LocalDateTime.parse(project.getDeploydate(),DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 				LocalDateTime end = start.plusDays(project.getDay());
-				project.setEnddate(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+				//判断如果结束时间小于当前时间就比较已经超时
+				Long nowTime = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+				Long endTime = end.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+				if (endTime < nowTime) {
+					project.setEnddate("众筹结束");
+				}else {
+					project.setEnddate(end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+				}
+				
 			}else {
 				project.setEnddate("即将开始");
 			}

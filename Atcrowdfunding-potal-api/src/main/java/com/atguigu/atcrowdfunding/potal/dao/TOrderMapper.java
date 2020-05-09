@@ -32,4 +32,7 @@ public abstract interface TOrderMapper
 
   @Select("select * from t_order where ordernum = #{ordernum}")
   public abstract TOrder selectByOrderNum(String ordernum);
+
+  @Select("select count(*) from t_order where returnid = #{id} and status = #{status}")
+  public abstract Integer getRetSuportCount(@Param("id")Integer id,@Param("status")String status);
 }

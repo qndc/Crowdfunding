@@ -311,7 +311,8 @@ table tbody td:nth-child(even) {
 		
 		//在线预览委托书
 		function showTemp(doc) {
-			window.open("https://view.officeapps.live.com/op/view.aspx?src="+doc);
+			/* window.open("https://view.officeapps.live.com/op/view.aspx?src="+doc); */
+			window.open(doc);
 		}
 		
 		//审核通过
